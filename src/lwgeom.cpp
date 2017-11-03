@@ -112,3 +112,26 @@ Rcpp::List CPL_lwgeom_transform(Rcpp::List sfc, Rcpp::CharacterVector p4s) {
 	ret.attr("class") = "sfc";
 	return ret;
 }
+
+// [[Rcpp::export]]
+Rcpp::List CPL_minimum_bounding_circle(Rcpp::List sfc) {
+  
+  Rcpp::List center(sfc.size());
+  Rcpp::NumericVector radius(sfc.size());
+  
+  std::vector<LWGEOM *> lwgeom_v = lwgeom_from_sfc(sfc);
+  for (int i = 0; i < lwgeom_v.size(); i++) {
+    LWBOUNDINGCIRCLE *lwg_ret = lwgeom_calculate_mbc(lwgeom_v[i]);
+    center[i] = Rcpp::NumericVector::create(
+      Rcpp::Named("x") = lwg_ret->center->x,
+      Rcpp::Named("y") = lwg_ret->center->y
+    );
+    radius[i] = lwg_ret->radius;
+    
+    lwgeom_free(lwgeom_v[i]);
+  }
+  return Rcpp::List::create(
+    Rcpp::Named("center") = center,
+    Rcpp::Named("radius") = radius
+  );
+}
