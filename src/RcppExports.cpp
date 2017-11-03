@@ -5,18 +5,6 @@
 
 using namespace Rcpp;
 
-// CPL_get_bbox
-Rcpp::NumericVector CPL_get_bbox(Rcpp::List sf, int depth);
-RcppExport SEXP _lwgeom_CPL_get_bbox(SEXP sfSEXP, SEXP depthSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::List >::type sf(sfSEXP);
-    Rcpp::traits::input_parameter< int >::type depth(depthSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_get_bbox(sf, depth));
-    return rcpp_result_gen;
-END_RCPP
-}
 // CPL_lwgeom_version
 Rcpp::CharacterVector CPL_lwgeom_version(bool b);
 RcppExport SEXP _lwgeom_CPL_lwgeom_version(SEXP bSEXP) {
@@ -75,69 +63,25 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// CPL_hex_to_raw
-Rcpp::List CPL_hex_to_raw(Rcpp::CharacterVector cx);
-RcppExport SEXP _lwgeom_CPL_hex_to_raw(SEXP cxSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type cx(cxSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_hex_to_raw(cx));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CPL_raw_to_hex
-Rcpp::CharacterVector CPL_raw_to_hex(Rcpp::RawVector raw);
-RcppExport SEXP _lwgeom_CPL_raw_to_hex(SEXP rawSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::RawVector >::type raw(rawSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_raw_to_hex(raw));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CPL_read_wkb
-Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB, bool spatialite, int endian);
-RcppExport SEXP _lwgeom_CPL_read_wkb(SEXP wkb_listSEXP, SEXP EWKBSEXP, SEXP spatialiteSEXP, SEXP endianSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::List >::type wkb_list(wkb_listSEXP);
-    Rcpp::traits::input_parameter< bool >::type EWKB(EWKBSEXP);
-    Rcpp::traits::input_parameter< bool >::type spatialite(spatialiteSEXP);
-    Rcpp::traits::input_parameter< int >::type endian(endianSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_read_wkb(wkb_list, EWKB, spatialite, endian));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CPL_write_wkb
-Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB, int endian, Rcpp::CharacterVector dim, double precision);
-RcppExport SEXP _lwgeom_CPL_write_wkb(SEXP sfcSEXP, SEXP EWKBSEXP, SEXP endianSEXP, SEXP dimSEXP, SEXP precisionSEXP) {
+// CPL_minimum_bounding_circle
+Rcpp::List CPL_minimum_bounding_circle(Rcpp::List sfc);
+RcppExport SEXP _lwgeom_CPL_minimum_bounding_circle(SEXP sfcSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
-    Rcpp::traits::input_parameter< bool >::type EWKB(EWKBSEXP);
-    Rcpp::traits::input_parameter< int >::type endian(endianSEXP);
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type dim(dimSEXP);
-    Rcpp::traits::input_parameter< double >::type precision(precisionSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_write_wkb(sfc, EWKB, endian, dim, precision));
+    rcpp_result_gen = Rcpp::wrap(CPL_minimum_bounding_circle(sfc));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_lwgeom_CPL_get_bbox", (DL_FUNC) &_lwgeom_CPL_get_bbox, 2},
     {"_lwgeom_CPL_lwgeom_version", (DL_FUNC) &_lwgeom_CPL_lwgeom_version, 1},
     {"_lwgeom_CPL_make_valid", (DL_FUNC) &_lwgeom_CPL_make_valid, 1},
     {"_lwgeom_CPL_split", (DL_FUNC) &_lwgeom_CPL_split, 2},
     {"_lwgeom_CPL_geohash", (DL_FUNC) &_lwgeom_CPL_geohash, 2},
     {"_lwgeom_CPL_lwgeom_transform", (DL_FUNC) &_lwgeom_CPL_lwgeom_transform, 2},
-    {"_lwgeom_CPL_hex_to_raw", (DL_FUNC) &_lwgeom_CPL_hex_to_raw, 1},
-    {"_lwgeom_CPL_raw_to_hex", (DL_FUNC) &_lwgeom_CPL_raw_to_hex, 1},
-    {"_lwgeom_CPL_read_wkb", (DL_FUNC) &_lwgeom_CPL_read_wkb, 4},
-    {"_lwgeom_CPL_write_wkb", (DL_FUNC) &_lwgeom_CPL_write_wkb, 5},
+    {"_lwgeom_CPL_minimum_bounding_circle", (DL_FUNC) &_lwgeom_CPL_minimum_bounding_circle, 1},
     {NULL, NULL, 0}
 };
 
