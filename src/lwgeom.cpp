@@ -1,7 +1,9 @@
+// [[Rcpp::depends(sf)]]
+#include <sf.h>
+
 #include <Rcpp.h>
 
 #include <string.h>
-#include "wkb.h"
 
 extern "C" {
 #include <liblwgeom.h>
@@ -18,7 +20,7 @@ Rcpp::CharacterVector CPL_lwgeom_version(bool b = false) {
 std::vector<LWGEOM *> lwgeom_from_sfc(Rcpp::List sfc) {
 	double precision = sfc.attr("precision");
 	std::vector<LWGEOM *> lwgeom_v(sfc.size()); // return
-	Rcpp::List wkblst = CPL_write_wkb(sfc, true, native_endian(), get_dim_sfc(sfc, NULL), precision);
+	Rcpp::List wkblst = sf::CPL_write_wkb(sfc, sf::get_dim_sfc(sfc), true, precision);
 	for (int i = 0; i < wkblst.size(); i++) {
 		Rcpp::RawVector rv = wkblst[i];
 		const uint8_t *wkb = &(rv[0]); 
@@ -40,7 +42,7 @@ Rcpp::List sfc_from_lwgeom(std::vector<LWGEOM *> lwgeom_v) {
 		lwfree((void *) wkb);
 		wkblst[i] = raw;
 	}
-	return CPL_read_wkb(wkblst, true, false, native_endian());
+	return sf::CPL_read_wkb(wkblst, true, false);
 }
 
 // [[Rcpp::export]]
@@ -110,4 +112,27 @@ Rcpp::List CPL_lwgeom_transform(Rcpp::List sfc, Rcpp::CharacterVector p4s) {
 	ret.attr("crs") = crs;
 	ret.attr("class") = "sfc";
 	return ret;
+}
+
+// [[Rcpp::export]]
+Rcpp::List CPL_minimum_bounding_circle(Rcpp::List sfc) {
+  
+  Rcpp::List center(sfc.size());
+  Rcpp::NumericVector radius(sfc.size());
+  
+  std::vector<LWGEOM *> lwgeom_v = lwgeom_from_sfc(sfc);
+  for (int i = 0; i < lwgeom_v.size(); i++) {
+    LWBOUNDINGCIRCLE *lwg_ret = lwgeom_calculate_mbc(lwgeom_v[i]);
+    center[i] = Rcpp::NumericVector::create(
+      Rcpp::Named("x") = lwg_ret->center->x,
+      Rcpp::Named("y") = lwg_ret->center->y
+    );
+    radius[i] = lwg_ret->radius;
+    
+    lwgeom_free(lwgeom_v[i]);
+  }
+  return Rcpp::List::create(
+    Rcpp::Named("center") = center,
+    Rcpp::Named("radius") = radius
+  );
 }

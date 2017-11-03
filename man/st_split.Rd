@@ -21,9 +21,8 @@ Return a collection of geometries resulting by splitting a geometry
 \code{st_split} is only available if the package was linked against liblwgeom, which is currently not the case for the binary CRAN distributions; see the package source code repository for instructions how to install liblwgeom. The example below shows how to run-time check the availability of liblwgeom.
 }
 \examples{
+library(sf)
 l = st_as_sfc('MULTILINESTRING((10 10, 190 190), (15 15, 30 30, 100 90))')
 pt = st_sfc(st_point(c(30,30)))
-if (!is.na(sf_extSoftVersion()["lwgeom"])) {
-  st_split(l, pt)
-}
+st_split(l, pt)
 }
