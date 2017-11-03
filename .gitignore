@@ -6,3 +6,6 @@ src/*.o
 src/*.so
 src/*.dll
 autom4te.cache
+src/Makevars
+config.log
+config.status
