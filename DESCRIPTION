@@ -9,7 +9,7 @@ Imports:
     Rcpp, 
 Suggests:
 	knitr
-LinkingTo: Rcpp
+LinkingTo: Rcpp, sf
 VignetteBuilder: knitr
 SystemRequirements: liblwgeom
 License: GPL-2 | MIT + file LICENSE
@@ -21,4 +21,5 @@ Collate:
 	geohash.R
 	split.R
 	valid.R
+	bounding_circle.R
 RoxygenNote: 6.0.1

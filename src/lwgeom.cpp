@@ -1,13 +1,14 @@
 #include <Rcpp.h>
 
 #include <string.h>
-#include "wkb.h"
+#include <wkb.h>
 
 extern "C" {
 #include <liblwgeom.h>
 }
 
 using namespace Rcpp; // for _ to work
+using namespace sf;
 
 // [[Rcpp::export]]
 Rcpp::CharacterVector CPL_lwgeom_version(bool b = false) {
@@ -18,7 +19,7 @@ Rcpp::CharacterVector CPL_lwgeom_version(bool b = false) {
 std::vector<LWGEOM *> lwgeom_from_sfc(Rcpp::List sfc) {
 	double precision = sfc.attr("precision");
 	std::vector<LWGEOM *> lwgeom_v(sfc.size()); // return
-	Rcpp::List wkblst = CPL_write_wkb(sfc, true, native_endian(), get_dim_sfc(sfc, NULL), precision);
+	Rcpp::List wkblst = write_wkb(sfc, true, native_endian(), get_dim_sfc(sfc, NULL), precision);
 	for (int i = 0; i < wkblst.size(); i++) {
 		Rcpp::RawVector rv = wkblst[i];
 		const uint8_t *wkb = &(rv[0]); 
@@ -40,7 +41,7 @@ Rcpp::List sfc_from_lwgeom(std::vector<LWGEOM *> lwgeom_v) {
 		lwfree((void *) wkb);
 		wkblst[i] = raw;
 	}
-	return CPL_read_wkb(wkblst, true, false, native_endian());
+	return read_wkb(wkblst, true, false, native_endian());
 }
 
 // [[Rcpp::export]]
