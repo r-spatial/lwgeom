@@ -2,6 +2,7 @@
 bindings to the liblwgeom library
 
 [![Build Status](https://travis-ci.org/r-spatial/lwgeom.png?branch=master)](https://travis-ci.org/r-spatial/lwgeom)
+[![Coverage Status](https://img.shields.io/codecov/c/github/r-spatial/lwgeom/master.svg)](https://codecov.io/github/r-spatial/lwgeom?branch=master)
 [![CRAN](http://www.r-pkg.org/badges/version/lwgeom)](https://cran.r-project.org/package=lwgeom)
 
 
