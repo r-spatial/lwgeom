@@ -1,5 +1,5 @@
 # lwgeom
-bindings to the liblwgeom library
+R bindings to the liblwgeom library
 
 [![Build Status](https://travis-ci.org/r-spatial/lwgeom.png?branch=master)](https://travis-ci.org/r-spatial/lwgeom)
 [![Coverage Status](https://img.shields.io/codecov/c/github/r-spatial/lwgeom/master.svg)](https://codecov.io/github/r-spatial/lwgeom?branch=master)
@@ -12,6 +12,10 @@ This package provides a few functions that require `liblwgeom`, including
 `st_minimum_bounding_circle`,
 `st_split`, and
 `st_transform_proj`.
+
+## Installing
+
+`lwgeom` critically depends on [sf](https://github.com/r-spatial/sf), which you'll need to install first.
 
 ### MacOS
 
