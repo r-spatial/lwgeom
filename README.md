@@ -33,3 +33,7 @@ sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 sudo apt-get update
 sudo apt-get install libgdal-dev libgeos-dev libproj-dev libudunits2-dev liblwgeom-dev
 ```
+
+### Windows
+
+We welcome suggestions about how to install `lwgeom` on windows!
