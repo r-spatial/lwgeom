@@ -1,6 +1,7 @@
-context("sf: lwgeom")
+context("lwgeom")
 
 test_that("st_make_valid works", {
+	library(sf)
 	x = st_sfc(st_polygon(list(rbind(c(0,0),c(0.5,0),c(0.5,0.5),c(0.5,0),c(1,0),c(1,1),c(0,1),c(0,0)))))
 	fls = suppressWarnings(st_is_valid(x, FALSE))
 	expect_false(fls)
@@ -19,6 +20,17 @@ test_that("st_make_valid works", {
 	# https://github.com/r-spatial/sf/issues/509 :
 	p1 = st_point(c(7,52))
 	geom.sf = st_sfc(p1, crs = 4326)
-	x <- st_transform(geom.sf, "+proj=wintri", use_gdal = FALSE)
+	x <- st_transform_proj(geom.sf, "+proj=wintri")
 })
 
+test_that("st_minimum_bounding_circle works", {
+  library(sf)
+  x = st_multipoint(matrix(c(0,1,0,1),2,2))
+  y = st_multipoint(matrix(c(0,0,1,0,1,1),3,2))
+  plot(st_minimum_bounding_circle(x), axes=TRUE); plot(x, add=TRUE)
+  plot(st_minimum_bounding_circle(y), axes=TRUE); plot(y, add=TRUE)
+  nc = st_read(system.file("shape/nc.shp", package="sf"))
+  state = st_union(st_geometry(nc))
+  plot(st_minimum_bounding_circle(state), asp=1)
+  plot(state, add=TRUE)
+})
