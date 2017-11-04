@@ -11,6 +11,7 @@ Imports:
 	sf (>= 0.5-6)
 Suggests:
 	knitr,
+	covr,
 	testthat
 LinkingTo:
 	Rcpp,
