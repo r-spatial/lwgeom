@@ -25,7 +25,6 @@ st_transform_proj.sfc = function(x, crs, ...) {
 #' @examples
 #' library(sf)
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
-#' st_area(nc[1,]) # area, using geosphere::areaPolygon
 #' st_area(st_transform_proj(nc[1,], 32119)) # NC state plane, m
 #' st_area(st_transform_proj(nc[1,], 2264)) # NC state plane, US foot
 st_transform_proj.sf = function(x, crs, ...) {
