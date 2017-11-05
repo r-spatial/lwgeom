@@ -18,9 +18,8 @@ Rcpp::CharacterVector CPL_lwgeom_version(bool b = false) {
 
 // in
 std::vector<LWGEOM *> lwgeom_from_sfc(Rcpp::List sfc) {
-	double precision = sfc.attr("precision");
 	std::vector<LWGEOM *> lwgeom_v(sfc.size()); // return
-	Rcpp::List wkblst = sf::CPL_write_wkb(sfc, sf::get_dim_sfc(sfc), true, precision);
+	Rcpp::List wkblst = sf::CPL_write_wkb(sfc, true);
 	for (int i = 0; i < wkblst.size(); i++) {
 		Rcpp::RawVector rv = wkblst[i];
 		const uint8_t *wkb = &(rv[0]); 
