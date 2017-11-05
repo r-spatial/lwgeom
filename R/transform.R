@@ -42,7 +42,5 @@ st_transform_proj.sfg = function(x, crs , ...) {
 	x = st_sfc(x, crs = attr(x, "proj4string"))
 	if (missing(crs))
 		stop("argument crs cannot be missing")
-	#crs = make_crs(crs)
-	crs = st_crs(crs)
-	structure(st_transform_proj(x, crs, ...)[[1]], crs = crs)
+	structure(st_transform_proj(x, crs, ...)[[1]], proj4string = crs)
 }

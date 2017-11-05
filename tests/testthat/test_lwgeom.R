@@ -21,6 +21,11 @@ test_that("st_make_valid works", {
 	p1 = st_point(c(7,52))
 	geom.sf = st_sfc(p1, crs = 4326)
 	x <- st_transform_proj(geom.sf, "+proj=wintri")
+	p = st_crs(4326)$proj4string
+	x <- st_transform_proj(structure(geom.sf[[1]], proj4string = p), "+proj=wintri")
+	nc = st_read(system.file("shape/nc.shp", package="sf"))
+	st_transform_proj(nc[1,], "+proj=wintri +over")
+	lwgeom_extSoftVersion()
 })
 
 test_that("st_minimum_bounding_circle works", {
@@ -32,5 +37,6 @@ test_that("st_minimum_bounding_circle works", {
   nc = st_read(system.file("shape/nc.shp", package="sf"))
   state = st_union(st_geometry(nc))
   plot(st_minimum_bounding_circle(state), asp=1)
+  plot(st_minimum_bounding_circle(st_sf(st = "nc", geom = state)), asp=1)
   plot(state, add=TRUE)
 })
