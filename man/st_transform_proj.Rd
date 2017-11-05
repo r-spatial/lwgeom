@@ -3,17 +3,21 @@
 \name{st_transform_proj}
 \alias{st_transform_proj}
 \alias{st_transform_proj}
+\alias{st_transform_proj.sfc}
+\alias{st_transform_proj}
 \alias{st_transform_proj.sf}
 \title{Transform or convert coordinates of simple features directly with Proj.4}
 \usage{
 st_transform_proj(x, crs, ...)
+
+\method{st_transform_proj}{sfc}(x, crs, ...)
 
 \method{st_transform_proj}{sf}(x, crs, ...)
 }
 \arguments{
 \item{x}{object of class sf, sfc or sfg}
 
-\item{crs}{coordinate reference system: integer with the EPSG code, or character with proj4string}
+\item{crs}{character; proj4string of target coordinate reference system}
 
 \item{...}{ignored}
 }
@@ -29,9 +33,8 @@ p1 = st_point(c(7,52))
 p2 = st_point(c(-30,20))
 sfc = st_sfc(p1, p2, crs = 4326)
 sfc
-st_transform_proj(sfc, 3857)
+st_transform_proj(sfc, "+proj=wintri")
 library(sf)
 nc = st_read(system.file("shape/nc.shp", package="sf"))
-st_area(st_transform_proj(nc[1,], 32119)) # NC state plane, m
-st_area(st_transform_proj(nc[1,], 2264)) # NC state plane, US foot
+st_transform_proj(nc[1,], "+proj=wintri +over")
 }
