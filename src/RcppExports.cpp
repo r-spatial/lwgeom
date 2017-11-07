@@ -5,6 +5,56 @@
 
 using namespace Rcpp;
 
+// CPL_geodetic_area
+Rcpp::NumericVector CPL_geodetic_area(Rcpp::List sfc, double semi_major, double inv_flattening);
+RcppExport SEXP _lwgeom_CPL_geodetic_area(SEXP sfcSEXP, SEXP semi_majorSEXP, SEXP inv_flatteningSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    Rcpp::traits::input_parameter< double >::type semi_major(semi_majorSEXP);
+    Rcpp::traits::input_parameter< double >::type inv_flattening(inv_flatteningSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_geodetic_area(sfc, semi_major, inv_flattening));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_geodetic_length
+Rcpp::NumericVector CPL_geodetic_length(Rcpp::List sfc, double semi_major, double inv_flattening);
+RcppExport SEXP _lwgeom_CPL_geodetic_length(SEXP sfcSEXP, SEXP semi_majorSEXP, SEXP inv_flatteningSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    Rcpp::traits::input_parameter< double >::type semi_major(semi_majorSEXP);
+    Rcpp::traits::input_parameter< double >::type inv_flattening(inv_flatteningSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_geodetic_length(sfc, semi_major, inv_flattening));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_geodetic_segmentize
+Rcpp::List CPL_geodetic_segmentize(Rcpp::List sfc, double max_seg_length);
+RcppExport SEXP _lwgeom_CPL_geodetic_segmentize(SEXP sfcSEXP, SEXP max_seg_lengthSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    Rcpp::traits::input_parameter< double >::type max_seg_length(max_seg_lengthSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_geodetic_segmentize(sfc, max_seg_length));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_geodetic_covers
+Rcpp::List CPL_geodetic_covers(Rcpp::List sfc1, Rcpp::List sfc2);
+RcppExport SEXP _lwgeom_CPL_geodetic_covers(SEXP sfc1SEXP, SEXP sfc2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc1(sfc1SEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc2(sfc2SEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_geodetic_covers(sfc1, sfc2));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_lwgeom_version
 Rcpp::CharacterVector CPL_lwgeom_version(bool b);
 RcppExport SEXP _lwgeom_CPL_lwgeom_version(SEXP bSEXP) {
@@ -76,6 +126,10 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_lwgeom_CPL_geodetic_area", (DL_FUNC) &_lwgeom_CPL_geodetic_area, 3},
+    {"_lwgeom_CPL_geodetic_length", (DL_FUNC) &_lwgeom_CPL_geodetic_length, 3},
+    {"_lwgeom_CPL_geodetic_segmentize", (DL_FUNC) &_lwgeom_CPL_geodetic_segmentize, 2},
+    {"_lwgeom_CPL_geodetic_covers", (DL_FUNC) &_lwgeom_CPL_geodetic_covers, 2},
     {"_lwgeom_CPL_lwgeom_version", (DL_FUNC) &_lwgeom_CPL_lwgeom_version, 1},
     {"_lwgeom_CPL_make_valid", (DL_FUNC) &_lwgeom_CPL_make_valid, 1},
     {"_lwgeom_CPL_split", (DL_FUNC) &_lwgeom_CPL_split, 2},

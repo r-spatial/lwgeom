@@ -9,6 +9,8 @@ extern "C" {
 #include <liblwgeom.h>
 }
 
+#include "lwgeom.h"
+
 using namespace Rcpp; // for _ to work
 
 // [[Rcpp::export]]

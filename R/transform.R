@@ -33,7 +33,7 @@ st_transform_proj.sf = function(x, crs, ...) {
 	x
 }
 
-#' @name st_transform
+#' @name st_transform_proj
 #' @export
 #' @details The \code{st_transform_proj} method for \code{sfg} objects assumes that the CRS of the object is available as an attribute of that name.
 #' @examples

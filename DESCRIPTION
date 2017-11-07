@@ -8,6 +8,7 @@ Depends:
     R (>= 3.3.0)
 Imports: 
     Rcpp,
+	units,
 	sf (>= 0.5-6)
 Suggests:
 	knitr,
@@ -29,4 +30,5 @@ Collate:
 	valid.R
 	transform.R
 	bounding_circle.R
+	geodetic.R
 RoxygenNote: 6.0.1

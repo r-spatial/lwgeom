@@ -6,6 +6,8 @@
 \alias{st_transform_proj.sfc}
 \alias{st_transform_proj}
 \alias{st_transform_proj.sf}
+\alias{st_transform_proj}
+\alias{st_transform_proj.sfg}
 \title{Transform or convert coordinates of simple features directly with Proj.4}
 \usage{
 st_transform_proj(x, crs, ...)
@@ -13,6 +15,8 @@ st_transform_proj(x, crs, ...)
 \method{st_transform_proj}{sfc}(x, crs, ...)
 
 \method{st_transform_proj}{sf}(x, crs, ...)
+
+\method{st_transform_proj}{sfg}(x, crs, ...)
 }
 \arguments{
 \item{x}{object of class sf, sfc or sfg}
@@ -26,6 +30,8 @@ Transform or convert coordinates of simple features directly with Proj.4
 }
 \details{
 Transforms coordinates of object to new projection, using Proj.4 and not the GDAL API.
+
+The \code{st_transform_proj} method for \code{sfg} objects assumes that the CRS of the object is available as an attribute of that name.
 }
 \examples{
 library(sf)
@@ -37,4 +43,5 @@ st_transform_proj(sfc, "+proj=wintri")
 library(sf)
 nc = st_read(system.file("shape/nc.shp", package="sf"))
 st_transform_proj(nc[1,], "+proj=wintri +over")
+st_transform_proj(structure(p1, proj4string = "+init=epsg:4326"), "+init=epsg:3857")
 }
