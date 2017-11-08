@@ -53,7 +53,7 @@ Rcpp::List sfc_from_lwgeom(std::vector<LWGEOM *> lwgeom_v) {
 // [[Rcpp::export]]
 Rcpp::List CPL_sfc_from_twkb(Rcpp::List twkb) {
 	std::vector<LWGEOM *> lw(twkb.size());
-	for (size_t i = 0; i < twkb.size(); i++) {
+	for (size_t i = 0; i < lw.size(); i++) {
 		Rcpp::RawVector raw = twkb[i];
 		lw[i] = lwgeom_from_twkb(&(raw[0]), raw.size(), LW_PARSER_CHECK_ALL);
 	}
@@ -65,7 +65,7 @@ Rcpp::List CPL_sfc_from_twkb(Rcpp::List twkb) {
 Rcpp::List CPL_make_valid(Rcpp::List sfc) {
 
 	std::vector<LWGEOM *> lwgeom_v = lwgeom_from_sfc(sfc);
-	for (int i = 0; i < lwgeom_v.size(); i++) {
+	for (size_t i = 0; i < lwgeom_v.size(); i++) {
 		// do the trick:
 		LWGEOM *lwg_ret = lwgeom_make_valid(lwgeom_v[i]);
 		lwgeom_free(lwgeom_v[i]);
@@ -79,7 +79,7 @@ Rcpp::List CPL_split(Rcpp::List sfc, Rcpp::List blade) {
 
 	std::vector<LWGEOM *> lwgeom_in = lwgeom_from_sfc(sfc);
 	std::vector<LWGEOM *> lwgeom_blade = lwgeom_from_sfc(blade);
-	for (int i = 0; i < lwgeom_in.size(); i++) {
+	for (size_t i = 0; i < lwgeom_in.size(); i++) {
 		LWGEOM *lwg_ret = lwgeom_split(lwgeom_in[i], lwgeom_blade[0]);
 		lwgeom_free(lwgeom_in[i]);
 		lwgeom_in[i] = lwg_ret;
@@ -93,7 +93,7 @@ Rcpp::CharacterVector CPL_geohash(Rcpp::List sfc, int prec) {
 
 	Rcpp::CharacterVector chr(sfc.size()); // return
 	std::vector<LWGEOM *> lwgeom_v = lwgeom_from_sfc(sfc);
-	for (int i = 0; i < lwgeom_v.size(); i++) {
+	for (size_t i = 0; i < lwgeom_v.size(); i++) {
 		char *c = lwgeom_geohash(lwgeom_v[i], prec);
 		chr(i) = c; // copy
 		lwfree(c);
@@ -113,7 +113,7 @@ Rcpp::List CPL_lwgeom_transform(Rcpp::List sfc, Rcpp::CharacterVector p4s) {
 	projPJ target = lwproj_from_string(p4s[1]);
 	if (target == NULL)
 		Rcpp::stop("st_lwgeom_transform: wrong target proj4string\n"); // #nocov
-	for (int i = 0; i < lwgeom_v.size(); i++) {
+	for (size_t i = 0; i < lwgeom_v.size(); i++) {
 		// in-place transformation w/o GDAL:
 		if (lwgeom_transform(lwgeom_v[i], src, target) != LW_SUCCESS) {
 			Rcpp::Rcout << "Failed on geometry " << i + 1 << std::endl; // #nocov
@@ -139,7 +139,7 @@ Rcpp::List CPL_minimum_bounding_circle(Rcpp::List sfc) {
   Rcpp::NumericVector radius(sfc.size());
   
   std::vector<LWGEOM *> lwgeom_v = lwgeom_from_sfc(sfc);
-  for (int i = 0; i < lwgeom_v.size(); i++) {
+  for (size_t i = 0; i < lwgeom_v.size(); i++) {
     LWBOUNDINGCIRCLE *lwg_ret = lwgeom_calculate_mbc(lwgeom_v[i]);
 	if (lwg_ret == NULL)
 		Rcpp::stop("could not compute minimum bounding circle"); // #nocov

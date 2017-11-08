@@ -44,7 +44,7 @@ Rcpp::NumericVector CPL_geodetic_azimuth(Rcpp::List sfc, double semi_major, doub
 	std::vector<LWGEOM *> lw = lwgeom_from_sfc(sfc);
 	SPHEROID s;
 	spheroid_init(&s, semi_major, semi_major * (1.0 - 1.0/inv_flattening));
-	for (size_t i = 0; i < ret.size(); i++) {
+	for (int i = 0; i < ret.size(); i++) {
 		ret[i] = lwgeom_azumith_spheroid((LWPOINT*) lw[i], (LWPOINT*) lw[i+1], &s);
 		lwgeom_free(lw[i]);
 	}
@@ -69,9 +69,9 @@ Rcpp::List CPL_geodetic_covers(Rcpp::List sfc1, Rcpp::List sfc2) {
 	Rcpp::List ret(sfc1.size());
 	std::vector<LWGEOM *> lw1 = lwgeom_from_sfc(sfc1);
 	std::vector<LWGEOM *> lw2 = lwgeom_from_sfc(sfc2);
-	for (size_t i = 0; i < sfc1.size(); i++) {
+	for (size_t i = 0; i < lw1.size(); i++) {
 		std::vector<int> idx;
-		for (size_t j = 0; j < sfc2.size(); j++)
+		for (size_t j = 0; j < lw2.size(); j++)
 			if (lwgeom_covers_lwgeom_sphere(lw1[i], lw2[j]))
 				idx.push_back(j + 1);
 		ret[i] = idx;
