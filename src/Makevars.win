@@ -1,0 +1,104 @@
+CXX_STD = CXX11
+
+OBJECTS_LIBLWGEOM= \
+  liblwgeom/box2d.o \
+  liblwgeom/bytebuffer.o \
+  liblwgeom/eff.otivearea.o \
+  liblwgeom/g_box.o \
+  liblwgeom/g_serialized.o \
+  liblwgeom/g_util.o \
+  liblwgeom/kmeans.o \
+  liblwgeom/lwalgorithm.o \
+  liblwgeom/lwboundin.oi.ole.o \
+  liblwgeom/l.oi.ostring.o \
+  liblwgeom/l.ooll.otion.o \
+  liblwgeom/l.oompound.o \
+  liblwgeom/l.ourvepoly.o \
+  liblwgeom/lwgeodet.o.o \
+  liblwgeom/lwgeodet.o_tree.o \
+  liblwgeom/lwgeom_api.o \
+  liblwgeom/lwgeom.o \
+  liblwgeom/lwgeom_debug.o \
+  liblwgeom/lwgeom_geos.o \
+  liblwgeom/lwgeom_geos.olean.o \
+  liblwgeom/lwgeom_geos.oluster.o \
+  liblwgeom/lwgeom_geos_node.o \
+  liblwgeom/lwgeom_geos_split.o \
+  liblwgeom/lwgeom_median.o \
+  liblwgeom/lwgeom_s.ogal.o \
+  liblwgeom/lwgeom_topo.o \
+  liblwgeom/lwgeom_transform.o \
+  liblwgeom/lwgeom_wrapx.o \
+  liblwgeom/lwhomogenize.o \
+  liblwgeom/lwin_e.ooded_polyline.o \
+  liblwgeom/lwin_geojson.o \
+  liblwgeom/lwin_twkb.o \
+  liblwgeom/lwin_wkb.o \
+  liblwgeom/lwin_wkt.o \
+  liblwgeom/lwin_wkt_lex.o \
+  liblwgeom/lwin_wkt_parse.o \
+  liblwgeom/lwiterator.o \
+  liblwgeom/lwkmeans.o \
+  liblwgeom/lwlinearrefere.oing.o \
+  liblwgeom/lwline.o \
+  liblwgeom/lw.ourve.o \
+  liblwgeom/lwmline.o \
+  liblwgeom/lwmpoint.o \
+  liblwgeom/lwmpoly.o \
+  liblwgeom/lwmsurf.oe.o \
+  liblwgeom/lwout_e.ooded_polyline.o \
+  liblwgeom/lwout_geojson.o \
+  liblwgeom/lwout_gml.o \
+  liblwgeom/lwout_kml.o \
+  liblwgeom/lwout_svg.o \
+  liblwgeom/lwout_twkb.o \
+  liblwgeom/lwout_wkb.o \
+  liblwgeom/lwout_wkt.o \
+  liblwgeom/lwout_x3d.o \
+  liblwgeom/lwpoint.o \
+  liblwgeom/lwpoly.o \
+  liblwgeom/lwprint.o \
+  liblwgeom/lwpsurf.oe.o \
+  liblwgeom/lwspheroid.o \
+  liblwgeom/lwstroke.o \
+  liblwgeom/lwtin.o \
+  liblwgeom/lwtree.o \
+  liblwgeom/lwtriangle.o \
+  liblwgeom/lwunionfind.o \
+  liblwgeom/lwutil.o \
+  liblwgeom/measures3d.o \
+  liblwgeom/measures.o \
+  liblwgeom/ptarray.o \
+  liblwgeom/stringbuffer.o \
+  liblwgeom/varint.o \
+  
+OBJECTS_RCPP= \
+  geodetic.o \
+  lwgeom.o \
+  RcppExports.o
+
+OBJECTS= $(OBJECTS_LIBLWGEOM) $(OBJECTS_RCPP)
+
+all:	clean winlibs
+
+clean:
+	rm -f $(SHLIB) $(OBJECTS)
+
+winlibs:
+	mkdir -p ../inst
+	"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe --vanilla" "../tools/winlibs.R"
+	cp -r ../windows/gdal2-2.2.0/share/proj ../inst/
+
+COMPILED_BY ?= gcc-4.6.3
+
+RWINLIB = lib${subst gcc,,${COMPILED_BY}}${R_ARCH}
+
+PKG_CPPFLAGS =\
+	-I../windows/gdal2-2.2.0/include/geos \
+	-I../windows/gdal2-2.2.0/include/proj
+
+PKG_LIBS = \
+	-L../windows/gdal2-2.2.0/${RWINLIB} \
+	-lproj -lgeos_c -lgeos -ljson-c -lexpat -lxml2 -liconv 
+
+.PHONY: all winlibs clean
