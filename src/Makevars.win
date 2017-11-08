@@ -3,34 +3,34 @@ CXX_STD = CXX11
 OBJECTS_LIBLWGEOM= \
   liblwgeom/box2d.o \
   liblwgeom/bytebuffer.o \
-  liblwgeom/eff.otivearea.o \
+  liblwgeom/effectivearea.o \
   liblwgeom/g_box.o \
   liblwgeom/g_serialized.o \
   liblwgeom/g_util.o \
   liblwgeom/kmeans.o \
   liblwgeom/lwalgorithm.o \
-  liblwgeom/lwboundin.oi.ole.o \
-  liblwgeom/l.oi.ostring.o \
-  liblwgeom/l.ooll.otion.o \
-  liblwgeom/l.oompound.o \
-  liblwgeom/l.ourvepoly.o \
-  liblwgeom/lwgeodet.o.o \
-  liblwgeom/lwgeodet.o_tree.o \
+  liblwgeom/lwboundingcircle.o \
+  liblwgeom/lwcircstring.o \
+  liblwgeom/lwcollection.o \
+  liblwgeom/lwcompound.o \
+  liblwgeom/lwcurvepoly.o \
+  liblwgeom/lwgeodetic.o \
+  liblwgeom/lwgeodetic_tree.o \
   liblwgeom/lwgeom_api.o \
   liblwgeom/lwgeom.o \
   liblwgeom/lwgeom_debug.o \
   liblwgeom/lwgeom_geos.o \
-  liblwgeom/lwgeom_geos.olean.o \
-  liblwgeom/lwgeom_geos.oluster.o \
+  liblwgeom/lwgeom_geos_clean.o \
+  liblwgeom/lwgeom_geos_cluster.o \
   liblwgeom/lwgeom_geos_node.o \
   liblwgeom/lwgeom_geos_split.o \
   liblwgeom/lwgeom_median.o \
-  liblwgeom/lwgeom_s.ogal.o \
+  liblwgeom/lwgeom_sfcgal.o \
   liblwgeom/lwgeom_topo.o \
   liblwgeom/lwgeom_transform.o \
   liblwgeom/lwgeom_wrapx.o \
   liblwgeom/lwhomogenize.o \
-  liblwgeom/lwin_e.ooded_polyline.o \
+  liblwgeom/lwin_encoded_polyline.o \
   liblwgeom/lwin_geojson.o \
   liblwgeom/lwin_twkb.o \
   liblwgeom/lwin_wkb.o \
@@ -39,14 +39,14 @@ OBJECTS_LIBLWGEOM= \
   liblwgeom/lwin_wkt_parse.o \
   liblwgeom/lwiterator.o \
   liblwgeom/lwkmeans.o \
-  liblwgeom/lwlinearrefere.oing.o \
+  liblwgeom/lwlinearreferencing.o \
   liblwgeom/lwline.o \
-  liblwgeom/lw.ourve.o \
+  liblwgeom/lwmcurve.o \
   liblwgeom/lwmline.o \
   liblwgeom/lwmpoint.o \
   liblwgeom/lwmpoly.o \
-  liblwgeom/lwmsurf.oe.o \
-  liblwgeom/lwout_e.ooded_polyline.o \
+  liblwgeom/lwmsurface.o \
+  liblwgeom/lwout_encoded_polyline.o \
   liblwgeom/lwout_geojson.o \
   liblwgeom/lwout_gml.o \
   liblwgeom/lwout_kml.o \
@@ -58,7 +58,7 @@ OBJECTS_LIBLWGEOM= \
   liblwgeom/lwpoint.o \
   liblwgeom/lwpoly.o \
   liblwgeom/lwprint.o \
-  liblwgeom/lwpsurf.oe.o \
+  liblwgeom/lwpsurface.o \
   liblwgeom/lwspheroid.o \
   liblwgeom/lwstroke.o \
   liblwgeom/lwtin.o \
@@ -70,12 +70,7 @@ OBJECTS_LIBLWGEOM= \
   liblwgeom/measures.o \
   liblwgeom/ptarray.o \
   liblwgeom/stringbuffer.o \
-  liblwgeom/varint.o \
-  
-OBJECTS_RCPP= \
-  geodetic.o \
-  lwgeom.o \
-  RcppExports.o
+  liblwgeom/varint.o
 
 OBJECTS= $(OBJECTS_LIBLWGEOM) $(OBJECTS_RCPP)
 
