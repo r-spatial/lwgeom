@@ -11,7 +11,7 @@
 #' # st_area(nc[1:3,])
 st_geod_area = function(x) {
 	stopifnot(st_is_longlat(x))
-	p = st_crs(x, parameters = TRUE)
+	p = crs_parameters(x)
 	ret = CPL_geodetic_area(st_geometry(x), p$SemiMajor, p$InvFlattening)
 	units(ret) = units(p$SemiMajor^2)
 	ret
@@ -24,7 +24,7 @@ st_geod_area = function(x) {
 #' st_geod_length(l)
 st_geod_length = function(x) {
 	stopifnot(st_is_longlat(x))
-	p = st_crs(x, parameters = TRUE)
+	p = crs_parameters(x)
 	ret = CPL_geodetic_length(st_geometry(x), p$SemiMajor, p$InvFlattening)
 	units(ret) = units(p$SemiMajor)
 	ret
@@ -41,7 +41,7 @@ st_geod_length = function(x) {
 #' plot(seg, graticule = TRUE, axes = TRUE)
 st_geod_segmentize = function(x, max_seg_length) {
 	stopifnot(st_is_longlat(x))
-	p = st_crs(x, parameters = TRUE)
+	p = crs_parameters(x)
 	if (inherits(max_seg_length, "units")) {
 		units(max_seg_length) = units(p$SemiMajor)
 		max_seg_length = max_seg_length / p$SemiMajor # rad

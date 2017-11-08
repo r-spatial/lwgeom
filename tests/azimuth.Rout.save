@@ -1,0 +1,28 @@
+
+R version 3.4.2 (2017-09-28) -- "Short Summer"
+Copyright (C) 2017 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(sf)
+Linking to GEOS 3.5.1, GDAL 2.1.2, proj.4 4.9.3
+> library(lwgeom)
+Linking to lwgeom 2.3.1 r15264
+> p = st_sfc(st_point(c(7,52)), st_point(c(8,53)), crs = 4326)
+> st_geod_azimuth(p)
+0.5410385 rad
+> 
+> proc.time()
+   user  system elapsed 
+  0.384   0.268   0.330 

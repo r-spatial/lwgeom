@@ -10,7 +10,7 @@
 st_geod_azimuth = function(x) {
 	stopifnot(st_is_longlat(x))
 	stopifnot(all(st_is(x, "POINT")))
-	p = st_crs(x, parameters = TRUE)
+	p = crs_parameters(x)
 	ret = CPL_geodetic_azimuth(st_geometry(x), p$SemiMajor, p$InvFlattening)
 	units(ret) = make_unit("rad")
 	ret
