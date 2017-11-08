@@ -31,6 +31,7 @@ Rcpp::List read_data(wkb_buf *wkb, bool EWKB, bool spatialite, int endian,
 void write_data(std::ostringstream& os, Rcpp::List sfc, int i, bool EWKB, 
 		int endian, const char *cls, const char *dim, double prec, int srid);
 
+// #nocov start
 void wkb_read(wkb_buf *wkb, void *dst, size_t n) {
 	if (n > wkb->size)
 		Rcpp::stop("range check error: WKB buffer too small. Input file corrupt?");
@@ -743,3 +744,4 @@ Rcpp::List get_dim_sfc(Rcpp::List sfc) {
 			Rcpp::IntegerVector::create(3) :
 			Rcpp::IntegerVector::create(2));
 }
+// #nocov end
