@@ -8,7 +8,7 @@
 #' library(sf)
 #' nc = st_read(system.file("gpkg/nc.gpkg", package="sf"))
 #' st_geod_area(nc[1:3,])
-#' st_area(nc[1:3,])
+#' # st_area(nc[1:3,])
 st_geod_area = function(x) {
 	stopifnot(st_is_longlat(x))
 	p = st_crs(x, parameters = TRUE)
