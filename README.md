@@ -7,16 +7,19 @@ R bindings to the liblwgeom library
 [![CRAN](http://www.r-pkg.org/badges/version/lwgeom)](https://cran.r-project.org/package=lwgeom)
 
 
-This package provides a few functions that require `liblwgeom`, including 
-`st_geohash`,
-`st_make_valid`, 
-`st_minimum_bounding_circle`,
-`st_split`, and
-`st_transform_proj`.
+This package provides a few functions that require
+`liblwgeom`, including `st_geohash`, `st_make_valid`,
+`st_minimum_bounding_circle`, `st_split`,
+`st_transform_proj` (transform through proj, omitting
+GDAL) and `st_as_sfc.TWKB` (create `sfc` from [tiny
+wkb](https://github.com/TWKB/Specification/blob/master/twkb.md)),
+as well as the geodetic (spherical/ellipsoidal) geometry
+functions `st_geod_area`, `st_geod_azimuth`, `st_geod_covers`,
+`st_geod_length`, and `st_geod_segmentize`.
 
 ## Installing
 
-`lwgeom` depends on [sf](https://github.com/r-spatial/sf), which you'll need to install first.
+`lwgeom` depends on [sf](https://github.com/r-spatial/sf), which has to be installed first.
 
 ### MacOS
 
@@ -37,4 +40,6 @@ sudo apt-get install libgdal-dev libgeos-dev libproj-dev libudunits2-dev liblwge
 
 ### Windows
 
-We welcome suggestions about how to install `lwgeom` on windows!
+The `lwgeom` package on windows compiles the `liblwgeom` sources,
+and uses the external dependencies (GEOS, PROJ) from the `gdal2`
+[winlib](https://github.com/rwinlib/gdal2).
