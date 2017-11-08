@@ -22,6 +22,6 @@ see \url{http://geohash.org/} or \url{https://en.wikipedia.org/wiki/Geohash}.
 }
 \examples{
 library(sf)
-st_geohash(st_sfc(st_point(c(1.5,3.5)), st_point(c(0,90))), 2)
-st_geohash(st_sfc(st_point(c(1.5,3.5)), st_point(c(0,90))), 10)
+lwgeom::st_geohash(st_sfc(st_point(c(1.5,3.5)), st_point(c(0,90))), 2)
+lwgeom::st_geohash(st_sfc(st_point(c(1.5,3.5)), st_point(c(0,90))), 10)
 }
