@@ -25,7 +25,6 @@ OBJECTS_LIBLWGEOM= \
   liblwgeom/lwgeom_geos_node.o \
   liblwgeom/lwgeom_geos_split.o \
   liblwgeom/lwgeom_median.o \
-  liblwgeom/lwgeom_sfcgal.o \
   liblwgeom/lwgeom_topo.o \
   liblwgeom/lwgeom_transform.o \
   liblwgeom/lwgeom_wrapx.o \
