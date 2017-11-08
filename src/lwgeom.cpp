@@ -47,6 +47,17 @@ Rcpp::List sfc_from_lwgeom(std::vector<LWGEOM *> lwgeom_v) {
 }
 
 // [[Rcpp::export]]
+Rcpp::List CPL_sfc_from_twkb(Rcpp::List twkb) {
+	std::vector<LWGEOM *> lw(twkb.size());
+	for (size_t i = 0; i < twkb.size(); i++) {
+		Rcpp::RawVector raw = twkb[i];
+		lw[i] = lwgeom_from_twkb(&(raw[0]), raw.size(), LW_PARSER_CHECK_ALL);
+	}
+	return sfc_from_lwgeom(lw);
+}
+
+
+// [[Rcpp::export]]
 Rcpp::List CPL_make_valid(Rcpp::List sfc) {
 
 	std::vector<LWGEOM *> lwgeom_v = lwgeom_from_sfc(sfc);
@@ -79,7 +90,9 @@ Rcpp::CharacterVector CPL_geohash(Rcpp::List sfc, int prec) {
 	Rcpp::CharacterVector chr(sfc.size()); // return
 	std::vector<LWGEOM *> lwgeom_v = lwgeom_from_sfc(sfc);
 	for (int i = 0; i < lwgeom_v.size(); i++) {
-		chr(i) = lwgeom_geohash(lwgeom_v[i], prec);
+		char *c = lwgeom_geohash(lwgeom_v[i], prec);
+		chr(i) = c; // copy
+		lwfree(c);
 		lwgeom_free(lwgeom_v[i]);
 	}
 	return chr;
@@ -124,13 +137,15 @@ Rcpp::List CPL_minimum_bounding_circle(Rcpp::List sfc) {
   std::vector<LWGEOM *> lwgeom_v = lwgeom_from_sfc(sfc);
   for (int i = 0; i < lwgeom_v.size(); i++) {
     LWBOUNDINGCIRCLE *lwg_ret = lwgeom_calculate_mbc(lwgeom_v[i]);
+	if (lwg_ret == NULL)
+		Rcpp::stop("could not compute minimum bounding circle");
     center[i] = Rcpp::NumericVector::create(
       Rcpp::Named("x") = lwg_ret->center->x,
       Rcpp::Named("y") = lwg_ret->center->y
     );
     radius[i] = lwg_ret->radius;
-    
     lwgeom_free(lwgeom_v[i]);
+	lwboundingcircle_destroy(lwg_ret);
   }
   return Rcpp::List::create(
     Rcpp::Named("center") = center,

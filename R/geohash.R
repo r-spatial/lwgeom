@@ -3,10 +3,9 @@
 #' compute geohash from (average) coordinates (requires lwgeom)
 #' 
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
-#' @param precision integer; precision (length) of geohash returned; when omitted, precision 10 is taken.
+#' @param precision integer; precision (length) of geohash returned. From the liblwgeom source: ``where the precision is non-positive, a precision based on the bounds of the feature. Big features have loose precision. Small features have tight precision.''
 #' @export
 #' @details see \url{http://geohash.org/} or \url{https://en.wikipedia.org/wiki/Geohash}.
-#' in case a geometry contains more than one point, the geohash for the average of the points in the geometry is returned.
 #' @return character vector with geohashes
 #' @examples
 #' library(sf)
@@ -15,3 +14,5 @@
 st_geohash = function(x, precision = 0) {
 	CPL_geohash(st_geometry(x), precision)
 }
+
+

@@ -9,6 +9,10 @@ CPL_geodetic_length <- function(sfc, semi_major, inv_flattening) {
     .Call('_lwgeom_CPL_geodetic_length', PACKAGE = 'lwgeom', sfc, semi_major, inv_flattening)
 }
 
+CPL_geodetic_azimuth <- function(sfc, semi_major, inv_flattening) {
+    .Call('_lwgeom_CPL_geodetic_azimuth', PACKAGE = 'lwgeom', sfc, semi_major, inv_flattening)
+}
+
 CPL_geodetic_segmentize <- function(sfc, max_seg_length) {
     .Call('_lwgeom_CPL_geodetic_segmentize', PACKAGE = 'lwgeom', sfc, max_seg_length)
 }
@@ -19,6 +23,10 @@ CPL_geodetic_covers <- function(sfc1, sfc2) {
 
 CPL_lwgeom_version <- function(b = FALSE) {
     .Call('_lwgeom_CPL_lwgeom_version', PACKAGE = 'lwgeom', b)
+}
+
+CPL_sfc_from_twkb <- function(twkb) {
+    .Call('_lwgeom_CPL_sfc_from_twkb', PACKAGE = 'lwgeom', twkb)
 }
 
 CPL_make_valid <- function(sfc) {

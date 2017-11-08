@@ -31,4 +31,6 @@ Collate:
 	transform.R
 	bounding_circle.R
 	geodetic.R
+	bearing.R
+	twkb.R
 RoxygenNote: 6.0.1

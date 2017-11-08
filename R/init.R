@@ -1,6 +1,6 @@
 #' @importFrom Rcpp evalCpp
 #' @import sf
-#' @importFrom units set_units
+#' @importFrom units set_units make_unit
 #' @useDynLib lwgeom
 NULL
 

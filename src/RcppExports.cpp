@@ -31,6 +31,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_geodetic_azimuth
+Rcpp::NumericVector CPL_geodetic_azimuth(Rcpp::List sfc, double semi_major, double inv_flattening);
+RcppExport SEXP _lwgeom_CPL_geodetic_azimuth(SEXP sfcSEXP, SEXP semi_majorSEXP, SEXP inv_flatteningSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    Rcpp::traits::input_parameter< double >::type semi_major(semi_majorSEXP);
+    Rcpp::traits::input_parameter< double >::type inv_flattening(inv_flatteningSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_geodetic_azimuth(sfc, semi_major, inv_flattening));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_geodetic_segmentize
 Rcpp::List CPL_geodetic_segmentize(Rcpp::List sfc, double max_seg_length);
 RcppExport SEXP _lwgeom_CPL_geodetic_segmentize(SEXP sfcSEXP, SEXP max_seg_lengthSEXP) {
@@ -63,6 +76,17 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< bool >::type b(bSEXP);
     rcpp_result_gen = Rcpp::wrap(CPL_lwgeom_version(b));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_sfc_from_twkb
+Rcpp::List CPL_sfc_from_twkb(Rcpp::List twkb);
+RcppExport SEXP _lwgeom_CPL_sfc_from_twkb(SEXP twkbSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type twkb(twkbSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_sfc_from_twkb(twkb));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -128,9 +152,11 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_lwgeom_CPL_geodetic_area", (DL_FUNC) &_lwgeom_CPL_geodetic_area, 3},
     {"_lwgeom_CPL_geodetic_length", (DL_FUNC) &_lwgeom_CPL_geodetic_length, 3},
+    {"_lwgeom_CPL_geodetic_azimuth", (DL_FUNC) &_lwgeom_CPL_geodetic_azimuth, 3},
     {"_lwgeom_CPL_geodetic_segmentize", (DL_FUNC) &_lwgeom_CPL_geodetic_segmentize, 2},
     {"_lwgeom_CPL_geodetic_covers", (DL_FUNC) &_lwgeom_CPL_geodetic_covers, 2},
     {"_lwgeom_CPL_lwgeom_version", (DL_FUNC) &_lwgeom_CPL_lwgeom_version, 1},
+    {"_lwgeom_CPL_sfc_from_twkb", (DL_FUNC) &_lwgeom_CPL_sfc_from_twkb, 1},
     {"_lwgeom_CPL_make_valid", (DL_FUNC) &_lwgeom_CPL_make_valid, 1},
     {"_lwgeom_CPL_split", (DL_FUNC) &_lwgeom_CPL_split, 2},
     {"_lwgeom_CPL_geohash", (DL_FUNC) &_lwgeom_CPL_geohash, 2},
