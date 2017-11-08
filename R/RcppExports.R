@@ -57,7 +57,3 @@ CPL_write_wkb <- function(sfc, EWKB = FALSE) {
     .Call('_lwgeom_CPL_write_wkb', PACKAGE = 'lwgeom', sfc, EWKB)
 }
 
-# Register entry points for exported C++ functions
-methods::setLoadAction(function(ns) {
-    .Call('_lwgeom_RcppExport_registerCCallable', PACKAGE = 'lwgeom')
-})

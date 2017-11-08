@@ -13,14 +13,11 @@
 
 #include <Rcpp.h>
 
-// #include "bbox.h"
 #include "wkb.h"
 
 #define EWKB_Z_BIT    0x80000000
 #define EWKB_M_BIT    0x40000000
 #define EWKB_SRID_BIT 0x20000000
-
-// [[Rcpp::interfaces(r, cpp)]] 
 
 typedef struct {
 	const unsigned char *pt;
