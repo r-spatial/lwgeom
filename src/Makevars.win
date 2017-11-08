@@ -71,6 +71,12 @@ OBJECTS_LIBLWGEOM= \
   liblwgeom/stringbuffer.o \
   liblwgeom/varint.o
 
+OBJECTS_RCPP= \
+  geodetic.o \
+  lwgeom.o \
+  RcppExports.o \
+  wkb.o
+
 OBJECTS= $(OBJECTS_LIBLWGEOM) $(OBJECTS_RCPP)
 
 all:	clean winlibs
