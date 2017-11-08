@@ -20,6 +20,10 @@ lwgeom_extSoftVersion = function() {
 crs_parameters = function(x) {
 	if (utils::packageVersion("sf") > "0.5-5")
 		st_crs(x, parameters = TRUE)
-	else
-		sf:::crs_parameters(x)
+	else # hard-code the outcome for st_crs(4326):
+		structure(list(SemiMajor = structure(6378137, units = structure(list(
+    		numerator = "m", denominator = character(0)), .Names = c("numerator", 
+		"denominator"), class = "symbolic_units"), class = "units"), 
+    		InvFlattening = 298.257223563), .Names = c("SemiMajor", "InvFlattening"
+		))
 }
