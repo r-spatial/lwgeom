@@ -86,7 +86,7 @@ clean:
 
 winlibs:
 	mkdir -p ../inst
-	"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe --vanilla" "../tools/winlibs.R"
+	"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" --vanilla "../tools/winlibs.R"
 	cp -r ../windows/gdal2-2.2.0/share/proj ../inst/
 
 COMPILED_BY ?= gcc-4.6.3
