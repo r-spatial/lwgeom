@@ -1,5 +1,5 @@
-// [[Rcpp::depends(sf)]]
-#include <sf.h>
+/* to add back later: [ [ R c p p :: d e p e n d s(s f)]] */
+// to add back later: #include <sf.h>
 
 #include <Rcpp.h>
 
@@ -8,6 +8,8 @@
 extern "C" {
 #include <liblwgeom.h>
 }
+
+#include "wkb.h"
 
 #include "lwgeom.h"
 
@@ -21,7 +23,8 @@ Rcpp::CharacterVector CPL_lwgeom_version(bool b = false) {
 // in
 std::vector<LWGEOM *> lwgeom_from_sfc(Rcpp::List sfc) {
 	std::vector<LWGEOM *> lwgeom_v(sfc.size()); // return
-	Rcpp::List wkblst = sf::CPL_write_wkb(sfc, true);
+	// Rcpp::List wkblst = sf::CPL_write_wkb(sfc, true);
+	Rcpp::List wkblst = CPL_write_wkb(sfc, true);
 	for (int i = 0; i < wkblst.size(); i++) {
 		Rcpp::RawVector rv = wkblst[i];
 		const uint8_t *wkb = &(rv[0]); 
@@ -43,7 +46,8 @@ Rcpp::List sfc_from_lwgeom(std::vector<LWGEOM *> lwgeom_v) {
 		lwfree((void *) wkb);
 		wkblst[i] = raw;
 	}
-	return sf::CPL_read_wkb(wkblst, true, false);
+	// return sf::CPL_read_wkb(wkblst, true, false);
+	return CPL_read_wkb(wkblst, true, false);
 }
 
 // [[Rcpp::export]]

@@ -1,6 +1,3 @@
-// [[Rcpp::depends(sf)]]
-#include <sf.h>
-
 #include <Rcpp.h>
 
 #include <string.h>
