@@ -138,7 +138,7 @@ Rcpp::List CPL_minimum_bounding_circle(Rcpp::List sfc) {
   for (int i = 0; i < lwgeom_v.size(); i++) {
     LWBOUNDINGCIRCLE *lwg_ret = lwgeom_calculate_mbc(lwgeom_v[i]);
 	if (lwg_ret == NULL)
-		Rcpp::stop("could not compute minimum bounding circle");
+		Rcpp::stop("could not compute minimum bounding circle"); // #nocov
     center[i] = Rcpp::NumericVector::create(
       Rcpp::Named("x") = lwg_ret->center->x,
       Rcpp::Named("y") = lwg_ret->center->y
