@@ -93,7 +93,8 @@ COMPILED_BY ?= gcc-4.6.3
 
 RWINLIB = lib${subst gcc,,${COMPILED_BY}}${R_ARCH}
 
-PKG_CPPFLAGS =\
+PKG_CPPFLAGS = \
+	-I./liblwgeom \
 	-I../windows/gdal2-2.2.0/include/geos \
 	-I../windows/gdal2-2.2.0/include/proj
 
