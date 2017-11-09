@@ -6,3 +6,4 @@ configured with:
 removed: *_sfcgal.[ch], *_wkt_*.[chly]
 
 putchar warning: possibly the fwrite() in *wkt_lex.c
+#define ECHO do { if (fwrite( wkt_yytext, wkt_yyleng, 1, wkt_yyout )) {} } while (0)
