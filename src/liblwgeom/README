@@ -2,3 +2,7 @@ liblwgeom code obtained from from https://github.com/postgis/postgis
 git commit d9a98c5be3c8644699220729f11ed48488548bad
 configured with:
 ./configure --without-pgconfig --without-sfcgal --without-libiconv-prefix --without-libintl-prefix --without-json --without-protobuf --without-topology --without-raster  
+
+removed: *_sfcgal.[ch], *_wkt_*.[chly]
+
+putchar warning: possibly the fwrite() in *wkt_lex.c
