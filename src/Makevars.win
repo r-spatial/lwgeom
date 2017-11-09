@@ -68,7 +68,8 @@ OBJECTS_LIBLWGEOM= \
   liblwgeom/varint.o \
   liblwgeom/lwin_wkt_parse.o \
   liblwgeom/lwin_wkt_lex.o \
-  liblwgeom/lwout_wkt.o
+  liblwgeom/lwout_wkt.o \
+  liblwgeom/lwin_wkt.o
 
 OBJECTS_RCPP= \
   geodetic.o \
