@@ -21,6 +21,10 @@ CPL_geodetic_covers <- function(sfc1, sfc2) {
     .Call('_lwgeom_CPL_geodetic_covers', PACKAGE = 'lwgeom', sfc1, sfc2)
 }
 
+CPL_init_lwgeom <- function(l) {
+    .Call('_lwgeom_CPL_init_lwgeom', PACKAGE = 'lwgeom', l)
+}
+
 CPL_lwgeom_version <- function(b = FALSE) {
     .Call('_lwgeom_CPL_lwgeom_version', PACKAGE = 'lwgeom', b)
 }

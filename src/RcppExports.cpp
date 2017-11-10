@@ -68,6 +68,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_init_lwgeom
+Rcpp::List CPL_init_lwgeom(Rcpp::List l);
+RcppExport SEXP _lwgeom_CPL_init_lwgeom(SEXP lSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type l(lSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_init_lwgeom(l));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_lwgeom_version
 Rcpp::CharacterVector CPL_lwgeom_version(bool b);
 RcppExport SEXP _lwgeom_CPL_lwgeom_version(SEXP bSEXP) {
@@ -180,6 +191,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_lwgeom_CPL_geodetic_azimuth", (DL_FUNC) &_lwgeom_CPL_geodetic_azimuth, 3},
     {"_lwgeom_CPL_geodetic_segmentize", (DL_FUNC) &_lwgeom_CPL_geodetic_segmentize, 2},
     {"_lwgeom_CPL_geodetic_covers", (DL_FUNC) &_lwgeom_CPL_geodetic_covers, 2},
+    {"_lwgeom_CPL_init_lwgeom", (DL_FUNC) &_lwgeom_CPL_init_lwgeom, 1},
     {"_lwgeom_CPL_lwgeom_version", (DL_FUNC) &_lwgeom_CPL_lwgeom_version, 1},
     {"_lwgeom_CPL_sfc_from_twkb", (DL_FUNC) &_lwgeom_CPL_sfc_from_twkb, 1},
     {"_lwgeom_CPL_make_valid", (DL_FUNC) &_lwgeom_CPL_make_valid, 1},
