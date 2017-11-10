@@ -1869,8 +1869,7 @@ YY_BUFFER_STATE wkt_yy_scan_bytes  (yyconst char * yybytes, yy_size_t  _yybytes_
 
 static void yy_fatal_error (yyconst char* msg )
 {
-    	(void) fprintf( stderr, "%s\n", msg );
-	exit( YY_EXIT_FAILURE );
+	/* (void) fprintf( stderr, "%s\n", msg ); exit( YY_EXIT_FAILURE ); */
 }
 
 /* Redefine yyless() so it works in section 3 code. */

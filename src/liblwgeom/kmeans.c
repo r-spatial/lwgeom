@@ -137,8 +137,8 @@ static void update_r_threaded(kmeans_config *config)
 			rc = pthread_create(&thread[i], &thread_attr, update_r_threaded_main, (void *) &thread_config[i]);
 			if (rc)
 			{
-				printf("ERROR: return code from pthread_create() is %d\n", rc);
-				exit(-1);
+				/* printf("ERROR: return code from pthread_create() is %d\n", rc); */
+				/* exit(-1); */
 			}
 		}
 
@@ -152,8 +152,8 @@ static void update_r_threaded(kmeans_config *config)
 			rc = pthread_join(thread[i], &status);
 			if (rc)
 			{
-				printf("ERROR: return code from pthread_join() is %d\n", rc);
-				exit(-1);
+				/* printf("ERROR: return code from pthread_join() is %d\n", rc);
+				exit(-1); */
 			}
 		}
 	}
@@ -220,8 +220,8 @@ update_means_threaded(kmeans_config *config)
 			rc = pthread_create(&thread[i], &thread_attr, update_means_threaded_main, (void *) config);
 			if (rc)
 			{
-				printf("ERROR: return code from pthread_create() is %d\n", rc);
-				exit(-1);
+				/* printf("ERROR: return code from pthread_create() is %d\n", rc);
+				exit(-1); */
 			}
 		}
 
@@ -234,8 +234,8 @@ update_means_threaded(kmeans_config *config)
 			rc = pthread_join(thread[i], &status);
 			if (rc)
 			{
-				printf("ERROR: return code from pthread_join() is %d\n", rc);
-				exit(-1);
+				/* printf("ERROR: return code from pthread_join() is %d\n", rc);
+				exit(-1); */
 			}
 		}
 

@@ -789,6 +789,7 @@ circ_tree_distance_tree_internal(const CIRC_NODE* n1, const CIRC_NODE* n2, doubl
 
 void circ_tree_print(const CIRC_NODE* node, int depth)
 {
+	/*
 	int i;
 
 	if (circ_node_is_leaf(node))
@@ -832,6 +833,7 @@ void circ_tree_print(const CIRC_NODE* node, int depth)
 	{
 		circ_tree_print(node->nodes[i], depth + 1);
 	}
+	*/
 	return;
 }
 
