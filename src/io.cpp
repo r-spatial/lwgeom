@@ -7,6 +7,7 @@ extern "C" {
 
 #define LW_MSG_MAXLEN 256
 
+// #nocov start
 static void io_notice(const char *fmt, va_list ap)
 {
     char msg[LW_MSG_MAXLEN+1];
@@ -28,6 +29,7 @@ static void io_error(const char *fmt, va_list ap)
     Rprintf("%s\n", msg);
 	Rcpp::stop("lwgeom error");
 }
+// #nocov end
 
 // [[Rcpp::export]]
 Rcpp::List CPL_init_lwgeom(Rcpp::List l) {
