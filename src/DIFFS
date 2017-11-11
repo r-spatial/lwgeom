@@ -1,0 +1,290 @@
+diff -c liblwgeom/kmeans.c ../../postgis/liblwgeom/kmeans.c
+*** liblwgeom/kmeans.c	2017-11-10 22:45:06.065006363 +0100
+--- ../../postgis/liblwgeom/kmeans.c	2017-10-20 12:30:08.754503045 +0200
+***************
+*** 137,144 ****
+  			rc = pthread_create(&thread[i], &thread_attr, update_r_threaded_main, (void *) &thread_config[i]);
+  			if (rc)
+  			{
+! 				/* printf("ERROR: return code from pthread_create() is %d\n", rc); */
+! 				/* exit(-1); */
+  			}
+  		}
+  
+--- 137,144 ----
+  			rc = pthread_create(&thread[i], &thread_attr, update_r_threaded_main, (void *) &thread_config[i]);
+  			if (rc)
+  			{
+! 				printf("ERROR: return code from pthread_create() is %d\n", rc);
+! 				exit(-1);
+  			}
+  		}
+  
+***************
+*** 152,159 ****
+  			rc = pthread_join(thread[i], &status);
+  			if (rc)
+  			{
+! 				/* printf("ERROR: return code from pthread_join() is %d\n", rc);
+! 				exit(-1); */
+  			}
+  		}
+  	}
+--- 152,159 ----
+  			rc = pthread_join(thread[i], &status);
+  			if (rc)
+  			{
+! 				printf("ERROR: return code from pthread_join() is %d\n", rc);
+! 				exit(-1);
+  			}
+  		}
+  	}
+***************
+*** 220,227 ****
+  			rc = pthread_create(&thread[i], &thread_attr, update_means_threaded_main, (void *) config);
+  			if (rc)
+  			{
+! 				/* printf("ERROR: return code from pthread_create() is %d\n", rc);
+! 				exit(-1); */
+  			}
+  		}
+  
+--- 220,227 ----
+  			rc = pthread_create(&thread[i], &thread_attr, update_means_threaded_main, (void *) config);
+  			if (rc)
+  			{
+! 				printf("ERROR: return code from pthread_create() is %d\n", rc);
+! 				exit(-1);
+  			}
+  		}
+  
+***************
+*** 234,241 ****
+  			rc = pthread_join(thread[i], &status);
+  			if (rc)
+  			{
+! 				/* printf("ERROR: return code from pthread_join() is %d\n", rc);
+! 				exit(-1); */
+  			}
+  		}
+  
+--- 234,241 ----
+  			rc = pthread_join(thread[i], &status);
+  			if (rc)
+  			{
+! 				printf("ERROR: return code from pthread_join() is %d\n", rc);
+! 				exit(-1);
+  			}
+  		}
+  
+diff -c liblwgeom/lwgeodetic_tree.c ../../postgis/liblwgeom/lwgeodetic_tree.c
+*** liblwgeom/lwgeodetic_tree.c	2017-11-10 22:39:40.653760871 +0100
+--- ../../postgis/liblwgeom/lwgeodetic_tree.c	2017-10-20 12:30:08.754503045 +0200
+***************
+*** 789,795 ****
+  
+  void circ_tree_print(const CIRC_NODE* node, int depth)
+  {
+- 	/*
+  	int i;
+  
+  	if (circ_node_is_leaf(node))
+--- 789,794 ----
+***************
+*** 833,839 ****
+  	{
+  		circ_tree_print(node->nodes[i], depth + 1);
+  	}
+- 	*/
+  	return;
+  }
+  
+--- 832,837 ----
+diff -c liblwgeom/lwgeom_geos.c ../../postgis/liblwgeom/lwgeom_geos.c
+*** liblwgeom/lwgeom_geos.c	2017-11-11 09:47:18.923276493 +0100
+--- ../../postgis/liblwgeom/lwgeom_geos.c	2017-10-20 12:30:08.754503045 +0200
+***************
+*** 23,29 ****
+   *
+   **********************************************************************/
+  
+- #include "R.h" /* unif_rand() to replace rand() */
+  
+  #include "lwgeom_geos.h"
+  #include "liblwgeom.h"
+--- 23,28 ----
+***************
+*** 1771,1777 ****
+  	mpt = lwmpoint_construct_empty(srid, 0, 0);
+  
+  	/* Init random number generator */
+! 	/* srand(time(NULL)); */
+  
+  	/* Now we fill in an array of cells, and then shuffle that array, */
+  	/* so we can visit the cells in random order to avoid visual ugliness */
+--- 1770,1776 ----
+  	mpt = lwmpoint_construct_empty(srid, 0, 0);
+  
+  	/* Init random number generator */
+! 	srand(time(NULL));
+  
+  	/* Now we fill in an array of cells, and then shuffle that array, */
+  	/* so we can visit the cells in random order to avoid visual ugliness */
+***************
+*** 1791,1801 ****
+  		n = sample_height*sample_width;
+  		if (n > 1) {
+  			for (i = 0; i < n - 1; ++i) {
+! 				/* size_t rnd = (size_t) rand();
+! 				size_t j = i + rnd / (RAND_MAX / (n - i) + 1); */
+! 
+! 				size_t rnd = (size_t) unif_rand();
+! 				size_t j = i + rnd / (1.0 / (n - i) + 1);
+  
+  				memcpy(tmp, (char *)cells + j * stride, size);
+  				memcpy((char *)cells + j * stride, (char *)cells + i * stride, size);
+--- 1790,1797 ----
+  		n = sample_height*sample_width;
+  		if (n > 1) {
+  			for (i = 0; i < n - 1; ++i) {
+! 				size_t rnd = (size_t) rand();
+! 				size_t j = i + rnd / (RAND_MAX / (n - i) + 1);
+  
+  				memcpy(tmp, (char *)cells + j * stride, size);
+  				memcpy((char *)cells + j * stride, (char *)cells + i * stride, size);
+***************
+*** 1814,1823 ****
+  			int contains = 0;
+  			double y = bbox.ymin + cells[2*i] * sample_cell_size;
+  			double x = bbox.xmin + cells[2*i+1] * sample_cell_size;
+! 			/* x += rand() * sample_cell_size / RAND_MAX;
+! 			y += rand() * sample_cell_size / RAND_MAX; */
+! 			x += unif_rand() * sample_cell_size;
+! 			y += unif_rand() * sample_cell_size;
+  			if (x >= bbox.xmax || y >= bbox.ymax)
+  				continue;
+  
+--- 1810,1817 ----
+  			int contains = 0;
+  			double y = bbox.ymin + cells[2*i] * sample_cell_size;
+  			double x = bbox.xmin + cells[2*i+1] * sample_cell_size;
+! 			x += rand() * sample_cell_size / RAND_MAX;
+! 			y += rand() * sample_cell_size / RAND_MAX;
+  			if (x >= bbox.xmax || y >= bbox.ymax)
+  				continue;
+  
+diff -c liblwgeom/lwin_wkt_lex.c ../../postgis/liblwgeom/lwin_wkt_lex.c
+*** liblwgeom/lwin_wkt_lex.c	2017-11-10 22:41:45.547287168 +0100
+--- ../../postgis/liblwgeom/lwin_wkt_lex.c	2017-10-20 12:30:08.758503081 +0200
+***************
+*** 787,794 ****
+  /* This used to be an fputs(), but since the string might contain NUL's,
+   * we now use fwrite().
+   */
+! /* #define ECHO do { if (fwrite( wkt_yytext, wkt_yyleng, 1, wkt_yyout )) {} } while (0) */
+! #define ECHO
+  #endif
+  
+  /* Gets input and stuffs it into "buf".  number of characters read, or YY_NULL,
+--- 787,793 ----
+  /* This used to be an fputs(), but since the string might contain NUL's,
+   * we now use fwrite().
+   */
+! #define ECHO do { if (fwrite( wkt_yytext, wkt_yyleng, 1, wkt_yyout )) {} } while (0)
+  #endif
+  
+  /* Gets input and stuffs it into "buf".  number of characters read, or YY_NULL,
+***************
+*** 1869,1875 ****
+  
+  static void yy_fatal_error (yyconst char* msg )
+  {
+! 	/* (void) fprintf( stderr, "%s\n", msg ); exit( YY_EXIT_FAILURE ); */
+  }
+  
+  /* Redefine yyless() so it works in section 3 code. */
+--- 1868,1875 ----
+  
+  static void yy_fatal_error (yyconst char* msg )
+  {
+!     	(void) fprintf( stderr, "%s\n", msg );
+! 	exit( YY_EXIT_FAILURE );
+  }
+  
+  /* Redefine yyless() so it works in section 3 code. */
+diff -c liblwgeom/lwout_x3d.c ../../postgis/liblwgeom/lwout_x3d.c
+*** liblwgeom/lwout_x3d.c	2017-11-11 10:13:54.774661432 +0100
+--- ../../postgis/liblwgeom/lwout_x3d.c	2017-10-20 12:30:08.762503117 +0200
+***************
+*** 807,814 ****
+  		else
+  			lwerror("asx3d3_collection_buf: unknown geometry type");
+  
+! 		/* ptr += printf(ptr, "</Shape>"); EJP, no clue if this was intended: */
+! 		ptr += sprintf(ptr, "</Shape>");
+  	}
+  
+  	/* Close outmost tag */
+--- 807,813 ----
+  		else
+  			lwerror("asx3d3_collection_buf: unknown geometry type");
+  
+! 		ptr += printf(ptr, "</Shape>");
+  	}
+  
+  	/* Close outmost tag */
+diff -c liblwgeom/lwutil.c ../../postgis/liblwgeom/lwutil.c
+*** liblwgeom/lwutil.c	2017-11-10 22:41:03.504970943 +0100
+--- ../../postgis/liblwgeom/lwutil.c	2017-10-20 12:30:08.762503117 +0200
+***************
+*** 119,125 ****
+  	char msg[LW_MSG_MAXLEN+1];
+  	vsnprintf (msg, LW_MSG_MAXLEN, fmt, ap);
+  	msg[LW_MSG_MAXLEN]='\0';
+! 	/* fprintf(stderr, "%s\n", msg); */
+  }
+  
+  static void
+--- 119,125 ----
+  	char msg[LW_MSG_MAXLEN+1];
+  	vsnprintf (msg, LW_MSG_MAXLEN, fmt, ap);
+  	msg[LW_MSG_MAXLEN]='\0';
+! 	fprintf(stderr, "%s\n", msg);
+  }
+  
+  static void
+***************
+*** 134,140 ****
+  			msg[i] = ' ';
+  		vsnprintf(msg+i, LW_MSG_MAXLEN-i, fmt, ap);
+  		msg[LW_MSG_MAXLEN]='\0';
+! 		/* fprintf(stderr, "%s\n", msg); */
+  	}
+  }
+  
+--- 134,140 ----
+  			msg[i] = ' ';
+  		vsnprintf(msg+i, LW_MSG_MAXLEN-i, fmt, ap);
+  		msg[LW_MSG_MAXLEN]='\0';
+! 		fprintf(stderr, "%s\n", msg);
+  	}
+  }
+  
+***************
+*** 144,150 ****
+  	char msg[LW_MSG_MAXLEN+1];
+  	vsnprintf (msg, LW_MSG_MAXLEN, fmt, ap);
+  	msg[LW_MSG_MAXLEN]='\0';
+! 	/* fprintf(stderr, "%s\n", msg); exit(1); */
+  }
+  
+  /**
+--- 144,151 ----
+  	char msg[LW_MSG_MAXLEN+1];
+  	vsnprintf (msg, LW_MSG_MAXLEN, fmt, ap);
+  	msg[LW_MSG_MAXLEN]='\0';
+! 	fprintf(stderr, "%s\n", msg);
+! 	exit(1);
+  }
+  
+  /**

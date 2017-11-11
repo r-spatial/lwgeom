@@ -23,6 +23,7 @@
  *
  **********************************************************************/
 
+#include "R.h" /* unif_rand() to replace rand() */
 
 #include "lwgeom_geos.h"
 #include "liblwgeom.h"
@@ -1770,7 +1771,7 @@ lwpoly_to_points(const LWPOLY *lwpoly, int npoints)
 	mpt = lwmpoint_construct_empty(srid, 0, 0);
 
 	/* Init random number generator */
-	srand(time(NULL));
+	/* srand(time(NULL)); */
 
 	/* Now we fill in an array of cells, and then shuffle that array, */
 	/* so we can visit the cells in random order to avoid visual ugliness */
@@ -1790,8 +1791,11 @@ lwpoly_to_points(const LWPOLY *lwpoly, int npoints)
 		n = sample_height*sample_width;
 		if (n > 1) {
 			for (i = 0; i < n - 1; ++i) {
-				size_t rnd = (size_t) rand();
-				size_t j = i + rnd / (RAND_MAX / (n - i) + 1);
+				/* size_t rnd = (size_t) rand();
+				size_t j = i + rnd / (RAND_MAX / (n - i) + 1); */
+
+				size_t rnd = (size_t) unif_rand();
+				size_t j = i + rnd / (1.0 / (n - i) + 1);
 
 				memcpy(tmp, (char *)cells + j * stride, size);
 				memcpy((char *)cells + j * stride, (char *)cells + i * stride, size);
@@ -1810,8 +1814,10 @@ lwpoly_to_points(const LWPOLY *lwpoly, int npoints)
 			int contains = 0;
 			double y = bbox.ymin + cells[2*i] * sample_cell_size;
 			double x = bbox.xmin + cells[2*i+1] * sample_cell_size;
-			x += rand() * sample_cell_size / RAND_MAX;
-			y += rand() * sample_cell_size / RAND_MAX;
+			/* x += rand() * sample_cell_size / RAND_MAX;
+			y += rand() * sample_cell_size / RAND_MAX; */
+			x += unif_rand() * sample_cell_size;
+			y += unif_rand() * sample_cell_size;
 			if (x >= bbox.xmax || y >= bbox.ymax)
 				continue;
 

@@ -13,3 +13,5 @@ replace:
 with:
 
 #define ECHO
+
+all diffs, registered with "diff -c", are found in file DIFFS
