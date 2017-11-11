@@ -3,7 +3,9 @@ Version: 0.0-0
 Title: Liblwgeom Bindings for Simple Features 
 Description: Access to some of the functions found in liblwgeom, the geometry library used by PostGIS. Those that are directly exposed by the C interface of GEOS are to be found in package sf.
 Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.pebesma@uni-muenster.de", comment = c(ORCID = "0000-0001-8049-7069")),
-	person("Colin", "Rundel", role = "ctb"))
+	person("Colin", "Rundel", role = "ctb"),
+	person("liblwgeom developers", role = "cph"),
+	)
 Depends:
     R (>= 3.3.0)
 Imports: 
@@ -18,7 +20,7 @@ LinkingTo:
 	Rcpp
 VignetteBuilder: knitr
 SystemRequirements: liblwgeom
-License: GPL-2 | MIT + file LICENSE
+License: GPL-2
 URL: https://github.com/r-spatial/lwgeom/
 BugReports: https://github.com/r-spatial/lwgeom/issues/
 Collate:
