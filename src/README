@@ -3,15 +3,6 @@ git commit d9a98c5be3c8644699220729f11ed48488548bad
 configured with:
 ./configure --without-pgconfig --without-sfcgal --without-libiconv-prefix --without-libintl-prefix --without-json --without-protobuf --without-topology --without-raster  
 
-removed: *_sfcgal.[ch], *_wkt_*.[chly]
-
-putchar warning: possibly the fwrite() in *wkt_lex.c
-replace:
-
-#define ECHO do { if (fwrite( wkt_yytext, wkt_yyleng, 1, wkt_yyout )) {} } while (0)
-
-with:
-
-#define ECHO
+removed: *_sfcgal.[ch]
 
 all diffs, registered with "diff -c", are found in file DIFFS
