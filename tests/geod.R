@@ -23,6 +23,7 @@ x = st_sfc(pole, pt, crs = 4326)
 st_geod_covers(x[c(1,1,1)], x[c(2,2,2,2)])
 
 # box crossing the dateline:
-box = st_polygon(list(rbind(c(179.5,0), c(179.5,1), c(-179.5,1), c(-179.5,0), c(179.5,0))))
+#box = st_polygon(list(rbind(c(179.5,0), c(179.5,1), c(-179.5,1), c(-179.5,0), c(179.5,0))))
+box = st_polygon(list(rbind(c(179.5,0.1), c(179.5,1), c(-179.5,1), c(-179.5,0.1), c(179.5,0.1))))
 b = st_sfc(box, crs = 4326)
 units::set_units(st_geod_area(b), km^2) # approx 111^2

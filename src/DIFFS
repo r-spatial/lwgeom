@@ -174,7 +174,7 @@ diff -c liblwgeom/lwgeom_geos.c ../../postgis/liblwgeom/lwgeom_geos.c
   				continue;
   
 diff -c liblwgeom/lwin_wkt_lex.c ../../postgis/liblwgeom/lwin_wkt_lex.c
-*** liblwgeom/lwin_wkt_lex.c	2017-11-10 22:41:45.547287168 +0100
+*** liblwgeom/lwin_wkt_lex.c	2017-11-15 12:24:21.433081247 +0100
 --- ../../postgis/liblwgeom/lwin_wkt_lex.c	2017-10-20 12:30:08.758503081 +0200
 ***************
 *** 787,794 ****
@@ -195,6 +195,25 @@ diff -c liblwgeom/lwin_wkt_lex.c ../../postgis/liblwgeom/lwin_wkt_lex.c
   
   /* Gets input and stuffs it into "buf".  number of characters read, or YY_NULL,
 ***************
+*** 900,907 ****
+  		if ( ! wkt_yyin )
+  			wkt_yyin = stdin;
+  
+! 		/* if ( ! wkt_yyout )
+! 			wkt_yyout = stdout; */
+  
+  		if ( ! YY_CURRENT_BUFFER ) {
+  			wkt_yyensure_buffer_stack ();
+--- 899,906 ----
+  		if ( ! wkt_yyin )
+  			wkt_yyin = stdin;
+  
+! 		if ( ! wkt_yyout )
+! 			wkt_yyout = stdout;
+  
+  		if ( ! YY_CURRENT_BUFFER ) {
+  			wkt_yyensure_buffer_stack ();
+***************
 *** 1869,1875 ****
   
   static void yy_fatal_error (yyconst char* msg )
@@ -212,6 +231,23 @@ diff -c liblwgeom/lwin_wkt_lex.c ../../postgis/liblwgeom/lwin_wkt_lex.c
   }
   
   /* Redefine yyless() so it works in section 3 code. */
+***************
+*** 1985,1991 ****
+  /* Defined in main.c */
+  #ifdef YY_STDINIT
+      wkt_yyin = stdin;
+! 	/* wkt_yyout = stdout; */
+  #else
+      wkt_yyin = (FILE *) 0;
+      wkt_yyout = (FILE *) 0;
+--- 1985,1991 ----
+  /* Defined in main.c */
+  #ifdef YY_STDINIT
+      wkt_yyin = stdin;
+!     wkt_yyout = stdout;
+  #else
+      wkt_yyin = (FILE *) 0;
+      wkt_yyout = (FILE *) 0;
 diff -c liblwgeom/lwout_x3d.c ../../postgis/liblwgeom/lwout_x3d.c
 *** liblwgeom/lwout_x3d.c	2017-11-11 10:13:54.774661432 +0100
 --- ../../postgis/liblwgeom/lwout_x3d.c	2017-10-20 12:30:08.762503117 +0200

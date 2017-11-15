@@ -900,8 +900,8 @@ YY_DECL
 		if ( ! wkt_yyin )
 			wkt_yyin = stdin;
 
-		if ( ! wkt_yyout )
-			wkt_yyout = stdout;
+		/* if ( ! wkt_yyout )
+			wkt_yyout = stdout; */
 
 		if ( ! YY_CURRENT_BUFFER ) {
 			wkt_yyensure_buffer_stack ();
@@ -1985,7 +1985,7 @@ static int yy_init_globals (void)
 /* Defined in main.c */
 #ifdef YY_STDINIT
     wkt_yyin = stdin;
-    wkt_yyout = stdout;
+	/* wkt_yyout = stdout; */
 #else
     wkt_yyin = (FILE *) 0;
     wkt_yyout = (FILE *) 0;

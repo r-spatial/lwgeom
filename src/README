@@ -5,4 +5,4 @@ configured with:
 
 removed: *_sfcgal.[ch]
 
-all diffs, registered with "diff -c", are found in file DIFFS
+all diffs, registered with "diff -c | grep -v 'Only in'", are found in file DIFFS
