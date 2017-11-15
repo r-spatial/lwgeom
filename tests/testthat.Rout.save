@@ -16,6 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library(testthat)
+> suppressPackageStartupMessages(library(sf))
 > suppressPackageStartupMessages(library(lwgeom))
 > 
 > test_check("lwgeom")
@@ -38,4 +39,4 @@ OK: 9 SKIPPED: 0 FAILED: 0
 > 
 > proc.time()
    user  system elapsed 
-  0.732   0.280   0.694 
+  0.764   0.260   0.735 

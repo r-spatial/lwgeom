@@ -22,10 +22,16 @@ Type 'q()' to quit R.
 > 
 > ### ** Examples
 > 
+> suppressPackageStartupMessages(library(sf))
 > library(lwgeom)
-Linking to lwgeom 2.3.1 r15264
-> library(sf)
-Linking to GEOS 3.5.1, GDAL 2.1.2, proj.4 4.9.3
+Linking to liblwgeom 2.5.0dev r16016
+
+Attaching package: 'lwgeom'
+
+The following objects are masked from 'package:sf':
+
+    st_geohash, st_make_valid, st_split
+
 > nc = st_read(system.file("gpkg/nc.gpkg", package="sf"))
 Reading layer `nc.gpkg' from data source `/home/edzer/R/x86_64-pc-linux-gnu-library/3.4/sf/gpkg/nc.gpkg' using driver `GPKG'
 Simple feature collection with 100 features and 14 fields
@@ -36,7 +42,7 @@ epsg (SRID):    4267
 proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > st_geod_area(nc[1:3,])
 Units: m^2
-[1] 1137388604  611077263 1423489919
+[1] 1137389166  611077451 1423490699
 > # st_area(nc[1:3,])
 > l = st_sfc(st_linestring(rbind(c(7,52), c(8,53))), crs = 4326)
 > st_geod_length(l)
@@ -55,6 +61,13 @@ Sparse geometry binary predicate list of length 3, where the predicate was `cove
  2: 1, 2, 3, 4
  3: 1, 2, 3, 4
 > 
+> # box crossing the dateline:
+> #box = st_polygon(list(rbind(c(179.5,0), c(179.5,1), c(-179.5,1), c(-179.5,0), c(179.5,0))))
+> box = st_polygon(list(rbind(c(179.5,0.1), c(179.5,1), c(-179.5,1), c(-179.5,0.1), c(179.5,0.1))))
+> b = st_sfc(box, crs = 4326)
+> units::set_units(st_geod_area(b), km^2) # approx 111^2
+11077.84 km^2
+> 
 > proc.time()
    user  system elapsed 
-  0.584   0.312   0.575 
+  0.660   0.292   0.659 

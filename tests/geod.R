@@ -5,8 +5,8 @@
 
 ### ** Examples
 
+suppressPackageStartupMessages(library(sf))
 library(lwgeom)
-library(sf)
 nc = st_read(system.file("gpkg/nc.gpkg", package="sf"))
 st_geod_area(nc[1:3,])
 # st_area(nc[1:3,])
