@@ -1,7 +1,7 @@
 Package: lwgeom
 Version: 0.1-0
-Title: Liblwgeom Bindings for Simple Features 
-Description: Access to some of the functions found in liblwgeom, the geometry library used by PostGIS. Those that are directly exposed by the C interface of GEOS are to be found in package sf.
+Title: Bindings to selected 'liblwgeom' functions for Simple Features 
+Description: Access to some of the functions found in 'liblwgeom', the geometry library used by 'PostGIS'.
 Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.pebesma@uni-muenster.de", comment = c(ORCID = "0000-0001-8049-7069")),
 	person("Colin", "Rundel", role = "ctb"),
 	person("liblwgeom developers", role = "cph"))
@@ -19,7 +19,7 @@ LinkingTo:
 SystemRequirements: GEOS (>= 3.3.0), PROJ.4 (>= 4.8.0)
 License: GPL-2
 Copyright: file COPYRIGHTS
-URL: https://github.com/r-spatial/lwgeom/
+URL: https://github.com/r-spatial/lwgeom/ https://github.com/postgis/postgis/tree/svn-trunk/liblwgeom
 BugReports: https://github.com/r-spatial/lwgeom/issues/
 Collate:
 	init.R

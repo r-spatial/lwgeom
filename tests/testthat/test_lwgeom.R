@@ -24,7 +24,7 @@ test_that("st_make_valid works", {
 	x <- st_transform_proj(geom.sf, "+proj=wintri")
 	p = st_crs(4326)$proj4string
 	x <- st_transform_proj(structure(geom.sf[[1]], proj4string = p), "+proj=wintri")
-	nc = st_read(system.file("shape/nc.shp", package="sf"))
+	nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 	st_transform_proj(nc[1,], "+proj=wintri +over")
 	lwgeom_extSoftVersion()
 })
@@ -35,7 +35,7 @@ test_that("st_minimum_bounding_circle works", {
   y = st_multipoint(matrix(c(0,0,1,0,1,1),3,2))
   plot(st_minimum_bounding_circle(x), axes=TRUE); plot(x, add=TRUE)
   plot(st_minimum_bounding_circle(y), axes=TRUE); plot(y, add=TRUE)
-  nc = st_read(system.file("shape/nc.shp", package="sf"))
+  nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
   state = st_union(st_geometry(nc))
   st_minimum_bounding_circle(state)
   st_minimum_bounding_circle(st_sf(st = "nc", geom = state))

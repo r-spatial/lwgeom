@@ -7,7 +7,7 @@
 
 suppressPackageStartupMessages(library(sf))
 library(lwgeom)
-nc = st_read(system.file("gpkg/nc.gpkg", package="sf"))
+nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE)
 st_geod_area(nc[1:3,])
 # st_area(nc[1:3,])
 l = st_sfc(st_linestring(rbind(c(7,52), c(8,53))), crs = 4326)
