@@ -2,8 +2,8 @@ language: r
 
 r:
   - release
-  #- oldrel
-  #- devel
+  - oldrel
+  - devel
 
 cache: packages
 
