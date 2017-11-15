@@ -18,7 +18,7 @@ Suggests:
 LinkingTo:
 	Rcpp
 VignetteBuilder: knitr
-SystemRequirements: liblwgeom
+SystemRequirements: GEOS (>= 3.3.0), PROJ.4 (>= 4.8.0)
 License: GPL-2
 URL: https://github.com/r-spatial/lwgeom/
 BugReports: https://github.com/r-spatial/lwgeom/issues/
