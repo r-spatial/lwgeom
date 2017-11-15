@@ -5,7 +5,7 @@
 NULL
 
 .onAttach = function(libname, pkgname) {
-	m = paste("Linking to lwgeom", CPL_lwgeom_version())
+	m = paste("Linking to liblwgeom", CPL_lwgeom_version())
 	CPL_init_lwgeom(NA_character_)
 	packageStartupMessage(m)
 }

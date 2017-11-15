@@ -25,28 +25,34 @@ AC_MSG_NOTICE([CXX: ${CXX}])
 #
 # liblwgeom
 #
-AC_ARG_WITH([lwgeom],
-  [AS_HELP_STRING([--without-lwgeom],
-    [disable support for lwgeom])],
+AC_ARG_WITH([liblwgeom],
+  [AS_HELP_STRING([--with-liblwgeom],
+    [use dynamically linking to liblwgeom @<:@default=check@:>@])],
   [],
-  [with_lwgeom=yes])
+  [with_liblwgeom=check])
+          
+AC_SUBST([OBJECTS], ["${OBJECTS} \$(OBJECTS_RCPP)"])
 
-if test "x$with_lwgeom" != xno; then
- AC_CHECK_HEADERS(liblwgeom.h,,with_lwgeom=no)
- if test "${with_lwgeom}" = no; then
-   AC_MSG_NOTICE([liblwgeom.h not found.])
- else
-  LIBLWGEOM=
-  AS_IF([test "x$with_lwgeom" != xno],
-   [AC_CHECK_LIB([lwgeom], [lwgeom_version],
+LIBLWGEOM=
+  AS_IF([test "x$with_liblwgeom" != xno],
+  [AC_CHECK_LIB([lwgeom], lwgeom_make_valid,
      [AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -llwgeom"])
-      AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DHAVE_LWGEOM"])
+      AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DHAVE_LIBGEOM"])
      ],
-     [AC_MSG_NOTICE(
-        [lwgeom was not found; on ubuntu, try: sudo apt-get install liblwgeom-dev])],
-     [])])
- fi
-fi
+     [AC_CHECK_LIB(proj, pj_init_plus,
+         AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -lproj"]), 
+	     AC_MSG_ERROR([libproj not found a standard locations.]))
+      AC_CHECK_LIB(geos_c, GEOS_init_r,
+         AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -lgeos_c"]), 
+	     AC_MSG_ERROR([libgeos not found a standard locations.]))
+      AC_SUBST([OBJECTS], ["${OBJECTS} \$(OBJECTS_LIBLWGEOM)"])
+      AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -I./liblwgeom"])
+	 ],
+     -llwgeom)],
+   AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -lgeos_c -lproj"])
+   AC_SUBST([OBJECTS], ["${OBJECTS} \$(OBJECTS_LIBLWGEOM)"])
+  )
+
 
 #
 # concluding substitution
