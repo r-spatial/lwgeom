@@ -17,9 +17,31 @@ as well as the geodetic (spherical/ellipsoidal) geometry
 functions `st_geod_area`, `st_geod_azimuth`, `st_geod_covers`,
 `st_geod_length`, and `st_geod_segmentize`.
 
-## Installing
+## Installing without liblwgeom preinstalled
 
 `lwgeom` depends on [sf](https://github.com/r-spatial/sf), which has to be installed first.
+It uses the liblwgeom library. When installing from source, it will compile a shipped (and
+modified) version of this library when the library is not autodetected. In this case, the
+GEOM and PROJ libraries have to be available.
+
+### Windows
+
+The `lwgeom` package on windows compiles the `liblwgeom` sources shipped with the package,
+and uses the external dependencies (GEOS, PROJ) from the `gdal2`
+[winlib](https://github.com/rwinlib/gdal2).
+
+### Linux
+
+If you have liblwgeom installed, but want to install this package using the shipped library, install with
+```
+R CMD INSTALL lwgeom --configure-args="--without-liblwgeom"
+```
+and check with
+```
+R CMD check --install-args="--configure-args=--without-liblwgeom" lwgeom_VERSION.tar.gz
+```
+
+## Installing with liblwgeom preinstalled
 
 ### MacOS
 
@@ -37,9 +59,3 @@ sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 sudo apt-get update
 sudo apt-get install libgdal-dev libgeos-dev libproj-dev libudunits2-dev liblwgeom-dev
 ```
-
-### Windows
-
-The `lwgeom` package on windows compiles the `liblwgeom` sources,
-and uses the external dependencies (GEOS, PROJ) from the `gdal2`
-[winlib](https://github.com/rwinlib/gdal2).
