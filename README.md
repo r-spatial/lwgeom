@@ -5,6 +5,7 @@ R bindings to the [liblwgeom](https://github.com/postgis/postgis/tree/svn-trunk/
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/r-spatial/lwgeom?branch=master&svg=true)](https://ci.appveyor.com/project/edzer/lwgeom)
 [![Coverage Status](https://img.shields.io/codecov/c/github/r-spatial/lwgeom/master.svg)](https://codecov.io/github/r-spatial/lwgeom?branch=master)
 [![CRAN](http://www.r-pkg.org/badges/version/lwgeom)](https://cran.r-project.org/package=lwgeom)
+[![Downloads](http://cranlogs.r-pkg.org/badges/lwgeom?color=brightgreen)](http://www.r-pkg.org/pkg/lwgeom)
 
 
 This package provides a few functions that require
