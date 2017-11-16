@@ -77,7 +77,6 @@ OBJECTS_RCPP= \
   geodetic.o \
   lwgeom.o \
   RcppExports.o \
-  wkb.o \
   io.o
 
 OBJECTS=@OBJECTS@

@@ -18,17 +18,10 @@ Type 'q()' to quit R.
 > suppressPackageStartupMessages(library(sf))
 > library(lwgeom)
 Linking to liblwgeom 2.5.0dev r16016
-
-Attaching package: 'lwgeom'
-
-The following objects are masked from 'package:sf':
-
-    st_geohash, st_make_valid, st_split
-
 > p = st_sfc(st_point(c(7,52)), st_point(c(8,53)), crs = 4326)
 > st_geod_azimuth(p)
 0.5410385 rad
 > 
 > proc.time()
    user  system elapsed 
-  0.388   0.268   0.351 
+  0.360   0.248   0.324 

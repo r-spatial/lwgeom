@@ -53,11 +53,3 @@ CPL_minimum_bounding_circle <- function(sfc) {
     .Call('_lwgeom_CPL_minimum_bounding_circle', PACKAGE = 'lwgeom', sfc)
 }
 
-CPL_read_wkb <- function(wkb_list, EWKB = FALSE, spatialite = FALSE) {
-    .Call('_lwgeom_CPL_read_wkb', PACKAGE = 'lwgeom', wkb_list, EWKB, spatialite)
-}
-
-CPL_write_wkb <- function(sfc, EWKB = FALSE) {
-    .Call('_lwgeom_CPL_write_wkb', PACKAGE = 'lwgeom', sfc, EWKB)
-}
-

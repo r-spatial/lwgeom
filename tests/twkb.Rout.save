@@ -19,13 +19,6 @@ Type 'q()' to quit R.
 > suppressPackageStartupMessages(library(sf))
 > library(lwgeom)
 Linking to liblwgeom 2.5.0dev r16016
-
-Attaching package: 'lwgeom'
-
-The following objects are masked from 'package:sf':
-
-    st_geohash, st_make_valid, st_split
-
 > st_as_sfc(l)
 Geometry set for 1 feature 
 geometry type:  LINESTRING
@@ -46,4 +39,4 @@ LINESTRING (1 1, 5 5)
 > 
 > proc.time()
    user  system elapsed 
-  0.460   0.256   0.400 
+  0.424   0.264   0.371 
