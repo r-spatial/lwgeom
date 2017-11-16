@@ -11,7 +11,7 @@ sudo: required
 
 dist: trusty
 
-# r_github_packages: r-spatial/sf
+r_github_packages: r-spatial/sf
 
 addons:
   postgresql: "9.6"
