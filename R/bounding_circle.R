@@ -30,8 +30,12 @@
 st_minimum_bounding_circle = function(x, nQuadSegs = 30) UseMethod("st_minimum_bounding_circle", x)
 
 generate_circles = function(geom, nQuadSegs = 30) {
+  stopifnot(inherits(geom,"sfc"))
   
   circles = CPL_minimum_bounding_circle(geom)
+  if (any(is.nan(unlist(circles))))
+    stop("NaN values returned by lwgeom's lwgeom_calculate_mbc.")
+
   mapply(
     function(xy, r, nQuadSegs) {
       st_buffer(st_point(xy), r, nQuadSegs)
