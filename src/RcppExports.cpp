@@ -68,6 +68,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_geos_version
+std::string CPL_geos_version(bool b);
+RcppExport SEXP _lwgeom_CPL_geos_version(SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< bool >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_geos_version(b));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_init_lwgeom
 Rcpp::List CPL_init_lwgeom(Rcpp::List l);
 RcppExport SEXP _lwgeom_CPL_init_lwgeom(SEXP lSEXP) {
@@ -159,6 +170,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_proj_version
+std::string CPL_proj_version(bool b);
+RcppExport SEXP _lwgeom_CPL_proj_version(SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< bool >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_proj_version(b));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_read_wkb
 Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB, bool spatialite);
 RcppExport SEXP _lwgeom_CPL_read_wkb(SEXP wkb_listSEXP, SEXP EWKBSEXP, SEXP spatialiteSEXP) {
@@ -191,6 +213,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_lwgeom_CPL_geodetic_azimuth", (DL_FUNC) &_lwgeom_CPL_geodetic_azimuth, 3},
     {"_lwgeom_CPL_geodetic_segmentize", (DL_FUNC) &_lwgeom_CPL_geodetic_segmentize, 2},
     {"_lwgeom_CPL_geodetic_covers", (DL_FUNC) &_lwgeom_CPL_geodetic_covers, 2},
+    {"_lwgeom_CPL_geos_version", (DL_FUNC) &_lwgeom_CPL_geos_version, 1},
     {"_lwgeom_CPL_init_lwgeom", (DL_FUNC) &_lwgeom_CPL_init_lwgeom, 1},
     {"_lwgeom_CPL_lwgeom_version", (DL_FUNC) &_lwgeom_CPL_lwgeom_version, 1},
     {"_lwgeom_CPL_sfc_from_twkb", (DL_FUNC) &_lwgeom_CPL_sfc_from_twkb, 1},
@@ -199,6 +222,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_lwgeom_CPL_geohash", (DL_FUNC) &_lwgeom_CPL_geohash, 2},
     {"_lwgeom_CPL_lwgeom_transform", (DL_FUNC) &_lwgeom_CPL_lwgeom_transform, 2},
     {"_lwgeom_CPL_minimum_bounding_circle", (DL_FUNC) &_lwgeom_CPL_minimum_bounding_circle, 1},
+    {"_lwgeom_CPL_proj_version", (DL_FUNC) &_lwgeom_CPL_proj_version, 1},
     {"_lwgeom_CPL_read_wkb", (DL_FUNC) &_lwgeom_CPL_read_wkb, 3},
     {"_lwgeom_CPL_write_wkb", (DL_FUNC) &_lwgeom_CPL_write_wkb, 2},
     {NULL, NULL, 0}

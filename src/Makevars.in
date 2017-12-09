@@ -77,6 +77,8 @@ OBJECTS_RCPP= \
   geodetic.o \
   lwgeom.o \
   RcppExports.o \
+  proj.o \
+  geos.o \
   wkb.o \
   io.o
 

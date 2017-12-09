@@ -21,6 +21,10 @@ CPL_geodetic_covers <- function(sfc1, sfc2) {
     .Call('_lwgeom_CPL_geodetic_covers', PACKAGE = 'lwgeom', sfc1, sfc2)
 }
 
+CPL_geos_version <- function(b = FALSE) {
+    .Call('_lwgeom_CPL_geos_version', PACKAGE = 'lwgeom', b)
+}
+
 CPL_init_lwgeom <- function(l) {
     .Call('_lwgeom_CPL_init_lwgeom', PACKAGE = 'lwgeom', l)
 }
@@ -51,6 +55,10 @@ CPL_lwgeom_transform <- function(sfc, p4s) {
 
 CPL_minimum_bounding_circle <- function(sfc) {
     .Call('_lwgeom_CPL_minimum_bounding_circle', PACKAGE = 'lwgeom', sfc)
+}
+
+CPL_proj_version <- function(b = FALSE) {
+    .Call('_lwgeom_CPL_proj_version', PACKAGE = 'lwgeom', b)
 }
 
 CPL_read_wkb <- function(wkb_list, EWKB = FALSE, spatialite = FALSE) {
