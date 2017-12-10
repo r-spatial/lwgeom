@@ -76,6 +76,8 @@ OBJECTS_RCPP= \
   lwgeom.o \
   RcppExports.o \
   wkb.o \
+  proj.o \
+  geos.o \
   io.o
 
 OBJECTS= $(OBJECTS_LIBLWGEOM) $(OBJECTS_RCPP)
