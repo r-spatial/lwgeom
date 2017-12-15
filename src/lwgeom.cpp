@@ -156,3 +156,13 @@ Rcpp::List CPL_minimum_bounding_circle(Rcpp::List sfc) {
     Rcpp::Named("radius") = radius
   );
 }
+
+// [[Rcpp::export]]
+Rcpp::List CPL_subdivide(Rcpp::List sfc, int max_vertices = 256) {
+  
+	std::vector<LWGEOM *> lwgeom_v = lwgeom_from_sfc(sfc);
+
+	for (size_t i = 0; i < lwgeom_v.size(); i++)
+		lwgeom_v[i] = lwcollection_as_lwgeom(lwgeom_subdivide(lwgeom_v[i], max_vertices));
+	return sfc_from_lwgeom(lwgeom_v);
+}

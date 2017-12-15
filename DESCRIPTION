@@ -26,6 +26,7 @@ Collate:
 	RcppExports.R
 	geohash.R
 	split.R
+	subdivide.R
 	valid.R
 	transform.R
 	bounding_circle.R

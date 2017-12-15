@@ -185,6 +185,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_subdivide
+Rcpp::List CPL_subdivide(Rcpp::List sfc, int max_vertices);
+RcppExport SEXP _lwgeom_CPL_subdivide(SEXP sfcSEXP, SEXP max_verticesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    Rcpp::traits::input_parameter< int >::type max_vertices(max_verticesSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_subdivide(sfc, max_vertices));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_proj_version
 std::string CPL_proj_version(bool b);
 RcppExport SEXP _lwgeom_CPL_proj_version(SEXP bSEXP) {
@@ -238,6 +250,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_lwgeom_CPL_geohash", (DL_FUNC) &_lwgeom_CPL_geohash, 2},
     {"_lwgeom_CPL_lwgeom_transform", (DL_FUNC) &_lwgeom_CPL_lwgeom_transform, 2},
     {"_lwgeom_CPL_minimum_bounding_circle", (DL_FUNC) &_lwgeom_CPL_minimum_bounding_circle, 1},
+    {"_lwgeom_CPL_subdivide", (DL_FUNC) &_lwgeom_CPL_subdivide, 2},
     {"_lwgeom_CPL_proj_version", (DL_FUNC) &_lwgeom_CPL_proj_version, 1},
     {"_lwgeom_CPL_read_wkb", (DL_FUNC) &_lwgeom_CPL_read_wkb, 3},
     {"_lwgeom_CPL_write_wkb", (DL_FUNC) &_lwgeom_CPL_write_wkb, 2},

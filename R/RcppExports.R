@@ -61,6 +61,10 @@ CPL_minimum_bounding_circle <- function(sfc) {
     .Call('_lwgeom_CPL_minimum_bounding_circle', PACKAGE = 'lwgeom', sfc)
 }
 
+CPL_subdivide <- function(sfc, max_vertices = 256L) {
+    .Call('_lwgeom_CPL_subdivide', PACKAGE = 'lwgeom', sfc, max_vertices)
+}
+
 CPL_proj_version <- function(b = FALSE) {
     .Call('_lwgeom_CPL_proj_version', PACKAGE = 'lwgeom', b)
 }
