@@ -68,6 +68,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_geodetic_distance
+Rcpp::NumericMatrix CPL_geodetic_distance(Rcpp::List sfc1, Rcpp::List sfc2, double semi_major, double inv_flattening, double tolerance);
+RcppExport SEXP _lwgeom_CPL_geodetic_distance(SEXP sfc1SEXP, SEXP sfc2SEXP, SEXP semi_majorSEXP, SEXP inv_flatteningSEXP, SEXP toleranceSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc1(sfc1SEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc2(sfc2SEXP);
+    Rcpp::traits::input_parameter< double >::type semi_major(semi_majorSEXP);
+    Rcpp::traits::input_parameter< double >::type inv_flattening(inv_flatteningSEXP);
+    Rcpp::traits::input_parameter< double >::type tolerance(toleranceSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_geodetic_distance(sfc1, sfc2, semi_major, inv_flattening, tolerance));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_geos_version
 std::string CPL_geos_version(bool b);
 RcppExport SEXP _lwgeom_CPL_geos_version(SEXP bSEXP) {
@@ -213,6 +228,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_lwgeom_CPL_geodetic_azimuth", (DL_FUNC) &_lwgeom_CPL_geodetic_azimuth, 3},
     {"_lwgeom_CPL_geodetic_segmentize", (DL_FUNC) &_lwgeom_CPL_geodetic_segmentize, 2},
     {"_lwgeom_CPL_geodetic_covers", (DL_FUNC) &_lwgeom_CPL_geodetic_covers, 2},
+    {"_lwgeom_CPL_geodetic_distance", (DL_FUNC) &_lwgeom_CPL_geodetic_distance, 5},
     {"_lwgeom_CPL_geos_version", (DL_FUNC) &_lwgeom_CPL_geos_version, 1},
     {"_lwgeom_CPL_init_lwgeom", (DL_FUNC) &_lwgeom_CPL_init_lwgeom, 1},
     {"_lwgeom_CPL_lwgeom_version", (DL_FUNC) &_lwgeom_CPL_lwgeom_version, 1},
