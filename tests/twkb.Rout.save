@@ -1,5 +1,5 @@
 
-R version 3.4.2 (2017-09-28) -- "Short Summer"
+R version 3.4.3 (2017-11-30) -- "Kite-Eating Tree"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -17,15 +17,7 @@ Type 'q()' to quit R.
 
 > l = structure(list(as.raw(c(0x02, 0x00, 0x02, 0x02, 0x02, 0x08, 0x08))), class = "TWKB")
 > suppressPackageStartupMessages(library(sf))
-> library(lwgeom)
-Linking to liblwgeom 2.5.0dev r16016
-
-Attaching package: 'lwgeom'
-
-The following objects are masked from 'package:sf':
-
-    st_geohash, st_make_valid, st_split
-
+> suppressPackageStartupMessages(library(lwgeom))
 > st_as_sfc(l)
 Geometry set for 1 feature 
 geometry type:  LINESTRING
@@ -46,4 +38,4 @@ LINESTRING (1 1, 5 5)
 > 
 > proc.time()
    user  system elapsed 
-  0.460   0.256   0.400 
+  0.484   0.276   0.553 
