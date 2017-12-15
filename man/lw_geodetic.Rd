@@ -37,12 +37,12 @@ liblwgeom geodetic functions for length, area, segmentizing, covers
 }
 \details{
 \code{st_area} will give an error message when the area spans the equator and \code{lwgeom} is linked to a proj.4 version older than 4.9.0 (see \link{lwgeom_extSoftVersion})
+}
+\examples{
 library(sf)
 nc = st_read(system.file("gpkg/nc.gpkg", package="sf"))
 st_geod_area(nc[1:3,])
 # st_area(nc[1:3,])
-}
-\examples{
 l = st_sfc(st_linestring(rbind(c(7,52), c(8,53))), crs = 4326)
 st_geod_length(l)
 library(units)

@@ -4,8 +4,8 @@
 #' @name lw_geodetic
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @export
-#' @examples
 #' @details \code{st_area} will give an error message when the area spans the equator and \code{lwgeom} is linked to a proj.4 version older than 4.9.0 (see \link{lwgeom_extSoftVersion})
+#' @examples
 #' library(sf)
 #' nc = st_read(system.file("gpkg/nc.gpkg", package="sf"))
 #' st_geod_area(nc[1:3,])
