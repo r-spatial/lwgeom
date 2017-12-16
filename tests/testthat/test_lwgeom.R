@@ -24,7 +24,7 @@ test_that("st_make_valid works", {
 	x <- st_transform_proj(geom.sf, "+proj=wintri")
 	p = st_crs(4326)$proj4string
 	x <- st_transform_proj(structure(geom.sf[[1]], proj4string = p), "+proj=wintri")
-	nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
+	nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE)
 	st_transform_proj(nc[1,], "+proj=wintri +over")
 	lwgeom_extSoftVersion()
 })
@@ -39,4 +39,12 @@ test_that("st_minimum_bounding_circle works", {
   state = st_union(st_geometry(nc))
   st_minimum_bounding_circle(state)
   st_minimum_bounding_circle(st_sf(st = "nc", geom = state))
+})
+
+test_that("st_subdivide works", {
+	library(sf)
+	x = st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE)
+	expect_silent(st_subdivide(x, 10))
+	expect_silent(st_subdivide(st_geometry(x), 10))
+	expect_silent(st_subdivide(st_geometry(x)[[1]], 10))
 })

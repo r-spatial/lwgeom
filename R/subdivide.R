@@ -4,6 +4,11 @@
 #' @param x object with geometries to be subdivided
 #' @param max_vertices integer; maximum size of the subgeometries (at least 8)
 #' @return object of the same class as \code{x}
+#' @examples
+#' library(sf)
+#' demo(nc, ask = FALSE, echo = FALSE)
+#' x = st_subdivide(nc, 10)
+#' plot(x[1])
 #' @export
 st_subdivide = function(x, max_vertices) UseMethod("st_subdivide")
 

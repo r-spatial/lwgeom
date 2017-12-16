@@ -1,5 +1,5 @@
 
-R version 3.4.2 (2017-09-28) -- "Short Summer"
+R version 3.4.3 (2017-11-30) -- "Kite-Eating Tree"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -21,8 +21,8 @@ Type 'q()' to quit R.
 > 
 > test_check("lwgeom")
 testthat results ================================================================
-OK: 9 SKIPPED: 0 FAILED: 0
+OK: 12 SKIPPED: 0 FAILED: 0
 > 
 > proc.time()
    user  system elapsed 
-  0.684   0.296   0.680 
+  0.776   0.264   0.738 

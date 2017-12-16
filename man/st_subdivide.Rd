@@ -17,3 +17,9 @@ object of the same class as \code{x}
 \description{
 Return a collection of geometries resulting by subdividing a geometry
 }
+\examples{
+library(sf)
+demo(nc, ask = FALSE, echo = FALSE)
+x = st_subdivide(nc, 10)
+plot(x[1])
+}

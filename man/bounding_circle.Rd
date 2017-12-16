@@ -19,7 +19,7 @@ Object of the same class as \code{x}
 Generate the minimum bounding circle
 }
 \details{
-\code{st_minimum_bounding_circle} uses the \code{lwgeom_calculate_mbc} method also used by the PostGIS command \code{ST_MinimumBoundingCircle}. It is only available if the package was linked against liblwgeom, which is currently not the case for the binary CRAN distributions; see the package source code repository for instructions how to install liblwgeom. The example below shows how to run-time check the availability of liblwgeom.
+\code{st_minimum_bounding_circle} uses the \code{lwgeom_calculate_mbc} method also used by the PostGIS command \code{ST_MinimumBoundingCircle}.
 }
 \examples{
 library(sf)
@@ -35,7 +35,7 @@ if (.Platform$OS.type != "windows") {
   plot(mbcy, axes=TRUE); plot(y, add=TRUE)
 }
 
-nc = st_read(system.file("shape/nc.shp", package="sf"))
+nc = st_read(system.file("gpkg/nc.gpkg", package="sf"))
 state = st_union(st_geometry(nc))
 
 if (.Platform$OS.type != "windows") {
