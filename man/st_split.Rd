@@ -21,5 +21,5 @@ Return a collection of geometries resulting by splitting a geometry
 library(sf)
 l = st_as_sfc('MULTILINESTRING((10 10, 190 190), (15 15, 30 30, 100 90))')
 pt = st_sfc(st_point(c(30,30)))
-st_split(l, pt)
+lwgeom::st_split(l, pt)
 }
