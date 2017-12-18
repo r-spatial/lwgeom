@@ -299,9 +299,15 @@ fi
 #ifdef __cplusplus
 extern "C" {
 #endif
+static void __errorHandler(const char *fmt, ...) {
+    return;
+}
+static void __warningHandler(const char *fmt, ...) {
+    return;
+}
 int main() {
-    GEOSContextHandle_t r = GEOS_init_r();
-    GEOS_finish_r(r);
+    GEOSContextHandle_t r = initGEOS_r((GEOSMessageHandler) __warningHandler, (GEOSMessageHandler) __errorHandler);
+    finishGEOS_r(r);
 }
 #ifdef __cplusplus
 }
