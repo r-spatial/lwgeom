@@ -3679,15 +3679,9 @@ cat > geos_test.cpp <<_EOCONF
 #ifdef __cplusplus
 extern "C" {
 #endif
-static void __errorHandler(const char *fmt, ...) {
-    return;
-}
-static void __warningHandler(const char *fmt, ...) {
-    return;
-}
 int main() {
-    GEOSContextHandle_t r = initGEOS_r((GEOSMessageHandler) __warningHandler, (GEOSMessageHandler) __errorHandler);
-    finishGEOS_r(r);
+    GEOSContextHandle_t r = GEOS_init_r();
+    GEOS_finish_r(r);
 }
 #ifdef __cplusplus
 }
@@ -3720,9 +3714,10 @@ $as_echo "no" >&6; }
     cat errors.txt
     { $as_echo "$as_me:${as_lineno-$LINENO}: Install failure: compilation and/or linkage problems." >&5
 $as_echo "$as_me: Install failure: compilation and/or linkage problems." >&6;}
-    as_fn_error $? "initGEOS_r not found in libgeos_c." "$LINENO" 5
+    as_fn_error $? "GEOS_init_r not found in libgeos_c." "$LINENO" 5
   else
-    #AC_SUBST([GEOS_LIBS], ["${GEOS_DEP_CLIBS}"])
+    GEOS_LIBS="${GEOS_DEP_CLIBS}"
+
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
   fi
@@ -3874,7 +3869,8 @@ if test "x$ac_cv_lib_geos_c_GEOS_init_r" = xyes; then :
   PKG_LIBS="${PKG_LIBS} -lgeos_c"
 
 else
-  as_fn_error $? "libgeos not found a standard locations." "$LINENO" 5
+  PKG_LIBS="${PKG_LIBS} ${PROJ_LIBS} ${GEOS_LIBS}"
+
 fi
 
       OBJECTS="${OBJECTS} \$(OBJECTS_LIBLWGEOM)"
