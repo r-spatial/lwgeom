@@ -78,7 +78,7 @@ st_geod_covers = function(x, y) {
 #' @name lw_geodetic
 #' @export
 st_geod_covered_by = function(x, y) {
-	t(st_geod_covers(y, x))
+	structure(t(st_geod_covers(y, x)), predicate = "covered_by")
 }
 
 #' @name lw_geodetic

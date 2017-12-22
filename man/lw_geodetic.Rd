@@ -10,6 +10,8 @@
 \alias{lw_geodetic}
 \alias{st_geod_covers}
 \alias{lw_geodetic}
+\alias{st_geod_covered_by}
+\alias{lw_geodetic}
 \alias{st_geod_distance}
 \title{liblwgeom geodetic functions}
 \usage{
@@ -20,6 +22,8 @@ st_geod_length(x)
 st_geod_segmentize(x, max_seg_length)
 
 st_geod_covers(x, y)
+
+st_geod_covered_by(x, y)
 
 st_geod_distance(x, y, tolerance = 0)
 }
