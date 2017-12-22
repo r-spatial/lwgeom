@@ -5,17 +5,22 @@ R bindings to the [liblwgeom](https://github.com/postgis/postgis/tree/svn-trunk/
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/r-spatial/lwgeom?branch=master&svg=true)](https://ci.appveyor.com/project/edzer/lwgeom)
 [![Coverage Status](https://img.shields.io/codecov/c/github/r-spatial/lwgeom/master.svg)](https://codecov.io/github/r-spatial/lwgeom?branch=master)
 [![CRAN](http://www.r-pkg.org/badges/version/lwgeom)](https://cran.r-project.org/package=lwgeom)
+[![Downloads](http://cranlogs.r-pkg.org/badges/lwgeom?color=brightgreen)](http://www.r-pkg.org/pkg/lwgeom)
 
 
 This package provides a few functions that require
 `liblwgeom`, including `st_geohash`, `st_make_valid`,
-`st_minimum_bounding_circle`, `st_split`,
+`st_minimum_bounding_circle`, `st_split`, `st_subdivide`,
 `st_transform_proj` (transform through proj, omitting
 GDAL) and `st_as_sfc.TWKB` (create `sfc` from [tiny
 wkb](https://github.com/TWKB/Specification/blob/master/twkb.md)),
 as well as the geodetic (spherical/ellipsoidal) geometry
-functions `st_geod_area`, `st_geod_azimuth`, `st_geod_covers`,
-`st_geod_length`, and `st_geod_segmentize`.
+functions `st_geod_area`, 
+`st_geod_length`, 
+`st_geod_distance`, 
+`st_geod_covers`,
+`st_geod_azimuth`, 
+and `st_geod_segmentize`.
 
 ## Installing without liblwgeom preinstalled
 

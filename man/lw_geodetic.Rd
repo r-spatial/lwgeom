@@ -9,6 +9,10 @@
 \alias{st_geod_segmentize}
 \alias{lw_geodetic}
 \alias{st_geod_covers}
+\alias{lw_geodetic}
+\alias{st_geod_covered_by}
+\alias{lw_geodetic}
+\alias{st_geod_distance}
 \title{liblwgeom geodetic functions}
 \usage{
 st_geod_area(x)
@@ -17,17 +21,28 @@ st_geod_length(x)
 
 st_geod_segmentize(x, max_seg_length)
 
-st_geod_covers(x, y)
+st_geod_covers(x, y, sparse = TRUE)
+
+st_geod_covered_by(x, y, sparse = TRUE)
+
+st_geod_distance(x, y, tolerance = 0)
 }
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
 
-\item{max_seg_length}{segment length in radians, or as a distance units}
+\item{max_seg_length}{segment length in degree, radians, or as a length unit (e.g., m)}
 
 \item{y}{object of class \code{sf}, \code{sfc} or \code{sfg}}
+
+\item{sparse}{logical; if \code{TRUE}, return a sparse matrix (object of class \code{sgbp}), otherwise, return a dense logical matrix.}
+
+\item{tolerance}{double; tolerance value}
 }
 \description{
 liblwgeom geodetic functions for length, area, segmentizing, covers
+}
+\details{
+\code{st_area} will give an error message when the area spans the equator and \code{lwgeom} is linked to a proj.4 version older than 4.9.0 (see \link{lwgeom_extSoftVersion})
 }
 \examples{
 library(sf)
@@ -45,4 +60,8 @@ pole = st_polygon(list(rbind(c(0,80), c(120,80), c(240,80), c(0,80))))
 pt = st_point(c(0,90))
 x = st_sfc(pole, pt, crs = 4326)
 st_geod_covers(x[c(1,1,1)], x[c(2,2,2,2)])
+pole = st_polygon(list(rbind(c(0,80), c(120,80), c(240,80), c(0,80))))
+pt = st_point(c(30,70))
+x = st_sfc(pole, pt, crs = 4326)
+st_geod_distance(x, x)
 }

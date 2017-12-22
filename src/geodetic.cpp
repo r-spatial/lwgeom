@@ -80,3 +80,19 @@ Rcpp::List CPL_geodetic_covers(Rcpp::List sfc1, Rcpp::List sfc2) {
 	sfc_from_lwgeom(lw2); // free
 	return ret;
 }
+
+// [[Rcpp::export]]
+Rcpp::NumericMatrix CPL_geodetic_distance(Rcpp::List sfc1, Rcpp::List sfc2, double semi_major,
+		double inv_flattening, double tolerance) {
+	Rcpp::NumericMatrix mat(sfc1.size(), sfc2.size());
+	std::vector<LWGEOM *> lw1 = lwgeom_from_sfc(sfc1);
+	std::vector<LWGEOM *> lw2 = lwgeom_from_sfc(sfc2);
+	SPHEROID s;
+	spheroid_init(&s, semi_major, semi_major * (1.0 - 1.0/inv_flattening));
+	for (size_t i = 0; i < lw1.size(); i++)
+		for (size_t j = 0; j < lw2.size(); j++)
+			mat(i, j) = lwgeom_distance_spheroid(lw1[i], lw2[j], &s, tolerance);
+	sfc_from_lwgeom(lw1); // free
+	sfc_from_lwgeom(lw2); // free
+	return mat;
+}

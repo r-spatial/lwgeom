@@ -17,9 +17,6 @@ object of the same class as \code{x}
 \description{
 Return a collection of geometries resulting by splitting a geometry
 }
-\details{
-\code{st_split} is only available if the package was linked against liblwgeom, which is currently not the case for the binary CRAN distributions; see the package source code repository for instructions how to install liblwgeom. The example below shows how to run-time check the availability of liblwgeom.
-}
 \examples{
 library(sf)
 l = st_as_sfc('MULTILINESTRING((10 10, 190 190), (15 15, 30 30, 100 90))')

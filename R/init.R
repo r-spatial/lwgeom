@@ -5,7 +5,9 @@
 NULL
 
 .onAttach = function(libname, pkgname) {
-	m = paste("Linking to liblwgeom", CPL_lwgeom_version())
+	m = paste0("Linking to liblwgeom ", CPL_lwgeom_version(), 
+		", GEOS ", CPL_geos_version(),
+		", proj.4 ", CPL_proj_version())
 	CPL_init_lwgeom(NA_character_)
 	packageStartupMessage(m)
 }
@@ -15,7 +17,8 @@ NULL
 #' Provide the external dependencies versions of the libraries linked to sf
 #' @export
 lwgeom_extSoftVersion = function() {
-	structure(CPL_lwgeom_version(), names = c("lwgeom"))
+	structure(c(CPL_lwgeom_version(), CPL_geos_version(), CPL_proj_version()),
+		names = c("lwgeom", "GEOS", "proj.4"))
 }
 
 # redo:
