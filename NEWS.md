@@ -1,5 +1,7 @@
 # version 0.1-3
 
+* add `st_geod_covered_by` binary geometry predicate
+
 # version 0.1-2
 
 * try to fix OSX compile on CRAN, tuning configure.ac

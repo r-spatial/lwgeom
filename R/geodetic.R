@@ -77,6 +77,12 @@ st_geod_covers = function(x, y) {
 
 #' @name lw_geodetic
 #' @export
+st_geod_covered_by = function(x, y) {
+	t(st_geod_covers(y, x))
+}
+
+#' @name lw_geodetic
+#' @export
 #' @param tolerance double; tolerance value
 #' @examples
 #' pole = st_polygon(list(rbind(c(0,80), c(120,80), c(240,80), c(0,80))))
@@ -86,6 +92,7 @@ st_geod_covers = function(x, y) {
 st_geod_distance = function(x, y, tolerance = 0.0) {
 	stopifnot(st_is_longlat(x))
 	p = crs_parameters(x)
+	units(tolerance) = make_unit("m")
 	ret = CPL_geodetic_distance(st_geometry(x), st_geometry(y), p$SemiMajor, p$InvFlattening, tolerance)
 	ret[ret < 0] = NA # invalid/incalculable
 	units(ret) = units(p$SemiMajor)
