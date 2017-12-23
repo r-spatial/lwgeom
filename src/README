@@ -6,3 +6,6 @@ configured with:
 removed: *_sfcgal.[ch]
 
 all diffs, registered with "diff -c | grep -v 'Only in'", are found in file DIFFS
+
+In addition: postgis_version.h, outcomment line 139 which defines
+POSTGIS_GEOS_VERSION; ./configure now does this on the command line.

@@ -621,10 +621,10 @@ ac_includes_default="\
 
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
-PKG_CPPFLAGS
 PKG_LIBS
 OBJECTS
 GEOS_LIBS
+PKG_CPPFLAGS
 GEOS_CONFIG
 PROJ_LIBS
 EGREP
@@ -3654,6 +3654,15 @@ fi
 # since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
 CPPFLAGS="${CPPFLAGS} ${PKG_CPPFLAGS}"
 LIBS="${LIBS} ${PKG_LIBS}"
+
+if test ${GEOS_VER_DOT} -lt 350 ; then
+  PKG_CPPFLAGS="${PKG_CPPFLAGS} -DPOSTGIS_GEOS_VERSION=34"
+
+else
+  PKG_CPPFLAGS="${PKG_CPPFLAGS} -DPOSTGIS_GEOS_VERSION=35"
+
+  # 34 or 35 is all liblwgeom cares about, now
+fi
 
 geosok=yes
 for ac_header in geos_c.h
