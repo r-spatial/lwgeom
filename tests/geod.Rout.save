@@ -49,8 +49,6 @@ Sparse geometry binary predicate list of length 3, where the predicate was `cove
 Sparse geometry binary predicate list of length 2, where the predicate was `covered_by'
  1: 1, 2, 3
  2: 1, 2, 3
-<<<<<<< HEAD
-=======
 > st_geod_covers(x[c(1,1,1)], x[c(2,2,2,2)], sparse = FALSE)
      [,1] [,2] [,3] [,4]
 [1,] TRUE TRUE TRUE TRUE
@@ -60,7 +58,6 @@ Sparse geometry binary predicate list of length 2, where the predicate was `cove
      [,1] [,2] [,3]
 [1,] TRUE TRUE TRUE
 [2,] TRUE TRUE TRUE
->>>>>>> 539c7a1... try fix #12
 > 
 > # box crossing the dateline:
 > #box = st_polygon(list(rbind(c(179.5,0), c(179.5,1), c(-179.5,1), c(-179.5,0), c(179.5,0))))
