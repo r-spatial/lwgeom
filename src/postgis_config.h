@@ -136,7 +136,7 @@
 /* #undef POSTGIS_GDAL_VERSION */
 
 /* GEOS library version */
-#define POSTGIS_GEOS_VERSION 35
+/* #define POSTGIS_GEOS_VERSION 35 */
 
 /* PostGIS libxml2 version */
 #define POSTGIS_LIBXML2_VERSION "2.9.4"

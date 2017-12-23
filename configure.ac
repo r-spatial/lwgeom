@@ -288,6 +288,13 @@ fi
 CPPFLAGS="${CPPFLAGS} ${PKG_CPPFLAGS}"
 LIBS="${LIBS} ${PKG_LIBS}"
 
+if test ${GEOS_VER_DOT} -lt 350 ; then
+  AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DPOSTGIS_GEOS_VERSION=34"])
+else
+  AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DPOSTGIS_GEOS_VERSION=35"])
+  # 34 or 35 is all liblwgeom cares about, now
+fi
+
 geosok=yes
 AC_CHECK_HEADERS(geos_c.h,,geosok=no)
 if test "${geosok}" = no; then
