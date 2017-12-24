@@ -99,7 +99,8 @@ RWINLIB = lib${subst gcc,,${COMPILED_BY}}${R_ARCH}
 PKG_CPPFLAGS = \
 	-I./liblwgeom \
 	-I../windows/gdal2-2.2.0/include/geos \
-	-I../windows/gdal2-2.2.0/include/proj
+	-I../windows/gdal2-2.2.0/include/proj \
+	DPOSTGIS_GEOS_VERSION=35
 
 PKG_LIBS = \
 	-L../windows/gdal2-2.2.0/${RWINLIB} \
