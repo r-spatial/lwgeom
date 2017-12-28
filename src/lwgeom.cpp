@@ -7,7 +7,7 @@
 
 extern "C" {
 #include <liblwgeom.h>
-#include "liblwgeom_internal.h"
+#include <liblwgeom_internal.h>
 }
 
 #include "wkb.h"
