@@ -7,6 +7,7 @@
 
 extern "C" {
 #include <liblwgeom.h>
+#include "liblwgeom_internal.h"
 }
 
 #include "wkb.h"
@@ -165,4 +166,23 @@ Rcpp::List CPL_subdivide(Rcpp::List sfc, int max_vertices = 256) {
 	for (size_t i = 0; i < lwgeom_v.size(); i++)
 		lwgeom_v[i] = lwcollection_as_lwgeom(lwgeom_subdivide(lwgeom_v[i], max_vertices));
 	return sfc_from_lwgeom(lwgeom_v);
+}
+
+// [[Rcpp::export]]
+Rcpp::List CPL_snap_to_grid(Rcpp::List sfc, double tolerance) {
+	// initialize input data
+	std::vector<LWGEOM *> lwgeom_v = lwgeom_from_sfc(sfc);
+	std::vector<LWGEOM *> out_v; 
+	// create grid
+	gridspec grid;
+	grid.ipx = 0;
+	grid.ipy = 0;
+	grid.xsize = tolerance;
+	grid.ysize = tolerance;
+	// snap data to grid
+	for (size_t i = 0; i < lwgeom_v.size(); i++) {
+		lwgeom_grid_in_place(lwgeom_v[i], &grid);
+	}
+	// return snapped data
+	return sfc_from_lwgeom(lwgeom_v); 
 }

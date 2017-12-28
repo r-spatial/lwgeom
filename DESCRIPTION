@@ -32,5 +32,6 @@ Collate:
 	bounding_circle.R
 	geodetic.R
 	bearing.R
+	snap_to_grid.R
 	twkb.R
 RoxygenNote: 6.0.1
