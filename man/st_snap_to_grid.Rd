@@ -4,12 +4,14 @@
 \alias{st_snap_to_grid}
 \title{Snap geometries to a grid}
 \usage{
-st_snap_to_grid(x, tolerance)
+st_snap_to_grid(x, size, origin)
 }
 \arguments{
 \item{x}{object with geometries to be snapped}
 
-\item{tolerance}{double; tolerance value}
+\item{size}{numeric or (length) units object; grid cell size in x-, y- (and possibly z- and m-) directions}
+
+\item{origin}{numeric; origin of the grid}
 }
 \value{
 object of the same class as \code{x}

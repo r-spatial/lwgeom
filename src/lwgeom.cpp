@@ -187,26 +187,27 @@ Rcpp::List CPL_subdivide(Rcpp::List sfc, int max_vertices = 256) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_snap_to_grid(Rcpp::List sfc, double tolerance) {
+Rcpp::List CPL_snap_to_grid(Rcpp::List sfc, Rcpp::NumericVector origin, Rcpp::NumericVector size) {
 #ifdef NO_GRID_IN_PLACE
-	// xxx
 	Rcpp::stop("st_snap_to_grid: not supported in this version of liblwgeom\n"); // #nocov
-	return sfc;
-#else // NO_GRID_IN_PLACE
+	// return sfc;
+#else
 	// initialize input data
 	std::vector<LWGEOM *> lwgeom_v = lwgeom_from_sfc(sfc);
-	std::vector<LWGEOM *> out_v; 
-	// create grid
+	// initialize grid
 	gridspec grid;
-	grid.ipx = 0;
-	grid.ipy = 0;
-	grid.xsize = tolerance;
-	grid.ysize = tolerance;
-	// snap data to grid
-	for (size_t i = 0; i < lwgeom_v.size(); i++) {
+	grid.ipx = origin[0];
+	grid.ipy = origin[1];
+	grid.ipz = origin[2];
+	grid.ipm = origin[3];
+	grid.xsize = size[0];
+	grid.ysize = size[1];
+	grid.zsize = size[2];
+	grid.msize = size[3];
+	// snap geometries to grid
+	for (size_t i = 0; i < lwgeom_v.size(); i++)
 		lwgeom_grid_in_place(lwgeom_v[i], &grid);
-	}
-	// return snapped data
+	// return snapped geometries
 	return sfc_from_lwgeom(lwgeom_v); 
 #endif
 }

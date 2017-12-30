@@ -2,7 +2,8 @@
 #' 
 #' @name st_snap_to_grid
 #' @param x object with geometries to be snapped
-#' @param tolerance double; tolerance value
+#' @param size numeric or (length) units object; grid cell size in x-, y- (and possibly z- and m-) directions
+#' @param origin numeric; origin of the grid
 #' @return object of the same class as \code{x}
 #' @examples
 #' # obtain data
@@ -19,22 +20,22 @@
 #' plot(x, main = "orginal data")
 #' plot(y, main = "snapped to 5000 m")
 #' @export
-st_snap_to_grid = function(x, tolerance) UseMethod("st_snap_to_grid")
+st_snap_to_grid = function(x, size, origin) UseMethod("st_snap_to_grid")
 
 #' @export
-st_snap_to_grid.sfg = function(x, tolerance) {
-	st_snap_to_grid(st_geometry(x), tolerance)[[1]]
+st_snap_to_grid.sfg = function(x, size, origin = st_point(rep(0.0,4))) {
+	st_snap_to_grid(st_geometry(x), size, origin)[[1]]
 }
 
 #' @export
-st_snap_to_grid.sfc = function(x, tolerance) {
-	stopifnot(length(tolerance) == 1)
-	stopifnot(!isTRUE(st_is_longlat(x)))
-	units(tolerance) = make_unit("m")
-	st_sfc(CPL_snap_to_grid(x, tolerance), crs = st_crs(x))
+st_snap_to_grid.sfc = function(x, size, origin = st_point(rep(0.0,4))) {
+	size = rep(as.numeric(size), length.out = 4)
+	stopifnot(!isTRUE(st_is_longlat(x))) # FIXME
+	units(size) = make_unit("m")
+	st_sfc(CPL_snap_to_grid(x, origin, size), crs = st_crs(x))
 }
 
 #' @export
-st_snap_to_grid.sf = function(x, tolerance) {
-	st_set_geometry(x, st_snap_to_grid(st_geometry(x), tolerance))
+st_snap_to_grid.sf = function(x, size, origin = st_point(rep(0.0,4))) {
+	st_set_geometry(x, st_snap_to_grid(st_geometry(x), size, origin))
 }

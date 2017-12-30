@@ -198,14 +198,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_snap_to_grid
-Rcpp::List CPL_snap_to_grid(Rcpp::List sfc, double tolerance);
-RcppExport SEXP _lwgeom_CPL_snap_to_grid(SEXP sfcSEXP, SEXP toleranceSEXP) {
+Rcpp::List CPL_snap_to_grid(Rcpp::List sfc, Rcpp::NumericVector origin, Rcpp::NumericVector size);
+RcppExport SEXP _lwgeom_CPL_snap_to_grid(SEXP sfcSEXP, SEXP originSEXP, SEXP sizeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
-    Rcpp::traits::input_parameter< double >::type tolerance(toleranceSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_snap_to_grid(sfc, tolerance));
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type origin(originSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type size(sizeSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_snap_to_grid(sfc, origin, size));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -263,7 +264,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_lwgeom_CPL_lwgeom_transform", (DL_FUNC) &_lwgeom_CPL_lwgeom_transform, 2},
     {"_lwgeom_CPL_minimum_bounding_circle", (DL_FUNC) &_lwgeom_CPL_minimum_bounding_circle, 1},
     {"_lwgeom_CPL_subdivide", (DL_FUNC) &_lwgeom_CPL_subdivide, 2},
-    {"_lwgeom_CPL_snap_to_grid", (DL_FUNC) &_lwgeom_CPL_snap_to_grid, 2},
+    {"_lwgeom_CPL_snap_to_grid", (DL_FUNC) &_lwgeom_CPL_snap_to_grid, 3},
     {"_lwgeom_CPL_proj_version", (DL_FUNC) &_lwgeom_CPL_proj_version, 1},
     {"_lwgeom_CPL_read_wkb", (DL_FUNC) &_lwgeom_CPL_read_wkb, 3},
     {"_lwgeom_CPL_write_wkb", (DL_FUNC) &_lwgeom_CPL_write_wkb, 2},

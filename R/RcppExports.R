@@ -65,8 +65,8 @@ CPL_subdivide <- function(sfc, max_vertices = 256L) {
     .Call('_lwgeom_CPL_subdivide', PACKAGE = 'lwgeom', sfc, max_vertices)
 }
 
-CPL_snap_to_grid <- function(sfc, tolerance) {
-    .Call('_lwgeom_CPL_snap_to_grid', PACKAGE = 'lwgeom', sfc, tolerance)
+CPL_snap_to_grid <- function(sfc, origin, size) {
+    .Call('_lwgeom_CPL_snap_to_grid', PACKAGE = 'lwgeom', sfc, origin, size)
 }
 
 CPL_proj_version <- function(b = FALSE) {
