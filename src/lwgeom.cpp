@@ -7,7 +7,25 @@
 
 extern "C" {
 #include <liblwgeom.h>
-#include <liblwgeom_internal.h>
+#ifdef HAVE_LIBLWGEOM_INTERNAL_H
+# include <liblwgeom_internal.h>
+#else /* hard copy from liblwgeom_internal.h: */
+# ifndef NO_GRID_IN_PLACE
+typedef struct gridspec_t
+{
+	double ipx;
+	double ipy;
+	double ipz;
+	double ipm;
+	double xsize;
+	double ysize;
+	double zsize;
+	double msize;
+}
+gridspec;
+void lwgeom_grid_in_place(LWGEOM *lwgeom, const gridspec *grid);
+# endif
+#endif
 }
 
 #include "wkb.h"
@@ -170,6 +188,11 @@ Rcpp::List CPL_subdivide(Rcpp::List sfc, int max_vertices = 256) {
 
 // [[Rcpp::export]]
 Rcpp::List CPL_snap_to_grid(Rcpp::List sfc, double tolerance) {
+#ifdef NO_GRID_IN_PLACE
+	// xxx
+	Rcpp::stop("st_snap_to_grid: not supported in this version of liblwgeom\n"); // #nocov
+	return sfc;
+#else // NO_GRID_IN_PLACE
 	// initialize input data
 	std::vector<LWGEOM *> lwgeom_v = lwgeom_from_sfc(sfc);
 	std::vector<LWGEOM *> out_v; 
@@ -185,4 +208,5 @@ Rcpp::List CPL_snap_to_grid(Rcpp::List sfc, double tolerance) {
 	}
 	// return snapped data
 	return sfc_from_lwgeom(lwgeom_v); 
+#endif
 }

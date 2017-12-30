@@ -366,6 +366,9 @@ LIBLWGEOM=
   [AC_CHECK_LIB([lwgeom], lwgeom_make_valid,
      [AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -llwgeom"])
       AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DHAVE_LIBGEOM"])
+      AC_CHECK_LIB(lwgeom,lwgeom_grid_in_place,,
+       [AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DNO_GRID_IN_PLACE"])]
+      )
      ],
      [AC_CHECK_LIB(proj, pj_init_plus,
          AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -lproj"]), 
@@ -380,6 +383,11 @@ LIBLWGEOM=
    AC_SUBST([PKG_LIBS], ["${PKG_LIBS} ${PROJ_LIBS} ${GEOS_LIBS}"])
    AC_SUBST([OBJECTS], ["${OBJECTS} \$(OBJECTS_LIBLWGEOM)"])
   )
+
+AC_CHECK_HEADERS(liblwgeom_internal.h,lwgeomint=yes)
+if test "${lwgeomint}" = yes; then
+   AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DHAVE_LIBLWGEOM_INTERNAL_H"])
+fi
 
 
 #
