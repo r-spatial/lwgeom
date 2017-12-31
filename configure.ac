@@ -377,7 +377,7 @@ LIBLWGEOM=
          AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -lgeos_c"]), 
          AC_SUBST([PKG_LIBS], ["${PKG_LIBS} ${PROJ_LIBS} ${GEOS_LIBS}"]))
       AC_SUBST([OBJECTS], ["${OBJECTS} \$(OBJECTS_LIBLWGEOM)"])
-      AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -I./liblwgeom"])
+      AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -I./liblwgeom -DHAVE_LIBGEOM_INTERNAL_H"])
 	 ],
      -llwgeom)],
    AC_SUBST([PKG_LIBS], ["${PKG_LIBS} ${PROJ_LIBS} ${GEOS_LIBS}"])

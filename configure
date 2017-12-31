@@ -3939,7 +3939,7 @@ fi
 
       OBJECTS="${OBJECTS} \$(OBJECTS_LIBLWGEOM)"
 
-      PKG_CPPFLAGS="${PKG_CPPFLAGS} -I./liblwgeom"
+      PKG_CPPFLAGS="${PKG_CPPFLAGS} -I./liblwgeom -DHAVE_LIBGEOM_INTERNAL_H"
 
 
 fi
