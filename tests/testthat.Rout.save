@@ -20,9 +20,16 @@ Type 'q()' to quit R.
 > suppressPackageStartupMessages(library(lwgeom))
 > 
 > test_check("lwgeom")
+Reading layer `nc.gpkg' from data source `/home/edzer/R/x86_64-pc-linux-gnu-library/3.4/sf/gpkg/nc.gpkg' using driver `GPKG'
+Simple feature collection with 100 features and 14 fields
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+epsg (SRID):    4267
+proj4string:    +proj=longlat +datum=NAD27 +no_defs
 testthat results ================================================================
-OK: 12 SKIPPED: 0 FAILED: 0
+OK: 25 SKIPPED: 0 FAILED: 0
 > 
 > proc.time()
    user  system elapsed 
-  0.776   0.264   0.738 
+  0.820   0.288   0.799 

@@ -34,3 +34,5 @@ units::set_units(st_geod_area(b), km^2) # approx 111^2
 pt = st_point(c(30, 70))
 x = st_sfc(pole, pt, pt, crs = 4326)
 st_geod_distance(x, x)
+st_geod_distance(x, x, sparse = TRUE)
+st_geod_distance(x, x, tolerance = 1, sparse = TRUE)

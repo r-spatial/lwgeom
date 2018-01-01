@@ -7,6 +7,25 @@
 
 extern "C" {
 #include <liblwgeom.h>
+#ifdef HAVE_LIBLWGEOM_INTERNAL_H
+# include <liblwgeom_internal.h>
+#else /* hard copy from liblwgeom_internal.h: */
+# ifndef NO_GRID_IN_PLACE
+typedef struct gridspec_t
+{
+	double ipx;
+	double ipy;
+	double ipz;
+	double ipm;
+	double xsize;
+	double ysize;
+	double zsize;
+	double msize;
+}
+gridspec;
+void lwgeom_grid_in_place(LWGEOM *lwgeom, const gridspec *grid);
+# endif
+#endif
 }
 
 #include "lwgeom.h"
@@ -161,4 +180,30 @@ Rcpp::List CPL_subdivide(Rcpp::List sfc, int max_vertices = 256) {
 	for (size_t i = 0; i < lwgeom_v.size(); i++)
 		lwgeom_v[i] = lwcollection_as_lwgeom(lwgeom_subdivide(lwgeom_v[i], max_vertices));
 	return sfc_from_lwgeom(lwgeom_v);
+}
+
+// [[Rcpp::export]]
+Rcpp::List CPL_snap_to_grid(Rcpp::List sfc, Rcpp::NumericVector origin, Rcpp::NumericVector size) {
+#ifdef NO_GRID_IN_PLACE
+	Rcpp::stop("st_snap_to_grid: not supported in this version of liblwgeom\n"); // #nocov
+	// return sfc;
+#else
+	// initialize input data
+	std::vector<LWGEOM *> lwgeom_v = lwgeom_from_sfc(sfc);
+	// initialize grid
+	gridspec grid;
+	grid.ipx = origin[0];
+	grid.ipy = origin[1];
+	grid.ipz = origin[2];
+	grid.ipm = origin[3];
+	grid.xsize = size[0];
+	grid.ysize = size[1];
+	grid.zsize = size[2];
+	grid.msize = size[3];
+	// snap geometries to grid
+	for (size_t i = 0; i < lwgeom_v.size(); i++)
+		lwgeom_grid_in_place(lwgeom_v[i], &grid);
+	// return snapped geometries
+	return sfc_from_lwgeom(lwgeom_v); 
+#endif
 }

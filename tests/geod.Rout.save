@@ -74,7 +74,27 @@ Units: m
 [1,]       0 1378923 1378923
 [2,] 1378923       0       0
 [3,] 1378923       0       0
+> st_geod_distance(x, x, sparse = TRUE)
+[[1]]
+[1] 1
+
+[[2]]
+[1] 2 3
+
+[[3]]
+[1] 2 3
+
+> st_geod_distance(x, x, tolerance = 1, sparse = TRUE)
+[[1]]
+[1] 1
+
+[[2]]
+[1] 2 3
+
+[[3]]
+[1] 2 3
+
 > 
 > proc.time()
    user  system elapsed 
-  0.612   0.284   0.579 
+  0.632   0.264   0.607 

@@ -21,8 +21,8 @@ CPL_geodetic_covers <- function(sfc1, sfc2) {
     .Call('_lwgeom_CPL_geodetic_covers', PACKAGE = 'lwgeom', sfc1, sfc2)
 }
 
-CPL_geodetic_distance <- function(sfc1, sfc2, semi_major, inv_flattening, tolerance) {
-    .Call('_lwgeom_CPL_geodetic_distance', PACKAGE = 'lwgeom', sfc1, sfc2, semi_major, inv_flattening, tolerance)
+CPL_geodetic_distance <- function(sfc1, sfc2, semi_major, inv_flattening, tolerance, sparse) {
+    .Call('_lwgeom_CPL_geodetic_distance', PACKAGE = 'lwgeom', sfc1, sfc2, semi_major, inv_flattening, tolerance, sparse)
 }
 
 CPL_geos_version <- function(b = FALSE) {
@@ -63,6 +63,10 @@ CPL_minimum_bounding_circle <- function(sfc) {
 
 CPL_subdivide <- function(sfc, max_vertices = 256L) {
     .Call('_lwgeom_CPL_subdivide', PACKAGE = 'lwgeom', sfc, max_vertices)
+}
+
+CPL_snap_to_grid <- function(sfc, origin, size) {
+    .Call('_lwgeom_CPL_snap_to_grid', PACKAGE = 'lwgeom', sfc, origin, size)
 }
 
 CPL_proj_version <- function(b = FALSE) {

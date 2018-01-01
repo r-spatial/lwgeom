@@ -82,17 +82,32 @@ Rcpp::List CPL_geodetic_covers(Rcpp::List sfc1, Rcpp::List sfc2) {
 }
 
 // [[Rcpp::export]]
-Rcpp::NumericMatrix CPL_geodetic_distance(Rcpp::List sfc1, Rcpp::List sfc2, double semi_major,
-		double inv_flattening, double tolerance) {
-	Rcpp::NumericMatrix mat(sfc1.size(), sfc2.size());
+Rcpp::List CPL_geodetic_distance(Rcpp::List sfc1, Rcpp::List sfc2, double semi_major,
+		double inv_flattening, double tolerance, bool sparse) {
+	Rcpp::List out(1);
 	std::vector<LWGEOM *> lw1 = lwgeom_from_sfc(sfc1);
 	std::vector<LWGEOM *> lw2 = lwgeom_from_sfc(sfc2);
 	SPHEROID s;
 	spheroid_init(&s, semi_major, semi_major * (1.0 - 1.0/inv_flattening));
-	for (size_t i = 0; i < lw1.size(); i++)
-		for (size_t j = 0; j < lw2.size(); j++)
-			mat(i, j) = lwgeom_distance_spheroid(lw1[i], lw2[j], &s, tolerance);
+	if (sparse) {
+		Rcpp::List lst(sfc1.size());
+		for (size_t i = 0; i < lw1.size(); i++) {
+			Rcpp::IntegerVector iv;
+			for (size_t j = 0; j < lw2.size(); j++) {
+				if (lwgeom_distance_spheroid(lw1[i], lw2[j], &s, tolerance) <= tolerance)
+					iv.push_back(j + 1);
+			}
+			lst(i) = iv;
+		}
+		out(0) = lst;
+	} else {
+		Rcpp::NumericMatrix mat(sfc1.size(), sfc2.size());
+		for (size_t i = 0; i < lw1.size(); i++)
+			for (size_t j = 0; j < lw2.size(); j++)
+				mat(i, j) = lwgeom_distance_spheroid(lw1[i], lw2[j], &s, tolerance);
+		out(0) = mat;
+	}
 	sfc_from_lwgeom(lw1); // free
 	sfc_from_lwgeom(lw2); // free
-	return mat;
+	return out;
 }

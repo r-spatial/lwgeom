@@ -3,7 +3,7 @@
 #' Transform or convert coordinates of simple features directly with Proj.4
 #'
 #' @param x object of class sf, sfc or sfg
-#' @param crs character; proj4string of target coordinate reference system
+#' @param crs object or class \code{crs}, or input to \link[sf]{st_crs} (proj4string, or EPSG code)
 #' @param ... ignored
 #' @details Transforms coordinates of object to new projection, using Proj.4 and not the GDAL API.
 #' @examples
@@ -19,6 +19,10 @@ st_transform_proj = function(x, crs, ...) UseMethod("st_transform_proj")
 #' @name st_transform_proj
 #' @export
 st_transform_proj.sfc = function(x, crs, ...) {
+	if (is.numeric(crs))
+		crs = st_crs(crs)$proj4string
+	if (inherits(crs, "crs"))
+		crs = crs$proj4string
 	st_sfc(CPL_lwgeom_transform(x, c(st_crs(x)$proj4string, crs)))
 }
 
@@ -38,7 +42,7 @@ st_transform_proj.sf = function(x, crs, ...) {
 #' @details The \code{st_transform_proj} method for \code{sfg} objects assumes that the CRS of the object is available as an attribute of that name.
 #' @examples
 #' st_transform_proj(structure(p1, proj4string = "+init=epsg:4326"), "+init=epsg:3857")
-st_transform_proj.sfg = function(x, crs , ...) {
+st_transform_proj.sfg = function(x, crs, ...) {
 	x = st_sfc(x, crs = attr(x, "proj4string"))
 	if (missing(crs))
 		stop("argument crs cannot be missing")

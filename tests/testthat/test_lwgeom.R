@@ -48,3 +48,44 @@ test_that("st_subdivide works", {
 	expect_silent(st_subdivide(st_geometry(x), 10))
 	expect_silent(st_subdivide(st_geometry(x)[[1]], 10))
 })
+
+test_that("st_snap_to_grid_works", {
+	# make data
+	library(sf)
+	x = st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE) %>%
+			st_transform(3395)
+	# snap to grid
+	y1 = st_snap_to_grid(x, 5000)
+	y2 = st_snap_to_grid(st_geometry(x), 5000)
+	y3 = st_snap_to_grid(st_geometry(x)[[1]], 5000)
+	# check that output class match inputs
+	expect_is(y1, "sf")
+	expect_is(y2, "sfc")
+	expect_is(y3, "sfg")
+	# check that outputs contain correct number of geometries
+	expect_equal(nrow(x), nrow(y1))
+	expect_equal(nrow(x), length(y2))
+	# check that outputs have correct crs
+	expect_equal(st_crs(x), st_crs(y1))
+	expect_equal(st_crs(x), st_crs(y2))
+	# check that outputs have been snapped correctly, 
+	# i.e. the coordinates of the geometries divided by the tolerance (5000)
+	# should not yield a remainder
+	y1_m <- do.call(rbind, lapply(st_cast(st_geometry(y1), "MULTIPOINT"), as.matrix))
+	expect_true(all(c(y1_m %% 5000) == 0))
+	y2_m <- do.call(rbind, lapply(st_cast(y2, "MULTIPOINT"), as.matrix))
+	expect_true(all(c(y2_m %% 5000) == 0))
+	expect_true(all(c(as.matrix(st_cast(y3, "MULTIPOINT")) %% 5000) == 0))
+})
+
+test_that("st_transform_proj finds sf's PROJ files", {
+  library(sf)
+  nc <- st_read(system.file("gpkg/nc.gpkg", package="sf"))
+  bb1 = st_bbox(nc)
+  bb2 = st_bbox(st_transform(nc, 4326))
+  bb3 = st_bbox(st_transform_proj(nc, 4326))
+  bb4 = st_bbox(st_transform_proj(nc, st_crs(4326)$proj4string))
+  expect_false(any(bb1 == bb2))
+  expect_true(all.equal(as.numeric(bb2), as.numeric(bb3)))
+  expect_true(all.equal(as.numeric(bb4), as.numeric(bb3)))
+})
