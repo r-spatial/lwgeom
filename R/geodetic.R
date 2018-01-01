@@ -83,18 +83,22 @@ st_geod_covered_by = function(x, y) {
 
 #' @name lw_geodetic
 #' @export
-#' @param tolerance double; tolerance value
+#' @param tolerance double or length \code{units} value: if positive, the first distance less than \code{tolerance} is returned, rather than the true distance
+#' @param sparse logical; if \code{TRUE}, return a list with indexes of features within distance \code{tolerance}
+#' @note this function should is used by \link[sf]{st_distance}, do not use it directly
 #' @examples
 #' pole = st_polygon(list(rbind(c(0,80), c(120,80), c(240,80), c(0,80))))
 #' pt = st_point(c(30,70))
 #' x = st_sfc(pole, pt, crs = 4326)
 #' st_geod_distance(x, x)
-st_geod_distance = function(x, y, tolerance = 0.0) {
+st_geod_distance = function(x, y, tolerance = 0.0, sparse = FALSE) {
 	stopifnot(st_is_longlat(x))
 	p = crs_parameters(x)
 	units(tolerance) = make_unit("m")
-	ret = CPL_geodetic_distance(st_geometry(x), st_geometry(y), p$SemiMajor, p$InvFlattening, tolerance)
-	ret[ret < 0] = NA # invalid/incalculable
-	units(ret) = units(p$SemiMajor)
+	ret = CPL_geodetic_distance(st_geometry(x), st_geometry(y), p$SemiMajor, p$InvFlattening, tolerance, sparse)[[1]]
+	if (! sparse) {
+		ret[ret < 0] = NA # invalid/incalculable
+		units(ret) = units(p$SemiMajor)
+	}
 	ret
 }

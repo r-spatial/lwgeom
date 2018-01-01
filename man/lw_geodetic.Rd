@@ -25,7 +25,7 @@ st_geod_covers(x, y)
 
 st_geod_covered_by(x, y)
 
-st_geod_distance(x, y, tolerance = 0)
+st_geod_distance(x, y, tolerance = 0, sparse = FALSE)
 }
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
@@ -34,13 +34,18 @@ st_geod_distance(x, y, tolerance = 0)
 
 \item{y}{object of class \code{sf}, \code{sfc} or \code{sfg}}
 
-\item{tolerance}{double; tolerance value}
+\item{tolerance}{double or length \code{units} value: if positive, the first distance less than \code{tolerance} is returned, rather than the true distance}
+
+\item{sparse}{logical; if \code{TRUE}, return a list with indexes of features within distance \code{tolerance}}
 }
 \description{
 liblwgeom geodetic functions for length, area, segmentizing, covers
 }
 \details{
 \code{st_area} will give an error message when the area spans the equator and \code{lwgeom} is linked to a proj.4 version older than 4.9.0 (see \link{lwgeom_extSoftVersion})
+}
+\note{
+this function should is used by \link[sf]{st_distance}, do not use it directly
 }
 \examples{
 library(sf)
