@@ -93,7 +93,6 @@ st_geod_covered_by = function(x, y, sparse = TRUE) {
 #' @name lw_geodetic
 #' @export
 #' @param tolerance double or length \code{units} value: if positive, the first distance less than \code{tolerance} is returned, rather than the true distance
-#' @param sparse logical; if \code{TRUE}, return a list with indexes of features within distance \code{tolerance}
 #' @note this function should is used by \link[sf]{st_distance}, do not use it directly
 #' @examples
 #' pole = st_polygon(list(rbind(c(0,80), c(120,80), c(240,80), c(0,80))))
@@ -108,6 +107,11 @@ st_geod_distance = function(x, y, tolerance = 0.0, sparse = FALSE) {
 	if (! sparse) {
 		ret[ret < 0] = NA # invalid/incalculable
 		units(ret) = units(p$SemiMajor)
+		ret
+	} else {
+		if (is.null(id <- row.names(x)))
+			id = as.character(seq_along(st_geometry(x)))
+		structure(ret, predicate = "st_is_within_distance", 
+			region.id = id, ncol = length(st_geometry(y)), class = "sgbp")
 	}
-	ret
 }

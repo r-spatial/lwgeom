@@ -75,26 +75,16 @@ Units: m
 [2,] 1378923       0       0
 [3,] 1378923       0       0
 > st_geod_distance(x, x, sparse = TRUE)
-[[1]]
-[1] 1
-
-[[2]]
-[1] 2 3
-
-[[3]]
-[1] 2 3
-
+Sparse geometry binary predicate list of length 3, where the predicate was `st_is_within_distance'
+ 1: 1
+ 2: 2, 3
+ 3: 2, 3
 > st_geod_distance(x, x, tolerance = 1, sparse = TRUE)
-[[1]]
-[1] 1
-
-[[2]]
-[1] 2 3
-
-[[3]]
-[1] 2 3
-
+Sparse geometry binary predicate list of length 3, where the predicate was `st_is_within_distance'
+ 1: 1
+ 2: 2, 3
+ 3: 2, 3
 > 
 > proc.time()
    user  system elapsed 
-  0.632   0.264   0.607 
+  0.664   0.244   0.643 

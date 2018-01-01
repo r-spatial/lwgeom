@@ -37,8 +37,6 @@ st_geod_distance(x, y, tolerance = 0, sparse = FALSE)
 \item{sparse}{logical; if \code{TRUE}, return a sparse matrix (object of class \code{sgbp}), otherwise, return a dense logical matrix.}
 
 \item{tolerance}{double or length \code{units} value: if positive, the first distance less than \code{tolerance} is returned, rather than the true distance}
-
-\item{sparse}{logical; if \code{TRUE}, return a list with indexes of features within distance \code{tolerance}}
 }
 \description{
 liblwgeom geodetic functions for length, area, segmentizing, covers
