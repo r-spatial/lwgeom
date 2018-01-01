@@ -80,9 +80,12 @@ test_that("st_snap_to_grid_works", {
 
 test_that("st_transform_proj finds sf's PROJ files", {
   library(sf)
-  bb1 = st_bbox(nc <- read_sf(system.file("gpkg/nc.gpkg", package="sf")))
+  nc <- st_read(system.file("gpkg/nc.gpkg", package="sf"))
+  bb1 = st_bbox(nc)
   bb2 = st_bbox(st_transform(nc, 4326))
-  bb3 = st_bbox(st_transform_proj(nc, st_crs(4326)$proj4string))
+  bb3 = st_bbox(st_transform_proj(nc, 4326))
+  bb4 = st_bbox(st_transform_proj(nc, st_crs(4326)$proj4string))
   expect_false(any(bb1 == bb2))
   expect_true(all.equal(as.numeric(bb2), as.numeric(bb3)))
+  expect_true(all.equal(as.numeric(bb4), as.numeric(bb3)))
 })

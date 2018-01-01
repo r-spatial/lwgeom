@@ -21,7 +21,7 @@ st_transform_proj(x, crs, ...)
 \arguments{
 \item{x}{object of class sf, sfc or sfg}
 
-\item{crs}{character; proj4string of target coordinate reference system}
+\item{crs}{object or class \code{crs}, or input to \link[sf]{st_crs} (proj4string, or EPSG code)}
 
 \item{...}{ignored}
 }
