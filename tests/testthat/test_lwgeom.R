@@ -77,3 +77,12 @@ test_that("st_snap_to_grid_works", {
 	expect_true(all(c(y2_m %% 5000) == 0))
 	expect_true(all(c(as.matrix(st_cast(y3, "MULTIPOINT")) %% 5000) == 0))
 })
+
+test_that("st_transform_proj finds sf's PROJ files", {
+  library(sf)
+  bb1 = st_bbox(nc <- read_sf(system.file("gpkg/nc.gpkg", package="sf")))
+  bb2 = st_bbox(st_transform(nc, 4326))
+  bb3 = st_bbox(st_transform_proj(nc, st_crs(4326)$proj4string))
+  expect_false(any(bb1 == bb2))
+  expect_true(all.equal(as.numeric(bb2), as.numeric(bb3)))
+})
