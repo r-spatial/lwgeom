@@ -13,6 +13,8 @@ Imports:
 	sf (>= 0.5-5)
 Suggests:
 	covr,
+	sp,
+	geosphere,
 	testthat
 LinkingTo:
 	Rcpp

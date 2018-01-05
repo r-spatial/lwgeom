@@ -1,0 +1,68 @@
+
+R version 3.4.3 (2017-11-30) -- "Kite-Eating Tree"
+Copyright (C) 2017 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> suppressPackageStartupMessages(library(sf))
+> library(sp)
+> suppressPackageStartupMessages(library(units))
+> library(geosphere)
+> 
+> x = st_sfc(
++ st_point(c(0,0)),
++ st_point(c(1,0)),
++ st_point(c(2,0)),
++ st_point(c(3,0)),
++ crs = 4326
++ )
+> 
+> y = st_sfc(
++ st_point(c(0,10)),
++ st_point(c(1,0)),
++ st_point(c(2,0)),
++ st_point(c(3,0)),
++ st_point(c(4,0)),
++ crs = 4326
++ )
+> 
+> st_crs(y) = 4326
+> st_crs(x) = 4326
+> d.sf = st_distance(x, y)
+> d.sp = spDists(as(x, "Spatial"), as(y, "Spatial")) # equiv to geosphere::distMeeus
+> d.sf - set_units(d.sp, km)
+Units: m
+         [,1]          [,2]          [,3]          [,4]         [,5]
+[1,] 11.58615  0.000000e+00  2.910383e-11  0.000000e+00 5.820766e-11
+[2,] 11.76865  0.000000e+00  0.000000e+00 -2.910383e-11 0.000000e+00
+[3,] 12.28011  0.000000e+00  0.000000e+00 -1.455192e-11 2.910383e-11
+[4,] 13.02504 -2.910383e-11 -1.455192e-11  0.000000e+00 1.455192e-11
+> 
+> # compare to geosphere::distVincentyEllispoid:
+> dv = matrix(NA_real_, 4, 5)
+> dv[1,] = distVincentyEllipsoid(as(x, "Spatial")[1], as(y, "Spatial"))
+> dv[2,] = distVincentyEllipsoid(as(x, "Spatial")[2], as(y, "Spatial"))
+> dv[3,] = distVincentyEllipsoid(as(x, "Spatial")[3], as(y, "Spatial"))
+> dv[4,] = distVincentyEllipsoid(as(x, "Spatial")[4], as(y, "Spatial"))
+> d.sf - set_units(dv, m) # difference in micrometer range:
+Units: m
+             [,1]         [,2]         [,3]         [,4]         [,5]
+[1,] 6.419141e-06 8.383504e-07 1.676701e-06 2.515037e-06 3.353402e-06
+[2,] 6.529503e-06 0.000000e+00 8.383504e-07 1.676643e-06 2.515037e-06
+[3,] 6.838469e-06 8.383504e-07 0.000000e+00 8.383213e-07 1.676701e-06
+[4,] 7.290393e-06 1.676643e-06 8.383213e-07 0.000000e+00 8.383649e-07
+> 
+> proc.time()
+   user  system elapsed 
+  0.892   0.196   0.881 
