@@ -10,7 +10,7 @@ Depends:
 Imports: 
     Rcpp,
 	units,
-	sf (>= 0.5-6)
+	sf (>= 0.6-0)
 Suggests:
 	covr,
 	sp,
@@ -18,7 +18,7 @@ Suggests:
 	testthat
 LinkingTo:
 	Rcpp,
-	sf (>= 0.5-6)
+	sf (>= 0.6-0)
 SystemRequirements: GEOS (>= 3.3.0), PROJ.4 (>= 4.8.0)
 License: GPL-2
 Copyright: file COPYRIGHTS
