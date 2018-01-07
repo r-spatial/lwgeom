@@ -83,12 +83,15 @@ Rcpp::List CPL_geodetic_covers(Rcpp::List sfc1, Rcpp::List sfc2) {
 
 // [[Rcpp::export]]
 Rcpp::List CPL_geodetic_distance(Rcpp::List sfc1, Rcpp::List sfc2, double semi_major,
-		double inv_flattening, double tolerance, bool sparse) {
+		double inv_flattening, double tolerance, bool sparse, double semi_minor = -1.0) {
 	Rcpp::List out(1);
 	std::vector<LWGEOM *> lw1 = lwgeom_from_sfc(sfc1);
 	std::vector<LWGEOM *> lw2 = lwgeom_from_sfc(sfc2);
 	SPHEROID s;
-	spheroid_init(&s, semi_major, semi_major * (1.0 - 1.0/inv_flattening));
+	if (semi_minor > 0.0)
+		spheroid_init(&s, semi_major, semi_minor);
+	else
+		spheroid_init(&s, semi_major, semi_major * (1.0 - 1.0/inv_flattening));
 	if (sparse) {
 		Rcpp::List lst(sfc1.size());
 		for (size_t i = 0; i < lw1.size(); i++) {

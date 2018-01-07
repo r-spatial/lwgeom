@@ -93,9 +93,12 @@ st_geod_covered_by = function(x, y) {
 #' st_geod_distance(x, x)
 st_geod_distance = function(x, y, tolerance = 0.0, sparse = FALSE) {
 	stopifnot(st_is_longlat(x))
+	stopifnot(st_crs(x) == st_crs(y))
 	p = crs_parameters(x)
+	SemiMinor = if (is.null(p$SemiMinor)) -1.0 else p$SemiMinor
 	units(tolerance) = make_unit("m")
-	ret = CPL_geodetic_distance(st_geometry(x), st_geometry(y), p$SemiMajor, p$InvFlattening, tolerance, sparse)[[1]]
+	ret = CPL_geodetic_distance(st_geometry(x), st_geometry(y), p$SemiMajor, p$InvFlattening,
+		tolerance, sparse, SemiMinor)[[1]]
 	if (! sparse) {
 		ret[ret < 0] = NA # invalid/incalculable
 		units(ret) = units(p$SemiMajor)

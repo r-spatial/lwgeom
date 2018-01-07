@@ -21,8 +21,8 @@ CPL_geodetic_covers <- function(sfc1, sfc2) {
     .Call('_lwgeom_CPL_geodetic_covers', PACKAGE = 'lwgeom', sfc1, sfc2)
 }
 
-CPL_geodetic_distance <- function(sfc1, sfc2, semi_major, inv_flattening, tolerance, sparse) {
-    .Call('_lwgeom_CPL_geodetic_distance', PACKAGE = 'lwgeom', sfc1, sfc2, semi_major, inv_flattening, tolerance, sparse)
+CPL_geodetic_distance <- function(sfc1, sfc2, semi_major, inv_flattening, tolerance, sparse, semi_minor = -1.0) {
+    .Call('_lwgeom_CPL_geodetic_distance', PACKAGE = 'lwgeom', sfc1, sfc2, semi_major, inv_flattening, tolerance, sparse, semi_minor)
 }
 
 CPL_geos_version <- function(b = FALSE) {
