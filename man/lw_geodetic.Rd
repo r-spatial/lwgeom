@@ -21,9 +21,9 @@ st_geod_length(x)
 
 st_geod_segmentize(x, max_seg_length)
 
-st_geod_covers(x, y)
+st_geod_covers(x, y, sparse = TRUE)
 
-st_geod_covered_by(x, y)
+st_geod_covered_by(x, y, sparse = TRUE)
 
 st_geod_distance(x, y, tolerance = 0, sparse = FALSE)
 }
@@ -34,9 +34,9 @@ st_geod_distance(x, y, tolerance = 0, sparse = FALSE)
 
 \item{y}{object of class \code{sf}, \code{sfc} or \code{sfg}}
 
-\item{tolerance}{double or length \code{units} value: if positive, the first distance less than \code{tolerance} is returned, rather than the true distance}
+\item{sparse}{logical; if \code{TRUE}, return a sparse matrix (object of class \code{sgbp}), otherwise, return a dense logical matrix.}
 
-\item{sparse}{logical; if \code{TRUE}, return a list with indexes of features within distance \code{tolerance}}
+\item{tolerance}{double or length \code{units} value: if positive, the first distance less than \code{tolerance} is returned, rather than the true distance}
 }
 \description{
 liblwgeom geodetic functions for length, area, segmentizing, covers

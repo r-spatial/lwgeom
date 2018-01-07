@@ -49,6 +49,15 @@ Sparse geometry binary predicate list of length 3, where the predicate was `cove
 Sparse geometry binary predicate list of length 2, where the predicate was `covered_by'
  1: 1, 2, 3
  2: 1, 2, 3
+> st_geod_covers(x[c(1,1,1)], x[c(2,2,2,2)], sparse = FALSE)
+     [,1] [,2] [,3] [,4]
+[1,] TRUE TRUE TRUE TRUE
+[2,] TRUE TRUE TRUE TRUE
+[3,] TRUE TRUE TRUE TRUE
+> st_geod_covered_by(x[c(2,2)], x[c(1,1,1)], sparse = FALSE)
+     [,1] [,2] [,3]
+[1,] TRUE TRUE TRUE
+[2,] TRUE TRUE TRUE
 > 
 > # box crossing the dateline:
 > #box = st_polygon(list(rbind(c(179.5,0), c(179.5,1), c(-179.5,1), c(-179.5,0), c(179.5,0))))
@@ -66,26 +75,16 @@ Units: m
 [2,] 1378923       0       0
 [3,] 1378923       0       0
 > st_geod_distance(x, x, sparse = TRUE)
-[[1]]
-[1] 1
-
-[[2]]
-[1] 2 3
-
-[[3]]
-[1] 2 3
-
+Sparse geometry binary predicate list of length 3, where the predicate was `st_is_within_distance'
+ 1: 1
+ 2: 2, 3
+ 3: 2, 3
 > st_geod_distance(x, x, tolerance = 1, sparse = TRUE)
-[[1]]
-[1] 1
-
-[[2]]
-[1] 2 3
-
-[[3]]
-[1] 2 3
-
+Sparse geometry binary predicate list of length 3, where the predicate was `st_is_within_distance'
+ 1: 1
+ 2: 2, 3
+ 3: 2, 3
 > 
 > proc.time()
    user  system elapsed 
-  0.624   0.296   0.600 
+  0.664   0.244   0.643 

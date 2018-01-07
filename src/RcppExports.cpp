@@ -223,31 +223,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// CPL_read_wkb
-Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB, bool spatialite);
-RcppExport SEXP _lwgeom_CPL_read_wkb(SEXP wkb_listSEXP, SEXP EWKBSEXP, SEXP spatialiteSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::List >::type wkb_list(wkb_listSEXP);
-    Rcpp::traits::input_parameter< bool >::type EWKB(EWKBSEXP);
-    Rcpp::traits::input_parameter< bool >::type spatialite(spatialiteSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_read_wkb(wkb_list, EWKB, spatialite));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CPL_write_wkb
-Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB);
-RcppExport SEXP _lwgeom_CPL_write_wkb(SEXP sfcSEXP, SEXP EWKBSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
-    Rcpp::traits::input_parameter< bool >::type EWKB(EWKBSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_write_wkb(sfc, EWKB));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_lwgeom_CPL_geodetic_area", (DL_FUNC) &_lwgeom_CPL_geodetic_area, 3},
@@ -268,8 +243,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_lwgeom_CPL_subdivide", (DL_FUNC) &_lwgeom_CPL_subdivide, 2},
     {"_lwgeom_CPL_snap_to_grid", (DL_FUNC) &_lwgeom_CPL_snap_to_grid, 3},
     {"_lwgeom_CPL_proj_version", (DL_FUNC) &_lwgeom_CPL_proj_version, 1},
-    {"_lwgeom_CPL_read_wkb", (DL_FUNC) &_lwgeom_CPL_read_wkb, 3},
-    {"_lwgeom_CPL_write_wkb", (DL_FUNC) &_lwgeom_CPL_write_wkb, 2},
     {NULL, NULL, 0}
 };
 

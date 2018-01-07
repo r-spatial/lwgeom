@@ -22,6 +22,8 @@ pt = st_point(c(0,90))
 x = st_sfc(pole, pt, crs = 4326)
 st_geod_covers(x[c(1,1,1)], x[c(2,2,2,2)])
 st_geod_covered_by(x[c(2,2)], x[c(1,1,1)])
+st_geod_covers(x[c(1,1,1)], x[c(2,2,2,2)], sparse = FALSE)
+st_geod_covered_by(x[c(2,2)], x[c(1,1,1)], sparse = FALSE)
 
 # box crossing the dateline:
 #box = st_polygon(list(rbind(c(179.5,0), c(179.5,1), c(-179.5,1), c(-179.5,0), c(179.5,0))))

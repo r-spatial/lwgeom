@@ -27,7 +27,7 @@ and `st_geod_segmentize`.
 `lwgeom` depends on [sf](https://github.com/r-spatial/sf), which has to be installed first.
 It uses the liblwgeom library. When installing from source, it will compile a shipped (and
 modified) version of this library when the library is not autodetected. In this case, the
-GEOM and PROJ libraries have to be available.
+GEOS and Proj.4 libraries have to be available.
 
 ### Windows
 

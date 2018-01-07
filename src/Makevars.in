@@ -79,7 +79,6 @@ OBJECTS_RCPP= \
   RcppExports.o \
   proj.o \
   geos.o \
-  wkb.o \
   io.o
 
 OBJECTS=@OBJECTS@

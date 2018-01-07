@@ -73,11 +73,3 @@ CPL_proj_version <- function(b = FALSE) {
     .Call('_lwgeom_CPL_proj_version', PACKAGE = 'lwgeom', b)
 }
 
-CPL_read_wkb <- function(wkb_list, EWKB = FALSE, spatialite = FALSE) {
-    .Call('_lwgeom_CPL_read_wkb', PACKAGE = 'lwgeom', wkb_list, EWKB, spatialite)
-}
-
-CPL_write_wkb <- function(sfc, EWKB = FALSE) {
-    .Call('_lwgeom_CPL_write_wkb', PACKAGE = 'lwgeom', sfc, EWKB)
-}
-

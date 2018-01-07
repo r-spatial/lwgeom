@@ -27,6 +27,7 @@ lwgeom_extSoftVersion = function() {
 		names = c("lwgeom", "GEOS", "proj.4"))
 }
 
+# redo:
 crs_parameters = function(x) {
 	if (utils::packageVersion("sf") > "0.5-5")
 		st_crs(x, parameters = TRUE)
