@@ -89,9 +89,9 @@ Rcpp::List CPL_geodetic_distance(Rcpp::List sfc1, Rcpp::List sfc2, double semi_m
 	std::vector<LWGEOM *> lw2 = lwgeom_from_sfc(sfc2);
 	SPHEROID s;
 	if (semi_minor > 0.0)
-		spheroid_init(&s, semi_major, semi_minor); // #nocov FIXME with new sf
+		spheroid_init(&s, semi_major, semi_minor);
 	else
-		spheroid_init(&s, semi_major, semi_major * (1.0 - 1.0/inv_flattening));
+		spheroid_init(&s, semi_major, semi_major * (1.0 - 1.0/inv_flattening)); // #nocov FIXME
 	if (sparse) {
 		Rcpp::List lst(sfc1.size());
 		for (size_t i = 0; i < lw1.size(); i++) {
