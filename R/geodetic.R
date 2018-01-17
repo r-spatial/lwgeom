@@ -44,7 +44,7 @@ st_geod_segmentize = function(x, max_seg_length) {
 	stopifnot(st_is_longlat(x))
 	p = crs_parameters(x)
 	if (inherits(max_seg_length, "units")) {
-		tr = try(units(max_seg_length) <- make_unit("rad"), silent = TRUE)
+		tr = try(units(max_seg_length) <- as_units("rad"), silent = TRUE)
 		if (inherits(tr, "try-error")) {
 			units(max_seg_length) = units(p$SemiMajor) # -> m
 			max_seg_length = max_seg_length / p$SemiMajor # m -> rad
@@ -104,7 +104,7 @@ st_geod_distance = function(x, y, tolerance = 0.0, sparse = FALSE) {
 	stopifnot(st_crs(x) == st_crs(y))
 	p = crs_parameters(x)
 	SemiMinor = if (is.null(p$SemiMinor)) -1.0 else p$SemiMinor
-	units(tolerance) = make_unit("m")
+	units(tolerance) = as_units("m")
 	ret = CPL_geodetic_distance(st_geometry(x), st_geometry(y), p$SemiMajor, p$InvFlattening,
 		tolerance, sparse, SemiMinor)[[1]]
 	if (! sparse) {

@@ -31,7 +31,7 @@ st_snap_to_grid.sfg = function(x, size, origin = st_point(rep(0.0,4))) {
 st_snap_to_grid.sfc = function(x, size, origin = st_point(rep(0.0,4))) {
 	size = rep(as.numeric(size), length.out = 4)
 	stopifnot(!isTRUE(st_is_longlat(x))) # FIXME
-	units(size) = make_unit("m")
+	units(size) = as_units("m")
 	st_sfc(CPL_snap_to_grid(x, origin, size), crs = st_crs(x))
 }
 

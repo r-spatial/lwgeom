@@ -7,12 +7,12 @@
 
 suppressPackageStartupMessages(library(sf))
 suppressPackageStartupMessages(library(lwgeom))
+suppressPackageStartupMessages(library(units))
 nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE)
 st_geod_area(nc[1:3,])
 # st_area(nc[1:3,])
 l = st_sfc(st_linestring(rbind(c(7,52), c(8,53))), crs = 4326)
 st_geod_length(l)
-library(units)
 pol = st_polygon(list(rbind(c(0,0), c(0,60), c(60,60), c(0,0))))
 x = st_sfc(pol, crs = 4326)
 seg = st_geod_segmentize(x[1], set_units(10, km))
