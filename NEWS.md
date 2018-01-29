@@ -1,3 +1,11 @@
+# version 0.1-5
+
+* allow `st_transform_proj` to take two proj4 strings as crs, as `c(input_p4s, output_p4s)`, ignoring the CRS of x
+
+# version 0.1-4
+
+* tries to fix the CRAN error for r-release-osx (datum files missing in sf; removed test)
+
 # version 0.1-3
 
 * add `st_geod_covered_by` binary geometry predicate

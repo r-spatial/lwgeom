@@ -3,7 +3,7 @@
 #' Transform or convert coordinates of simple features directly with Proj.4
 #'
 #' @param x object of class sf, sfc or sfg
-#' @param crs object or class \code{crs}, or input to \link[sf]{st_crs} (proj4string, or EPSG code)
+#' @param crs object or class \code{crs}, or input to \link[sf]{st_crs} (proj4string, or EPSG code), or length 2 character vector with input proj4string and output proj4string
 #' @param ... ignored
 #' @details Transforms coordinates of object to new projection, using Proj.4 and not the GDAL API.
 #' @examples
@@ -23,7 +23,10 @@ st_transform_proj.sfc = function(x, crs, ...) {
 		crs = st_crs(crs)$proj4string
 	if (inherits(crs, "crs"))
 		crs = crs$proj4string
-	st_sfc(CPL_lwgeom_transform(x, c(st_crs(x)$proj4string, crs)))
+	stopifnot(length(crs) %in% c(1,2))
+	if (length(crs) == 1) # only output
+		crs = c(st_crs(x)$proj4string, crs) # c(input, output)
+	st_sfc(CPL_lwgeom_transform(x, crs))
 }
 
 #' @name st_transform_proj
