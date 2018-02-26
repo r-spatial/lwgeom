@@ -46,8 +46,14 @@ st_transform_proj.sf = function(x, crs, ...) {
 #' @examples
 #' st_transform_proj(structure(p1, proj4string = "+init=epsg:4326"), "+init=epsg:3857")
 st_transform_proj.sfg = function(x, crs, ...) {
-	x = st_sfc(x, crs = attr(x, "proj4string"))
 	if (missing(crs))
-		stop("argument crs cannot be missing")
-	structure(st_transform_proj(x, crs, ...)[[1]], proj4string = crs)
+		stop("argument crs cannot be missing") # nocov
+	if (length(crs) == 1) {
+		if (is.null(attr(x, "proj4string")))
+			stop("x does not have a proj4string attribute") # nocov
+		if (!is.character(attr(x, "proj4string")))
+			stop("proj4string attribute should be a character string") # nocov
+		crs = c(attr(x, "proj4string"), crs)
+	}
+	structure(st_transform_proj(st_sfc(x), crs, ...)[[1]], proj4string = tail(crs, 1))
 }

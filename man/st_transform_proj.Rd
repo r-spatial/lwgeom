@@ -21,7 +21,7 @@ st_transform_proj(x, crs, ...)
 \arguments{
 \item{x}{object of class sf, sfc or sfg}
 
-\item{crs}{object or class \code{crs}, or input to \link[sf]{st_crs} (proj4string, or EPSG code)}
+\item{crs}{object or class \code{crs}, or input to \link[sf]{st_crs} (proj4string, or EPSG code), or length 2 character vector with input proj4string and output proj4string}
 
 \item{...}{ignored}
 }
