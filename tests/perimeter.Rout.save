@@ -1,0 +1,64 @@
+
+R version 3.4.3 (2017-11-30) -- "Kite-Eating Tree"
+Copyright (C) 2017 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> suppressPackageStartupMessages(library(lwgeom))
+> suppressPackageStartupMessages(library(sf))
+> demo(nc, ask = FALSE)
+
+
+	demo(nc)
+	---- ~~
+
+> ## this object was created as follows:
+> library(sf)
+
+> # nc = st_read(system.file("shapes/", package="maptools"), "sids")
+> # st_crs(nc) = 4267 # "+proj=longlat +ellps=clrk66" or "+proj=longlat +datum=NAD27"
+> # print(nc, n = 3)
+> # st_write(nc, "nc.gpkg", "nc.gpkg", driver = "GPKG")
+> 
+> # description of the dataset, see vignette in package spdep:
+> # https://cran.r-project.org/web/packages/spdep/vignettes/sids.pdf
+> 
+> datasource = { if ("GPKG" %in% st_drivers()$name)
++ 	system.file("gpkg/nc.gpkg", package="sf")
++ else
++ 	system.file("shape/nc.shp", package="sf")
++ }
+
+> agr = c(AREA = "aggregate", PERIMETER = "aggregate", CNTY_ = "identity",
++ 		CNTY_ID = "identity", NAME = "identity", FIPS = "identity", FIPSNO = "identity",
++ 		CRESS_ID = "identity", BIR74 = "aggregate", SID74 = "aggregate", NWBIR74 = "aggregate",
++ 		BIR79 = "aggregate", SID79 = "aggregate", NWBIR79  = "aggregate")
+
+> nc = st_read(datasource, agr = agr)
+Reading layer `nc.gpkg' from data source `/home/edzer/R/x86_64-pc-linux-gnu-library/3.4/sf/gpkg/nc.gpkg' using driver `GPKG'
+Simple feature collection with 100 features and 14 fields
+Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+epsg (SRID):    4267
+proj4string:    +proj=longlat +datum=NAD27 +no_defs
+> st_perimeter(nc)[1:5]
+[1] 1.442087 1.231197 1.630283 2.967975 2.206482
+> st_perimeter_2d(nc)[1:5]
+[1] 1.442087 1.231197 1.630283 2.967975 2.206482
+> 
+> proc.time()
+   user  system elapsed 
+  0.442   0.267   0.385 

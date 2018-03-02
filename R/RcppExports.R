@@ -69,6 +69,10 @@ CPL_snap_to_grid <- function(sfc, origin, size) {
     .Call('_lwgeom_CPL_snap_to_grid', PACKAGE = 'lwgeom', sfc, origin, size)
 }
 
+CPL_perimeter <- function(sfc, do2d = FALSE) {
+    .Call('_lwgeom_CPL_perimeter', PACKAGE = 'lwgeom', sfc, do2d)
+}
+
 CPL_proj_version <- function(b = FALSE) {
     .Call('_lwgeom_CPL_proj_version', PACKAGE = 'lwgeom', b)
 }

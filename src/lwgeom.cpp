@@ -207,3 +207,18 @@ Rcpp::List CPL_snap_to_grid(Rcpp::List sfc, Rcpp::NumericVector origin, Rcpp::Nu
 	return sfc_from_lwgeom(lwgeom_v); 
 #endif
 }
+
+// [[Rcpp::export]]
+Rcpp::NumericVector CPL_perimeter(Rcpp::List sfc, bool do2d = false) {
+	Rcpp::NumericVector out(sfc.length());
+	std::vector<LWGEOM *> lwgeom_v = lwgeom_from_sfc(sfc);
+
+	if (do2d) {
+		for (size_t i = 0; i < lwgeom_v.size(); i++)
+			out[i] = lwgeom_perimeter_2d(lwgeom_v[i]);
+	} else {
+		for (size_t i = 0; i < lwgeom_v.size(); i++)
+			out[i] = lwgeom_perimeter(lwgeom_v[i]);
+	}
+	return out;
+}

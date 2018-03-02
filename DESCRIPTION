@@ -37,4 +37,5 @@ Collate:
 	bearing.R
 	snap_to_grid.R
 	twkb.R
+	perimeter.R
 RoxygenNote: 6.0.1

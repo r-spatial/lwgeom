@@ -2,7 +2,7 @@
 % Please edit documentation in R/geohash.R
 \name{st_geohash}
 \alias{st_geohash}
-\title{compute geohash from (average) coordinates (requires lwgeom)}
+\title{compute geohash from (average) coordinates}
 \usage{
 st_geohash(x, precision = 0)
 }
@@ -15,7 +15,7 @@ st_geohash(x, precision = 0)
 character vector with geohashes
 }
 \description{
-compute geohash from (average) coordinates (requires lwgeom)
+compute geohash from (average) coordinates
 }
 \details{
 see \url{http://geohash.org/} or \url{https://en.wikipedia.org/wiki/Geohash}.
