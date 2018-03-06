@@ -56,10 +56,12 @@ epsg (SRID):    4267
 proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > nc = st_transform(nc, 3857)
 > st_perimeter(nc)[1:5]
+Units: m
 [1] 176215.7 149267.4 199588.2 375140.4 263513.1
 > st_perimeter_2d(nc)[1:5]
+Units: m
 [1] 176215.7 149267.4 199588.2 375140.4 263513.1
 > 
 > proc.time()
    user  system elapsed 
-  0.502   0.238   0.419 
+  0.551   0.232   0.455 
