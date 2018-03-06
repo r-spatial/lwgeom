@@ -8,7 +8,7 @@
 \alias{st_transform_proj.sf}
 \alias{st_transform_proj}
 \alias{st_transform_proj.sfg}
-\title{Transform or convert coordinates of simple features directly with Proj.4}
+\title{Transform or convert coordinates of simple features directly with Proj.4 (bypassing GDAL)}
 \usage{
 st_transform_proj(x, crs, ...)
 
@@ -21,15 +21,17 @@ st_transform_proj(x, crs, ...)
 \arguments{
 \item{x}{object of class sf, sfc or sfg}
 
-\item{crs}{object or class \code{crs}, or input to \link[sf]{st_crs} (proj4string, or EPSG code), or length 2 character vector with input proj4string and output proj4string}
+\item{crs}{either an object of class \code{crs}, or input to \link[sf]{st_crs} (proj4string, or EPSG code), or a length 2 character vector with input proj4string and output proj4string}
 
 \item{...}{ignored}
 }
 \description{
-Transform or convert coordinates of simple features directly with Proj.4
+Transform or convert coordinates of simple features directly with Proj.4 (bypassing GDAL)
 }
 \details{
-Transforms coordinates of object to new projection, using Proj.4 and not the GDAL API.
+Transforms coordinates of object to new projection, using Proj.4 directly rather than the GDAL API used by \link[sf]{st_transform}.
+
+If \code{crs} is a single CRS, it forms the target CRS, and in that case the source CRS is obtained as \code{st_crs(x)}. Since this presumes that the source CRS is accepted by GDAL (which is not always the case), a second option is to specify the source and target CRS as two proj4strings in argument \code{crs}. In the latter case, \code{st_crs(x)} is ignored and may well be \code{NA}.
 
 The \code{st_transform_proj} method for \code{sfg} objects assumes that the CRS of the object is available as an attribute of that name.
 }
