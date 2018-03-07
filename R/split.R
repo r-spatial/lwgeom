@@ -45,6 +45,8 @@ st_split.sf = function(x, y) {
 #' spl = st_linesubstring(lines, 0.2, 0.8) # should warn
 #' plot(st_geometry(lines), col = 'red', lwd = 3)
 #' plot(spl, col = 'black', lwd = 3, add = TRUE)
+#' st_linesubstring(lines, 0.49999, 0.8) # three points
+#' st_linesubstring(lines, 0.49999, 0.8, 0.001) # two points: snap start to second node
 st_linesubstring = function(x, from, to, tolerance, ...) UseMethod("st_linesubstring")
 
 #' @export
