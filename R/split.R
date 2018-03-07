@@ -39,13 +39,31 @@ st_split.sf = function(x, y) {
 #' @param to relative distance from origin (in [0,1])
 #' @param tolerance tolerance parameter, when to snap to line node node
 #' @return object of class \code{sfc}
-#' 
+#' @examples
+#' library(sf)
 #' lines = st_sfc(st_linestring(rbind(c(0,0), c(1,2), c(2,0))), crs = 4326)
 #' spl = st_linesubstring(lines, 0.2, 0.8) # should warn
 #' plot(st_geometry(lines), col = 'red', lwd = 3)
 #' plot(spl, col = 'black', lwd = 3, add = TRUE)
-st_linesubstring = function(x, from, to, tolerance = 0.0) {
+st_linesubstring = function(x, from, to, tolerance, ...) UseMethod("st_linesubstring")
+
+#' @export
+st_linesubstring.sfc = function(x, from, to, tolerance = 0.0, ...) {
 	if (isTRUE(st_is_longlat(x)))
 		warning("st_linesubstring does not follow a geodesic; you may want to use st_geod_segmentize first")
-	st_sfc(CPL_linesubstring(st_geometry(x), from, to, tolerance), crs = st_crs(x))
+	st_sfc(CPL_linesubstring(x, from, to, tolerance), crs = st_crs(x))
+}
+
+#' @export
+st_linesubstring.sf = function(x, from, to, tolerance = 0.0, ...) {
+	if (isTRUE(st_is_longlat(x)))
+		warning("st_linesubstring does not follow a geodesic; you may want to use st_geod_segmentize first")
+	st_set_geometry(x, CPL_linesubstring(st_geometry(x), from, to, tolerance))
+}
+
+#' @export
+st_linesubstring.sfg = function(x, from, to, tolerance = 0.0, ...) {
+	if (isTRUE(st_is_longlat(x)))
+		warning("st_linesubstring does not follow a geodesic; you may want to use st_geod_segmentize first")
+	CPL_linesubstring(st_geometry(x), from, to, tolerance)[[1]]
 }

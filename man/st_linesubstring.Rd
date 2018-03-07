@@ -4,7 +4,7 @@
 \alias{st_linesubstring}
 \title{get substring from linestring}
 \usage{
-st_linesubstring(x, from, to, tolerance = 0)
+st_linesubstring(x, from, to, tolerance, ...)
 }
 \arguments{
 \item{x}{object of class \code{sfc}, \code{sf} or \code{sfg}}
@@ -17,12 +17,14 @@ st_linesubstring(x, from, to, tolerance = 0)
 }
 \value{
 object of class \code{sfc}
-
+}
+\description{
+get substring from linestring
+}
+\examples{
+library(sf)
 lines = st_sfc(st_linestring(rbind(c(0,0), c(1,2), c(2,0))), crs = 4326)
 spl = st_linesubstring(lines, 0.2, 0.8) # should warn
 plot(st_geometry(lines), col = 'red', lwd = 3)
 plot(spl, col = 'black', lwd = 3, add = TRUE)
-}
-\description{
-get substring from linestring
 }
