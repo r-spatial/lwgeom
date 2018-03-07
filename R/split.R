@@ -37,6 +37,7 @@ st_split.sf = function(x, y) {
 #' @param x object of class \code{sfc}, \code{sf} or \code{sfg}
 #' @param from relative distance from origin (in [0,1])
 #' @param to relative distance from origin (in [0,1])
+#' @param ... ignored
 #' @param tolerance tolerance parameter, when to snap to line node node
 #' @return object of class \code{sfc}
 #' @examples

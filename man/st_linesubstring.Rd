@@ -14,6 +14,8 @@ st_linesubstring(x, from, to, tolerance, ...)
 \item{to}{relative distance from origin (in [0,1])}
 
 \item{tolerance}{tolerance parameter, when to snap to line node node}
+
+\item{...}{ignored}
 }
 \value{
 object of class \code{sfc}
@@ -27,4 +29,6 @@ lines = st_sfc(st_linestring(rbind(c(0,0), c(1,2), c(2,0))), crs = 4326)
 spl = st_linesubstring(lines, 0.2, 0.8) # should warn
 plot(st_geometry(lines), col = 'red', lwd = 3)
 plot(spl, col = 'black', lwd = 3, add = TRUE)
+st_linesubstring(lines, 0.49999, 0.8) # three points
+st_linesubstring(lines, 0.49999, 0.8, 0.001) # two points: snap start to second node
 }
