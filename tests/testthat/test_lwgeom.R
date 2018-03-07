@@ -90,3 +90,12 @@ test_that("st_transform_proj finds sf's PROJ files", {
   expect_true(all.equal(as.numeric(bb2), as.numeric(bb3)))
   expect_true(all.equal(as.numeric(bb4), as.numeric(bb3)))
 })
+
+test_that("st_linesubstring warns on 4326", {
+  library(sf)
+  lines = st_sfc(st_linestring(rbind(c(0,0), c(1,2), c(2,0))), crs = 4326)
+  library(lwgeom)
+  expect_warning(spl <- st_linesubstring(lines, 0.2, 0.8)) # should warn
+  plot(st_geometry(lines), col = 'red', lwd = 3)
+  plot(spl, col = 'black', lwd = 3, add = TRUE)
+})

@@ -235,6 +235,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_linesubstring
+Rcpp::List CPL_linesubstring(Rcpp::List sfc, double from, double to, double tolerance);
+RcppExport SEXP _lwgeom_CPL_linesubstring(SEXP sfcSEXP, SEXP fromSEXP, SEXP toSEXP, SEXP toleranceSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    Rcpp::traits::input_parameter< double >::type from(fromSEXP);
+    Rcpp::traits::input_parameter< double >::type to(toSEXP);
+    Rcpp::traits::input_parameter< double >::type tolerance(toleranceSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_linesubstring(sfc, from, to, tolerance));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_lwgeom_CPL_geodetic_area", (DL_FUNC) &_lwgeom_CPL_geodetic_area, 3},
@@ -256,6 +270,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_lwgeom_CPL_snap_to_grid", (DL_FUNC) &_lwgeom_CPL_snap_to_grid, 3},
     {"_lwgeom_CPL_perimeter", (DL_FUNC) &_lwgeom_CPL_perimeter, 2},
     {"_lwgeom_CPL_proj_version", (DL_FUNC) &_lwgeom_CPL_proj_version, 1},
+    {"_lwgeom_CPL_linesubstring", (DL_FUNC) &_lwgeom_CPL_linesubstring, 4},
     {NULL, NULL, 0}
 };
 

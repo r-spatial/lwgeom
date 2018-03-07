@@ -14,6 +14,9 @@ st_perimeter_2d(x)
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
 }
+\value{
+numerical vector with perimeter for each feature (geometry), with unit of measure when possible
+}
 \description{
 compute perimeter from polygons or other geometries
 }

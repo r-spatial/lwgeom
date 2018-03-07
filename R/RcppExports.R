@@ -77,3 +77,7 @@ CPL_proj_version <- function(b = FALSE) {
     .Call('_lwgeom_CPL_proj_version', PACKAGE = 'lwgeom', b)
 }
 
+CPL_linesubstring <- function(sfc, from, to, tolerance = 0.0) {
+    .Call('_lwgeom_CPL_linesubstring', PACKAGE = 'lwgeom', sfc, from, to, tolerance)
+}
+

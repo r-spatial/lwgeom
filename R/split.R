@@ -31,3 +31,21 @@ st_split.sfc = function(x, y) {
 st_split.sf = function(x, y) {
 	st_set_geometry(x, st_split(st_geometry(x), y))
 }
+
+#' get substring from linestring
+#' @export
+#' @param x object of class \code{sfc}, \code{sf} or \code{sfg}
+#' @param from relative distance from origin (in [0,1])
+#' @param to relative distance from origin (in [0,1])
+#' @param tolerance tolerance parameter, when to snap to line node node
+#' @return object of class \code{sfc}
+#' 
+#' lines = st_sfc(st_linestring(rbind(c(0,0), c(1,2), c(2,0))), crs = 4326)
+#' spl = st_linesubstring(lines, 0.2, 0.8) # should warn
+#' plot(st_geometry(lines), col = 'red', lwd = 3)
+#' plot(spl, col = 'black', lwd = 3, add = TRUE)
+st_linesubstring = function(x, from, to, tolerance = 0.0) {
+	if (isTRUE(st_is_longlat(x)))
+		warning("st_linesubstring does not follow a geodesic; you may want to use st_geod_segmentize first")
+	st_sfc(CPL_linesubstring(st_geometry(x), from, to, tolerance), crs = st_crs(x))
+}

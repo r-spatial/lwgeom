@@ -28,8 +28,8 @@ bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 epsg (SRID):    4267
 proj4string:    +proj=longlat +datum=NAD27 +no_defs
 testthat results ================================================================
-OK: 25 SKIPPED: 0 FAILED: 0
+OK: 26 SKIPPED: 0 FAILED: 0
 > 
 > proc.time()
    user  system elapsed 
-  0.820   0.288   0.799 
+  0.897   0.269   0.846 
