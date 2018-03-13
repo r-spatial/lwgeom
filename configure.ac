@@ -52,6 +52,7 @@ fi
 # for CPPFLAGS we will superfluously double R's flags
 # since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
 CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS} ${PROJ_CPPFLAGS}"
+PKG_CPPFLAGS="${PKG_CPPFLAGS} ${PROJ_CPPFLAGS}"
 
 proj4ok=yes
 AC_CHECK_HEADERS(proj_api.h,,proj4ok=no)
