@@ -43,6 +43,8 @@ liblwgeom geodetic functions for length, area, segmentizing, covers
 }
 \details{
 \code{st_area} will give an error message when the area spans the equator and \code{lwgeom} is linked to a proj.4 version older than 4.9.0 (see \link{lwgeom_extSoftVersion})
+
+longitude coordinates returned are rescaled to [-180,180)
 }
 \note{
 this function should is used by \link[sf]{st_distance}, do not use it directly

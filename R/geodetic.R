@@ -40,6 +40,8 @@ st_geod_length = function(x) {
 #' x = st_sfc(pol, crs = 4326)
 #' seg = st_geod_segmentize(x[1], set_units(10, km))
 #' plot(seg, graticule = TRUE, axes = TRUE)
+#' @details 
+#' longitude coordinates returned are rescaled to [-180,180)
 st_geod_segmentize = function(x, max_seg_length) {
 	stopifnot(st_is_longlat(x))
 	p = crs_parameters(x)
