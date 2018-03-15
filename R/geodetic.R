@@ -51,7 +51,8 @@ st_geod_segmentize = function(x, max_seg_length) {
 		}
 	} else
 		stop("st_geod_segmentize needs a max_seg_length with units rad, degree, or a length unit")
-	st_sfc(CPL_geodetic_segmentize(st_geometry(x), max_seg_length), crs = st_crs(x))
+	ret = st_sfc(CPL_geodetic_segmentize(st_geometry(x), max_seg_length))
+	st_set_crs((ret + c(180,90)) %% 360 - c(180, 90), st_crs(x)) # rescale lon to [-180,180)
 }
 
 #' @name lw_geodetic
