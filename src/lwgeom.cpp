@@ -222,3 +222,25 @@ Rcpp::NumericVector CPL_perimeter(Rcpp::List sfc, bool do2d = false) {
 	}
 	return out;
 }
+
+
+// [[Rcpp::export]]
+Rcpp::LogicalVector CPL_is_polygon_cw(Rcpp::List sfc) {
+  std::vector<LWGEOM *> lwgeom_cw = lwgeom_from_sfc(sfc);
+  Rcpp::LogicalVector out(sfc.length());
+  for (size_t i = 0; i < lwgeom_cw.size(); i++) {
+    out[i] = lwgeom_is_clockwise(lwgeom_cw[i]);
+    lwgeom_free(lwgeom_cw[i]);
+  }
+  return out;
+}
+
+// [[Rcpp::export]]
+Rcpp::List CPL_force_polygon_cw(Rcpp::List sfc) {
+  
+  std::vector<LWGEOM *> lwgeom_cw = lwgeom_from_sfc(sfc);
+  for (size_t i = 0; i < lwgeom_cw.size(); i++) {
+    lwgeom_force_clockwise(lwgeom_cw[i]);
+  }
+  return sfc_from_lwgeom(lwgeom_cw);
+}
