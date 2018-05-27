@@ -38,4 +38,5 @@ Collate:
 	snap_to_grid.R
 	twkb.R
 	perimeter.R
+	clockwise.R
 RoxygenNote: 6.0.1
