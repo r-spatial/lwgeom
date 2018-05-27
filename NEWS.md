@@ -1,5 +1,7 @@
 # version 0.1-5
 
+* add `st_is_polygon_cw`, #21 by Andy Teucher @ateucher; add Andy to contributors
+
 * add `st_perimeter` and `st_perimeter_2d` functions to compute the length measurement of the boundary of a surface.
 
 * allow `st_transform_proj` to take two proj4 strings as crs, as `c(input_p4s, output_p4s)`, ignoring the CRS of x
