@@ -1,6 +1,6 @@
 
-R version 3.4.3 (2017-11-30) -- "Kite-Eating Tree"
-Copyright (C) 2017 The R Foundation for Statistical Computing
+R version 3.5.0 (2018-04-23) -- "Joy in Playing"
+Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -20,16 +20,16 @@ Type 'q()' to quit R.
 > suppressPackageStartupMessages(library(lwgeom))
 > 
 > test_check("lwgeom")
-Reading layer `nc.gpkg' from data source `/home/edzer/R/x86_64-pc-linux-gnu-library/3.4/sf/gpkg/nc.gpkg' using driver `GPKG'
+Reading layer `nc.gpkg' from data source `/home/edzer/R/x86_64-pc-linux-gnu-library/3.5/sf/gpkg/nc.gpkg' using driver `GPKG'
 Simple feature collection with 100 features and 14 fields
 geometry type:  MULTIPOLYGON
 dimension:      XY
 bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 epsg (SRID):    4267
 proj4string:    +proj=longlat +datum=NAD27 +no_defs
-testthat results ================================================================
-OK: 26 SKIPPED: 0 FAILED: 0
+══ testthat results  ═══════════════════════════════════════════════════════════
+OK: 54 SKIPPED: 1 FAILED: 0
 > 
 > proc.time()
    user  system elapsed 
-  0.897   0.269   0.846 
+  0.785   0.242   0.708 

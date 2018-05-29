@@ -34,7 +34,7 @@ generate_circles = function(geom, nQuadSegs = 30) {
   
   circles = CPL_minimum_bounding_circle(geom)
   if (any(is.nan(unlist(circles))))
-    stop("NaN values returned by lwgeom's lwgeom_calculate_mbc.")
+    stop("NaN values returned by lwgeom's lwgeom_calculate_mbc.") #nocov
 
   mapply(
     function(xy, r, nQuadSegs) {

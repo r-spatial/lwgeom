@@ -61,12 +61,10 @@ st_linesubstring.sfc = function(x, from, to, tolerance = 0.0, ...) {
 st_linesubstring.sf = function(x, from, to, tolerance = 0.0, ...) {
 	if (isTRUE(st_is_longlat(x)))
 		warning("st_linesubstring does not follow a geodesic; you may want to use st_geod_segmentize first")
-	st_set_geometry(x, CPL_linesubstring(st_geometry(x), from, to, tolerance))
+	st_set_geometry(x, st_linesubstring(st_geometry(x), from, to, tolerance))
 }
 
 #' @export
 st_linesubstring.sfg = function(x, from, to, tolerance = 0.0, ...) {
-	if (isTRUE(st_is_longlat(x)))
-		warning("st_linesubstring does not follow a geodesic; you may want to use st_geod_segmentize first")
 	CPL_linesubstring(st_geometry(x), from, to, tolerance)[[1]]
 }

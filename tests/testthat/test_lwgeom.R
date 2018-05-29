@@ -95,7 +95,9 @@ test_that("st_linesubstring warns on 4326", {
   library(sf)
   lines = st_sfc(st_linestring(rbind(c(0,0), c(1,2), c(2,0))), crs = 4326)
   library(lwgeom)
-  expect_warning(spl <- st_linesubstring(lines, 0.2, 0.8)) # should warn
+  expect_warning(spl <- st_linesubstring(lines, 0.2, 0.8))
+  expect_silent(spl <- st_linesubstring(lines[[1]], 0.2, 0.8)) # sfg has no crs
+  expect_warning(spl <- st_linesubstring(st_sf(lines), 0.2, 0.8))
   plot(st_geometry(lines), col = 'red', lwd = 3)
   plot(spl, col = 'black', lwd = 3, add = TRUE)
 })
