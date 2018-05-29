@@ -1,7 +1,7 @@
 #' liblwgeom geodetic functions
 #' 
 #' liblwgeom geodetic functions for length, area, segmentizing, covers
-#' @name lw_geodetic
+#' @name geod
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @export
 #' @details \code{st_area} will give an error message when the area spans the equator and \code{lwgeom} is linked to a proj.4 version older than 4.9.0 (see \link{lwgeom_extSoftVersion})
@@ -18,7 +18,7 @@ st_geod_area = function(x) {
 	ret
 }
 
-#' @name lw_geodetic
+#' @name geod
 #' @export
 #' @examples
 #' l = st_sfc(st_linestring(rbind(c(7,52), c(8,53))), crs = 4326)
@@ -31,7 +31,7 @@ st_geod_length = function(x) {
 	ret
 }
 
-#' @name lw_geodetic
+#' @name geod
 #' @param max_seg_length segment length in degree, radians, or as a length unit (e.g., m)
 #' @export
 #' @examples
@@ -57,7 +57,7 @@ st_geod_segmentize = function(x, max_seg_length) {
 	st_set_crs((ret + c(180,90)) %% 360 - c(180, 90), st_crs(x)) # rescale lon to [-180,180)
 }
 
-#' @name lw_geodetic
+#' @name geod
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param sparse logical; if \code{TRUE}, return a sparse matrix (object of class \code{sgbp}), otherwise, return a dense logical matrix.
 #' @export
@@ -83,7 +83,7 @@ st_geod_covers = function(x, y, sparse = TRUE) {
 		as.matrix(ret)
 }
 
-#' @name lw_geodetic
+#' @name geod
 #' @export
 st_geod_covered_by = function(x, y, sparse = TRUE) {
 	ret = structure(t(st_geod_covers(y, x)), predicate = "covered_by")
@@ -93,7 +93,7 @@ st_geod_covered_by = function(x, y, sparse = TRUE) {
 		as.matrix(ret)
 }
 
-#' @name lw_geodetic
+#' @name geod
 #' @export
 #' @param tolerance double or length \code{units} value: if positive, the first distance less than \code{tolerance} is returned, rather than the true distance
 #' @note this function should is used by \link[sf]{st_distance}, do not use it directly
