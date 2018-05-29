@@ -34,10 +34,10 @@ Collate:
 	valid.R
 	transform.R
 	bounding_circle.R
-	geodetic.R
 	bearing.R
 	snap_to_grid.R
 	twkb.R
 	perimeter.R
 	clockwise.R
+	geod.R
 RoxygenNote: 6.0.1
