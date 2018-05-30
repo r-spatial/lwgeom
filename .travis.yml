@@ -2,7 +2,7 @@ language: r
 
 r:
   - release
-  - devel
+#  - devel
 # - oldrel
 
 sudo: required
