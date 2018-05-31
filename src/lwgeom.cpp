@@ -250,7 +250,7 @@ Rcpp::List CPL_startpoint(Rcpp::List sfc) {
   
   std::vector<LWGEOM *> lwgeom_cw = lwgeom_from_sfc(sfc);
   for (size_t i = 0; i < lwgeom_cw.size(); i++) {
-    lwgeom_startpoint(lwgeom_cw[i]);
+    lwgeom_startpoint(lwgeom_cw[i], 4.1);
   }
   return sfc_from_lwgeom(lwgeom_cw);
 }
