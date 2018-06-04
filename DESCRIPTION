@@ -40,4 +40,5 @@ Collate:
 	perimeter.R
 	clockwise.R
 	geod.R
+	startpoint.R
 RoxygenNote: 6.0.1

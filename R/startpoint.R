@@ -7,7 +7,10 @@
 #' @examples
 #' library(sf)
 #' m = matrix(c(0, 1, 2, 0, 1, 4), ncol = 2)
-#' # lwgeom::st_startpoint(st_sfc(st_linestring(m))
+#' l = st_sfc(st_linestring(m))
+#' lwgeom::st_startpoint(l)
+#' l2 = st_sfc(st_linestring(m), st_linestring(m[3:1, ]))
+#' lwgeom::st_startpoint(l2)
 st_startpoint = function(x) {
-	CPL_startpoint(st_geometry(x))
+  CPL_startpoint(st_geometry(x))
 }

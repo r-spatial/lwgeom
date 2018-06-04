@@ -247,7 +247,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_startpoint
-Rcpp::List CPL_startpoint(Rcpp::List sfc);
+Rcpp::NumericMatrix CPL_startpoint(Rcpp::List sfc);
 RcppExport SEXP _lwgeom_CPL_startpoint(SEXP sfcSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
