@@ -55,7 +55,9 @@ test_that("st_snap_to_grid_works", {
 	x = st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE) %>%
 			st_transform(3395)
 	# snap to grid
-	y1 = st_snap_to_grid(x, 5000)
+	err <- try(y1 <- st_snap_to_grid(x, 5000), silent = TRUE)
+	if (inherits(err, "try-error")) # not available in liblwgeom < 2.5.0
+		skip("snap_to_grid not available in this liblwgeom version")
 	y2 = st_snap_to_grid(st_geometry(x), 5000)
 	y3 = st_snap_to_grid(st_geometry(x)[[1]], 5000)
 	# check that output class match inputs

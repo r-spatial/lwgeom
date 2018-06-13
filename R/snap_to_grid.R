@@ -13,12 +13,15 @@
 #'     st_transform(3395)
 #'
 #' # snap to a grid of 5000 m
-#' y = st_snap_to_grid(x, 5000)
+#' err = try(y <- st_snap_to_grid(x, 5000))
 #'
 #' # plot data for visual comparison
-#' par(mfrow = c(1, 2))
-#' plot(x, main = "orginal data")
-#' plot(y, main = "snapped to 5000 m")
+#' if (!inherits(err, "try-error")) {
+#'  opar = par(mfrow = c(1, 2))
+#'  plot(x, main = "orginal data")
+#'  plot(y, main = "snapped to 5000 m")
+#'  par(opar)
+#' }
 #' @export
 st_snap_to_grid = function(x, size, origin) UseMethod("st_snap_to_grid")
 
