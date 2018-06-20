@@ -9,7 +9,7 @@ st_split(x, y)
 \arguments{
 \item{x}{object with geometries to be splitted}
 
-\item{y}{object split with (blade); if \code{y} contains more than one feature geometry, the geometries are \link[sf]{st_combine}}
+\item{y}{object split with (blade); if \code{y} contains more than one feature geometry, the geometries are \link[sf]{st_combine}d}
 }
 \value{
 object of the same class as \code{x}
@@ -21,5 +21,5 @@ Return a collection of geometries resulting by splitting a geometry
 library(sf)
 l = st_as_sfc('MULTILINESTRING((10 10, 190 190), (15 15, 30 30, 100 90))')
 pt = st_sfc(st_point(c(30,30)))
-lwgeom::st_split(l, pt)
+st_split(l, pt)
 }
