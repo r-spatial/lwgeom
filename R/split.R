@@ -2,13 +2,13 @@
 #' 
 #' @name st_split
 #' @param x object with geometries to be splitted
-#' @param y object split with (blade); if \code{y} contains more than one feature geometry, the geometries are \link{st_combine}d
+#' @param y object split with (blade); if \code{y} contains more than one feature geometry, the geometries are \link[sf]{st_combine}d
 #' @return object of the same class as \code{x}
 #' @examples
 #' library(sf)
 #' l = st_as_sfc('MULTILINESTRING((10 10, 190 190), (15 15, 30 30, 100 90))')
 #' pt = st_sfc(st_point(c(30,30)))
-#' lwgeom::st_split(l, pt)
+#' st_split(l, pt)
 #' @export
 st_split = function(x, y) UseMethod("st_split")
 
