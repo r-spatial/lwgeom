@@ -9,7 +9,7 @@ st_split(x, y)
 \arguments{
 \item{x}{object with geometries to be splitted}
 
-\item{y}{object split with (blade); if \code{y} contains more than one feature geometry, the geometries are \link{st_combine}d}
+\item{y}{object split with (blade); if \code{y} contains more than one feature geometry, the geometries are \link[sf]{st_combine}}
 }
 \value{
 object of the same class as \code{x}

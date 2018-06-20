@@ -2,7 +2,7 @@
 #' 
 #' @name st_split
 #' @param x object with geometries to be splitted
-#' @param y object split with (blade); if \code{y} contains more than one feature geometry, the geometries are \link{st_combine}d
+#' @param y object split with (blade); if \code{y} contains more than one feature geometry, the geometries are \link[sf]{st_combine}
 #' @return object of the same class as \code{x}
 #' @examples
 #' library(sf)
