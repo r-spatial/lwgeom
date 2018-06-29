@@ -23,7 +23,7 @@ addons:
       - libgdal-dev
 
 before_install:
-  - R -q -e 'install.packages("devtools"); devtools::install_github("ropenscilabs/tic"); tic::prepare_all_stages()'
+  - R -q -e 'install.packages("devtools"); devtools::install_github("ropenscilabs/tic@4ad0920c425c0e66809a1ae23837655f4dca997d"); tic::prepare_all_stages()'
 
 after_success:
   - R -q -e 'covr::codecov(quiet = FALSE)'
