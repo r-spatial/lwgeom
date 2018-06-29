@@ -4,3 +4,4 @@ appveyor.yml
 codecov.yml
 ^docs$
 tic.R
+NOTES
