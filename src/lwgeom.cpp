@@ -262,3 +262,14 @@ Rcpp::NumericMatrix CPL_startpoint(Rcpp::List sfc) {
   // next step: get it into sf form
   // return sfc_from_lwgeom(lwgeom_cw);
 }
+
+// [[Rcpp::export]]
+Rcpp::CharacterVector CPL_sfc_to_wkt(const Rcpp::List sfc, const int precision) {
+  std::vector<LWGEOM *> lwgeom_cw = lwgeom_from_sfc(sfc);
+  size_t wkt_size = 0;
+  Rcpp::CharacterVector out;
+  for (size_t i = 0; i < lwgeom_cw.size(); i++) {
+    out.push_back(lwgeom_to_wkt(lwgeom_cw[i], WKT_EXTENDED, precision, &wkt_size));
+  }
+  return out;
+}
