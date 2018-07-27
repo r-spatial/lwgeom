@@ -72,7 +72,7 @@ st_geod_covers = function(x, y, sparse = TRUE) {
 	if (!all(st_dimension(x) == 2))
 		stop("argument x must contain only polygons")
 	if (!all(st_dimension(y) == 0))
-		stop("argument x must contain only points")
+		stop("argument y must contain only points")
 	if (is.null(id <- row.names(x)))
 		id = as.character(seq_along(st_geometry(x)))
 	ret = structure(CPL_geodetic_covers(st_geometry(x), st_geometry(y)),
