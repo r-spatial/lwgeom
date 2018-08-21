@@ -12,5 +12,6 @@
 #' l2 = st_sfc(st_linestring(m), st_linestring(m[3:1, ]))
 #' lwgeom::st_startpoint(l2)
 st_startpoint = function(x) {
-  CPL_startpoint(st_geometry(x))
+  m <- CPL_startpoint(st_geometry(x))
+  st_sfc(lapply(seq_len(nrow(m)), function(i) st_point(m[i,])), crs = st_crs(x))
 }
