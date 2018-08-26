@@ -81,6 +81,10 @@ CPL_force_polygon_cw <- function(sfc) {
     .Call('_lwgeom_CPL_force_polygon_cw', PACKAGE = 'lwgeom', sfc)
 }
 
+CPL_startpoint <- function(sfc) {
+    .Call('_lwgeom_CPL_startpoint', PACKAGE = 'lwgeom', sfc)
+}
+
 CPL_proj_version <- function(b = FALSE) {
     .Call('_lwgeom_CPL_proj_version', PACKAGE = 'lwgeom', b)
 }

@@ -244,3 +244,21 @@ Rcpp::List CPL_force_polygon_cw(Rcpp::List sfc) {
   }
   return sfc_from_lwgeom(lwgeom_cw);
 }
+
+// [[Rcpp::export]]
+Rcpp::NumericMatrix CPL_startpoint(Rcpp::List sfc) {
+  
+  std::vector<LWGEOM *> lwgeom_cw = lwgeom_from_sfc(sfc);
+  Rcpp::NumericMatrix m(lwgeom_cw.size(), 2);
+  
+  POINT4D p;
+  for (size_t i = 0; i < lwgeom_cw.size(); i++) {
+    lwgeom_startpoint(lwgeom_cw[i], &p);
+    m(i, 0) = p.x;
+    m(i, 1) = p.y;
+  }
+  
+  return m;
+  // next step: get it into sf form
+  // return sfc_from_lwgeom(lwgeom_cw);
+}
