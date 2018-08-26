@@ -2,11 +2,8 @@
 % Please edit documentation in R/transform.R
 \name{st_transform_proj}
 \alias{st_transform_proj}
-\alias{st_transform_proj}
 \alias{st_transform_proj.sfc}
-\alias{st_transform_proj}
 \alias{st_transform_proj.sf}
-\alias{st_transform_proj}
 \alias{st_transform_proj.sfg}
 \title{Transform or convert coordinates of simple features directly with Proj.4 (bypassing GDAL)}
 \usage{

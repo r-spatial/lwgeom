@@ -3,15 +3,10 @@
 \name{geod}
 \alias{geod}
 \alias{st_geod_area}
-\alias{geod}
 \alias{st_geod_length}
-\alias{geod}
 \alias{st_geod_segmentize}
-\alias{geod}
 \alias{st_geod_covers}
-\alias{geod}
 \alias{st_geod_covered_by}
-\alias{geod}
 \alias{st_geod_distance}
 \title{liblwgeom geodetic functions}
 \usage{

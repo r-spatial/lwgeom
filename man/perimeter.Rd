@@ -3,7 +3,6 @@
 \name{perimeter}
 \alias{perimeter}
 \alias{st_perimeter}
-\alias{perimeter}
 \alias{st_perimeter_2d}
 \title{compute perimeter from polygons or other geometries}
 \usage{

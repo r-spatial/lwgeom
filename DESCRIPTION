@@ -25,20 +25,5 @@ License: GPL-2
 Copyright: file COPYRIGHTS
 URL: https://github.com/r-spatial/lwgeom/
 BugReports: https://github.com/r-spatial/lwgeom/issues/
-Collate:
-	init.R
-	RcppExports.R
-	geohash.R
-	split.R
-	subdivide.R
-	valid.R
-	transform.R
-	bounding_circle.R
-	bearing.R
-	snap_to_grid.R
-	twkb.R
-	perimeter.R
-	clockwise.R
-	geod.R
-	startpoint.R
-RoxygenNote: 6.0.1
+Collate: init.R RcppExports.R geohash.R split.R subdivide.R valid.R transform.R bounding_circle.R bearing.R snap_to_grid.R twkb.R perimeter.R clockwise.R geod.R startpoint.R
+RoxygenNote: 6.1.0
