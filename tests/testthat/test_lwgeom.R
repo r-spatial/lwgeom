@@ -103,3 +103,9 @@ test_that("st_linesubstring warns on 4326", {
   plot(st_geometry(lines), col = 'red', lwd = 3)
   plot(spl, col = 'black', lwd = 3, add = TRUE)
 })
+
+test_that("st_startpoint works", {
+  library(sf)
+  library(lwgeom)
+  sp = st_startpoint(st_sfc(st_linestring(matrix(1:10,,2)), st_linestring(matrix(3:12,,2)),crs=4326))
+})
