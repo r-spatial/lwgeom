@@ -257,6 +257,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_sfc_to_wkt
+Rcpp::CharacterVector CPL_sfc_to_wkt(const Rcpp::List sfc, const int precision);
+RcppExport SEXP _lwgeom_CPL_sfc_to_wkt(SEXP sfcSEXP, SEXP precisionSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List >::type sfc(sfcSEXP);
+    Rcpp::traits::input_parameter< const int >::type precision(precisionSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_sfc_to_wkt(sfc, precision));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_proj_version
 std::string CPL_proj_version(bool b);
 RcppExport SEXP _lwgeom_CPL_proj_version(SEXP bSEXP) {
@@ -305,6 +317,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_lwgeom_CPL_is_polygon_cw", (DL_FUNC) &_lwgeom_CPL_is_polygon_cw, 1},
     {"_lwgeom_CPL_force_polygon_cw", (DL_FUNC) &_lwgeom_CPL_force_polygon_cw, 1},
     {"_lwgeom_CPL_startpoint", (DL_FUNC) &_lwgeom_CPL_startpoint, 1},
+    {"_lwgeom_CPL_sfc_to_wkt", (DL_FUNC) &_lwgeom_CPL_sfc_to_wkt, 2},
     {"_lwgeom_CPL_proj_version", (DL_FUNC) &_lwgeom_CPL_proj_version, 1},
     {"_lwgeom_CPL_linesubstring", (DL_FUNC) &_lwgeom_CPL_linesubstring, 4},
     {NULL, NULL, 0}
