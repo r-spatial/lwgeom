@@ -105,9 +105,12 @@ Rcpp::List CPL_geodetic_distance(Rcpp::List sfc1, Rcpp::List sfc2, double semi_m
 		out(0) = lst;
 	} else {
 		Rcpp::NumericMatrix mat(sfc1.size(), sfc2.size());
-		for (size_t i = 0; i < lw1.size(); i++)
-			for (size_t j = 0; j < lw2.size(); j++)
+		for (size_t i = 0; i < lw1.size(); i++) {
+			for (size_t j = 0; j < lw2.size(); j++) {
 				mat(i, j) = lwgeom_distance_spheroid(lw1[i], lw2[j], &s, tolerance);
+			}
+			Rcpp::checkUserInterrupt();
+		}
 		out(0) = mat;
 	}
 	sfc_from_lwgeom(lw1); // free
