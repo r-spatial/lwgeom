@@ -5,7 +5,7 @@
 #' @return numerical vector with perimeter for each feature (geometry), with unit of measure when possible
 #' @export
 st_perimeter = function(x) {
-	if (iSTRUE(st_is_longlat(x)))
+	if (isTRUE(st_is_longlat(x)))
 		stop("for perimeter of longlat geometry, cast to LINESTRING and use st_length") # nocov
 	ret = CPL_perimeter(st_geometry(x), FALSE)
 	units(ret) = st_crs(x, parameters=TRUE)$ud_unit
