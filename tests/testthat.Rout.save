@@ -1,5 +1,5 @@
 
-R version 3.5.0 (2018-04-23) -- "Joy in Playing"
+R version 3.5.1 (2018-07-02) -- "Feather Spray"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -28,8 +28,8 @@ bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 epsg (SRID):    4267
 proj4string:    +proj=longlat +datum=NAD27 +no_defs
 ══ testthat results  ═══════════════════════════════════════════════════════════
-OK: 54 SKIPPED: 1 FAILED: 0
+OK: 50 SKIPPED: 3 FAILED: 0
 > 
 > proc.time()
    user  system elapsed 
-  0.785   0.242   0.708 
+  0.680   0.044   0.715 

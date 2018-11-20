@@ -5,14 +5,14 @@
 \alias{st_asewkt}
 \title{Return Well-known Text representation of simple feature geometry}
 \usage{
-st_astext(x, precision = 12, EWKT = FALSE)
+st_astext(x, digits = 12, EWKT = FALSE)
 
-st_asewkt(x, precision)
+st_asewkt(x, digits = 12)
 }
 \arguments{
 \item{x}{object of class \code{sfg}, \code{sfc} or `crs``}
 
-\item{precision}{number of digits to print}
+\item{digits}{number of digits to print}
 
 \item{EWKT}{Use Postgis Enhanced WKT (includes srid)}
 }

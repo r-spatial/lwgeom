@@ -1,6 +1,6 @@
 
-R version 3.4.3 (2017-11-30) -- "Kite-Eating Tree"
-Copyright (C) 2017 The R Foundation for Statistical Computing
+R version 3.5.1 (2018-07-02) -- "Feather Spray"
+Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -42,7 +42,7 @@ Type 'q()' to quit R.
 > d.sf = st_distance(x, y)
 > d.sp = spDists(as(x, "Spatial"), as(y, "Spatial")) # equiv to geosphere::distMeeus
 > d.sf - set_units(d.sp, km)
-Units: m
+Units: [m]
          [,1]          [,2]          [,3]          [,4]         [,5]
 [1,] 11.58615  0.000000e+00  2.910383e-11  0.000000e+00 5.820766e-11
 [2,] 11.76865  0.000000e+00  0.000000e+00 -2.910383e-11 0.000000e+00
@@ -56,7 +56,7 @@ Units: m
 > dv[3,] = distVincentyEllipsoid(as(x, "Spatial")[3], as(y, "Spatial"))
 > dv[4,] = distVincentyEllipsoid(as(x, "Spatial")[4], as(y, "Spatial"))
 > d.sf - set_units(dv, m) # difference in micrometer range:
-Units: m
+Units: [m]
              [,1]         [,2]         [,3]         [,4]         [,5]
 [1,] 6.419141e-06 8.383504e-07 1.676701e-06 2.515037e-06 3.353402e-06
 [2,] 6.529503e-06 0.000000e+00 8.383504e-07 1.676643e-06 2.515037e-06
@@ -65,4 +65,4 @@ Units: m
 > 
 > proc.time()
    user  system elapsed 
-  0.892   0.196   0.881 
+  0.489   0.033   0.513 

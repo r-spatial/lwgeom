@@ -12,7 +12,7 @@
 #' # st_area(nc[1:3,])
 st_geod_area = function(x) {
 	stopifnot(st_is_longlat(x))
-	p = crs_parameters(x)
+	p = st_crs(st_geometry(x), parameters = TRUE)
 	ret = CPL_geodetic_area(st_geometry(x), p$SemiMajor, p$InvFlattening)
 	units(ret) = units(p$SemiMajor^2)
 	ret
@@ -25,7 +25,7 @@ st_geod_area = function(x) {
 #' st_geod_length(l)
 st_geod_length = function(x) {
 	stopifnot(st_is_longlat(x))
-	p = crs_parameters(x)
+	p = st_crs(st_geometry(x), parameters = TRUE)
 	ret = CPL_geodetic_length(st_geometry(x), p$SemiMajor, p$InvFlattening)
 	units(ret) = units(p$SemiMajor)
 	ret
@@ -44,7 +44,7 @@ st_geod_length = function(x) {
 #' longitude coordinates returned are rescaled to [-180,180)
 st_geod_segmentize = function(x, max_seg_length) {
 	stopifnot(st_is_longlat(x))
-	p = crs_parameters(x)
+	p = st_crs(st_geometry(x), parameters = TRUE)
 	if (inherits(max_seg_length, "units")) {
 		tr = try(units(max_seg_length) <- as_units("rad"), silent = TRUE)
 		if (inherits(tr, "try-error")) {
@@ -105,7 +105,7 @@ st_geod_covered_by = function(x, y, sparse = TRUE) {
 st_geod_distance = function(x, y, tolerance = 0.0, sparse = FALSE) {
 	stopifnot(st_is_longlat(x))
 	stopifnot(st_crs(x) == st_crs(y))
-	p = crs_parameters(x)
+	p = st_crs(st_geometry(x), parameters = TRUE)
 	SemiMinor = if (is.null(p$SemiMinor)) -1.0 else p$SemiMinor
 	units(tolerance) = as_units("m")
 	ret = CPL_geodetic_distance(st_geometry(x), st_geometry(y), p$SemiMajor, p$InvFlattening,

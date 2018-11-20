@@ -15,7 +15,7 @@ Rcpp::List CPL_linesubstring(Rcpp::List sfc, double from, double to, double tole
 	std::vector<LWGEOM *> lw = lwgeom_from_sfc(sfc);
 	std::vector<LWGEOM *> out(sfc.size());
 	for (size_t i = 0; i < lw.size(); i++) {
-		LWLINE *iline = lwgeom_as_lwline(lw[i]);
+		// LWLINE *iline = lwgeom_as_lwline(lw[i]);
 		if ( lw[i]->type == LINETYPE ) {
 			POINTARRAY *opa;
 			opa = ptarray_substring(((LWLINE*)lw[i])->points, from, to, tolerance);
