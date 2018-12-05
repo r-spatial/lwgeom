@@ -258,13 +258,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_sfc_to_wkt
-Rcpp::CharacterVector CPL_sfc_to_wkt(const Rcpp::List sfc, const int precision);
+Rcpp::CharacterVector CPL_sfc_to_wkt(Rcpp::List sfc, Rcpp::IntegerVector precision);
 RcppExport SEXP _lwgeom_CPL_sfc_to_wkt(SEXP sfcSEXP, SEXP precisionSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::List >::type sfc(sfcSEXP);
-    Rcpp::traits::input_parameter< const int >::type precision(precisionSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type precision(precisionSEXP);
     rcpp_result_gen = Rcpp::wrap(CPL_sfc_to_wkt(sfc, precision));
     return rcpp_result_gen;
 END_RCPP

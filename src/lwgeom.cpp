@@ -40,7 +40,7 @@ Rcpp::CharacterVector CPL_lwgeom_version(bool b = false) {
 // in
 std::vector<LWGEOM *> lwgeom_from_sfc(Rcpp::List sfc) {
 	std::vector<LWGEOM *> lwgeom_v(sfc.size()); // return
-	Rcpp::List wkblst = sf::CPL_write_wkb(sfc, true);
+	Rcpp::List wkblst = sf::CPL_write_wkb(sfc, true); // true: write EWKB, puts EPSG inside the wkb
 	for (int i = 0; i < wkblst.size(); i++) {
 		Rcpp::RawVector rv = wkblst[i];
 		const uint8_t *wkb = &(rv[0]); 
@@ -264,12 +264,14 @@ Rcpp::NumericMatrix CPL_startpoint(Rcpp::List sfc) {
 }
 
 // [[Rcpp::export]]
-Rcpp::CharacterVector CPL_sfc_to_wkt(const Rcpp::List sfc, const int precision) {
+Rcpp::CharacterVector CPL_sfc_to_wkt(Rcpp::List sfc, Rcpp::IntegerVector precision) {
+
   std::vector<LWGEOM *> lwgeom_cw = lwgeom_from_sfc(sfc);
-  size_t wkt_size = 0;
   Rcpp::CharacterVector out;
   for (size_t i = 0; i < lwgeom_cw.size(); i++) {
-    out.push_back(lwgeom_to_wkt(lwgeom_cw[i], WKT_EXTENDED, precision, &wkt_size));
+	char *wkt = lwgeom_to_wkt(lwgeom_cw[i], WKT_EXTENDED, precision[0], NULL);
+    out.push_back(wkt);
+	free(wkt);
   }
   return out;
 }

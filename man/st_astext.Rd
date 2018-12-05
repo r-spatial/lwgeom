@@ -5,16 +5,18 @@
 \alias{st_asewkt}
 \title{Return Well-known Text representation of simple feature geometry}
 \usage{
-st_astext(x, digits = 12, EWKT = FALSE)
+st_astext(x, digits = options("digits"), ..., EWKT = FALSE)
 
-st_asewkt(x, digits = 12)
+st_asewkt(x, digits = options("digits"))
 }
 \arguments{
-\item{x}{object of class \code{sfg}, \code{sfc} or `crs``}
+\item{x}{object of class \code{sfg}, \code{sfc}, or \code{sf}}
 
-\item{digits}{number of digits to print}
+\item{digits}{integer; number of digits to print}
 
-\item{EWKT}{Use Postgis Enhanced WKT (includes srid)}
+\item{...}{ignored}
+
+\item{EWKT}{logical; use PostGIS Enhanced WKT (includes srid)}
 }
 \description{
 Return Well-known Text representation of simple feature geometry or coordinate reference system
@@ -31,5 +33,6 @@ the geometry with SRID meta data.
 \examples{
 library(sf)
 pt <- st_sfc(st_point(c(1.0002,2.3030303)), crs = 4326)
-st_astext(pt, 3, TRUE)
+st_astext(pt, 3)
+st_asewkt(pt, 3)
 }
