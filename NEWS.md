@@ -1,6 +1,10 @@
 # version 0.1-5
 
-* add `st_is_polygon_cw`, #21 by Andy Teucher @ateucher; add Andy to contributors
+* check for user interrupts on `st_geod_distance`, #29 by Dan Baston
+
+* add `st_astext` for fast WKT writing, #25 by Etienne Racine
+
+* add `st_is_polygon_cw`, #21 by Andy Teucher @ateucher; add Andy Teucher to contributors
 
 * add `st_perimeter` and `st_perimeter_2d` functions to compute the length measurement of the boundary of a surface.
 
