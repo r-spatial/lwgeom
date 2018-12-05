@@ -3332,7 +3332,8 @@ $as_echo "$as_me: PROJ: ${proj_version}" >&6;}
   fi
 fi
 
-LIBS="${INLIBS} ${PKG_LIBS} ${PROJ_LIBS}"
+PKG_LIBS="${PKG_LIBS} ${PROJ_LIBS}"
+LIBS="${INLIBS} ${PKG_LIBS}"
 
 proj4ok=yes
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for pj_init_plus in -lproj" >&5
@@ -3653,8 +3654,9 @@ fi
 # honor PKG_xx overrides
 # for CPPFLAGS we will superfluously double R's flags
 # since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
+PKG_CPPFLAGS="${PKG_CPPFLAGS} ${GEOS_CPPFLAGS}"
 CPPFLAGS="${CPPFLAGS} ${PKG_CPPFLAGS}"
-LIBS="${LIBS} ${PKG_LIBS}"
+LIBS="${LIBS} ${PKG_LIBS} ${GEOS_CLIBS}"
 
 if test ${GEOS_VER_DOT} -lt 350 ; then
   PKG_CPPFLAGS="${PKG_CPPFLAGS} -DPOSTGIS_GEOS_VERSION=34"

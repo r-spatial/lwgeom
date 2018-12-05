@@ -78,7 +78,8 @@ else
   fi
 fi
 
-LIBS="${INLIBS} ${PKG_LIBS} ${PROJ_LIBS}"
+PKG_LIBS="${PKG_LIBS} ${PROJ_LIBS}"
+LIBS="${INLIBS} ${PKG_LIBS}"
 
 proj4ok=yes
 AC_CHECK_LIB(proj,pj_init_plus,,proj4ok=no)
@@ -286,8 +287,9 @@ fi
 # honor PKG_xx overrides
 # for CPPFLAGS we will superfluously double R's flags
 # since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
+PKG_CPPFLAGS="${PKG_CPPFLAGS} ${GEOS_CPPFLAGS}"
 CPPFLAGS="${CPPFLAGS} ${PKG_CPPFLAGS}"
-LIBS="${LIBS} ${PKG_LIBS}"
+LIBS="${LIBS} ${PKG_LIBS} ${GEOS_CLIBS}"
 
 if test ${GEOS_VER_DOT} -lt 350 ; then
   AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DPOSTGIS_GEOS_VERSION=34"])
