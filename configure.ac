@@ -356,42 +356,24 @@ rm -f geos_test errors.txt geos_test.cpp
 #
 # liblwgeom
 #
-AC_ARG_WITH([liblwgeom],
-  [AS_HELP_STRING([--with-liblwgeom],
-    [use dynamically linking to liblwgeom @<:@default=check@:>@])],
-  [],
-  [with_liblwgeom=check])
-          
 AC_SUBST([OBJECTS], ["${OBJECTS} \$(OBJECTS_RCPP)"])
-
-LIBLWGEOM=
-  AS_IF([test "x$with_liblwgeom" != xno],
-  [AC_CHECK_LIB([lwgeom], lwgeom_make_valid,
-     [AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -llwgeom"])
-      AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DHAVE_LIBGEOM"])
-      AC_CHECK_LIB(lwgeom,lwgeom_grid_in_place,,
-       [AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DNO_GRID_IN_PLACE"])]
-      )
-     ],
-     [AC_CHECK_LIB(proj, pj_init_plus,
-         AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -lproj"]), 
-	     AC_MSG_ERROR([libproj not found a standard locations.]))
-      AC_CHECK_LIB(geos_c, GEOS_init_r,
-         AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -lgeos_c"]), 
-         AC_SUBST([PKG_LIBS], ["${PKG_LIBS} ${PROJ_LIBS} ${GEOS_LIBS}"]))
-      AC_SUBST([OBJECTS], ["${OBJECTS} \$(OBJECTS_LIBLWGEOM)"])
-      AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -I./liblwgeom -DHAVE_LIBGEOM_INTERNAL_H"])
-	 ],
-     -llwgeom)],
-   AC_SUBST([PKG_LIBS], ["${PKG_LIBS} ${PROJ_LIBS} ${GEOS_LIBS}"])
-   AC_SUBST([OBJECTS], ["${OBJECTS} \$(OBJECTS_LIBLWGEOM)"])
-  )
 
 AC_CHECK_HEADERS(liblwgeom_internal.h,lwgeomint=yes)
 if test "${lwgeomint}" = yes; then
    AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DHAVE_LIBLWGEOM_INTERNAL_H"])
 fi
 
+ AC_CHECK_LIB(proj, pj_init_plus,
+         AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -lproj"]), 
+	     AC_MSG_ERROR([libproj not found a standard locations.]))
+
+AC_CHECK_LIB(geos_c, GEOS_init_r,
+         AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -lgeos_c"]), 
+         AC_SUBST([PKG_LIBS], ["${PKG_LIBS} ${PROJ_LIBS} ${GEOS_LIBS}"]))
+
+AC_SUBST([OBJECTS], ["${OBJECTS} \$(OBJECTS_LIBLWGEOM)"])
+
+AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -I./liblwgeom -DHAVE_LIBGEOM_INTERNAL_H"])
 
 #
 # concluding substitution

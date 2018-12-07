@@ -684,7 +684,6 @@ with_proj_include
 with_proj_lib
 with_proj_share
 with_geos_config
-with_liblwgeom
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1319,7 +1318,6 @@ Optional Packages:
                           the location of proj metadata files
   --with-geos-config=GEOS_CONFIG
                           the location of geos-config
-  --with-liblwgeom        use dynamically linking to liblwgeom [default=check]
 
 Some influential environment variables:
   CC          C compiler command
@@ -3747,113 +3745,27 @@ rm -f geos_test errors.txt geos_test.cpp
 #
 # liblwgeom
 #
-
-# Check whether --with-liblwgeom was given.
-if test "${with_liblwgeom+set}" = set; then :
-  withval=$with_liblwgeom;
-else
-  with_liblwgeom=check
-fi
-
-
 OBJECTS="${OBJECTS} \$(OBJECTS_RCPP)"
 
 
-LIBLWGEOM=
-  if test "x$with_liblwgeom" != xno; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for lwgeom_make_valid in -llwgeom" >&5
-$as_echo_n "checking for lwgeom_make_valid in -llwgeom... " >&6; }
-if ${ac_cv_lib_lwgeom_lwgeom_make_valid+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-llwgeom -llwgeom $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char lwgeom_make_valid ();
-int
-main ()
-{
-return lwgeom_make_valid ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_lwgeom_lwgeom_make_valid=yes
-else
-  ac_cv_lib_lwgeom_lwgeom_make_valid=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_lwgeom_lwgeom_make_valid" >&5
-$as_echo "$ac_cv_lib_lwgeom_lwgeom_make_valid" >&6; }
-if test "x$ac_cv_lib_lwgeom_lwgeom_make_valid" = xyes; then :
-  PKG_LIBS="${PKG_LIBS} -llwgeom"
-
-      PKG_CPPFLAGS="${PKG_CPPFLAGS} -DHAVE_LIBGEOM"
-
-      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for lwgeom_grid_in_place in -llwgeom" >&5
-$as_echo_n "checking for lwgeom_grid_in_place in -llwgeom... " >&6; }
-if ${ac_cv_lib_lwgeom_lwgeom_grid_in_place+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-llwgeom  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char lwgeom_grid_in_place ();
-int
-main ()
-{
-return lwgeom_grid_in_place ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_lwgeom_lwgeom_grid_in_place=yes
-else
-  ac_cv_lib_lwgeom_lwgeom_grid_in_place=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_lwgeom_lwgeom_grid_in_place" >&5
-$as_echo "$ac_cv_lib_lwgeom_lwgeom_grid_in_place" >&6; }
-if test "x$ac_cv_lib_lwgeom_lwgeom_grid_in_place" = xyes; then :
+for ac_header in liblwgeom_internal.h
+do :
+  ac_fn_c_check_header_mongrel "$LINENO" "liblwgeom_internal.h" "ac_cv_header_liblwgeom_internal_h" "$ac_includes_default"
+if test "x$ac_cv_header_liblwgeom_internal_h" = xyes; then :
   cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBLWGEOM 1
+#define HAVE_LIBLWGEOM_INTERNAL_H 1
 _ACEOF
+ lwgeomint=yes
+fi
 
-  LIBS="-llwgeom $LIBS"
+done
 
-else
-  PKG_CPPFLAGS="${PKG_CPPFLAGS} -DNO_GRID_IN_PLACE"
-
+if test "${lwgeomint}" = yes; then
+   PKG_CPPFLAGS="${PKG_CPPFLAGS} -DHAVE_LIBLWGEOM_INTERNAL_H"
 
 fi
 
-
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for pj_init_plus in -lproj" >&5
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for pj_init_plus in -lproj" >&5
 $as_echo_n "checking for pj_init_plus in -lproj... " >&6; }
 if ${ac_cv_lib_proj_pj_init_plus+:} false; then :
   $as_echo_n "(cached) " >&6
@@ -3896,7 +3808,8 @@ else
   as_fn_error $? "libproj not found a standard locations." "$LINENO" 5
 fi
 
-      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for GEOS_init_r in -lgeos_c" >&5
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GEOS_init_r in -lgeos_c" >&5
 $as_echo_n "checking for GEOS_init_r in -lgeos_c... " >&6; }
 if ${ac_cv_lib_geos_c_GEOS_init_r+:} false; then :
   $as_echo_n "(cached) " >&6
@@ -3940,37 +3853,11 @@ else
 
 fi
 
-      OBJECTS="${OBJECTS} \$(OBJECTS_LIBLWGEOM)"
 
-      PKG_CPPFLAGS="${PKG_CPPFLAGS} -I./liblwgeom -DHAVE_LIBGEOM_INTERNAL_H"
-
-
-fi
-
-else
-  PKG_LIBS="${PKG_LIBS} ${PROJ_LIBS} ${GEOS_LIBS}"
-
-   OBJECTS="${OBJECTS} \$(OBJECTS_LIBLWGEOM)"
+OBJECTS="${OBJECTS} \$(OBJECTS_LIBLWGEOM)"
 
 
-fi
-
-for ac_header in liblwgeom_internal.h
-do :
-  ac_fn_c_check_header_mongrel "$LINENO" "liblwgeom_internal.h" "ac_cv_header_liblwgeom_internal_h" "$ac_includes_default"
-if test "x$ac_cv_header_liblwgeom_internal_h" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBLWGEOM_INTERNAL_H 1
-_ACEOF
- lwgeomint=yes
-fi
-
-done
-
-if test "${lwgeomint}" = yes; then
-   PKG_CPPFLAGS="${PKG_CPPFLAGS} -DHAVE_LIBLWGEOM_INTERNAL_H"
-
-fi
+PKG_CPPFLAGS="${PKG_CPPFLAGS} -I./liblwgeom -DHAVE_LIBGEOM_INTERNAL_H"
 
 
 #
