@@ -358,14 +358,9 @@ rm -f geos_test errors.txt geos_test.cpp
 #
 AC_SUBST([OBJECTS], ["${OBJECTS} \$(OBJECTS_RCPP)"])
 
-AC_CHECK_HEADERS(liblwgeom_internal.h,lwgeomint=yes)
-if test "${lwgeomint}" = yes; then
-   AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DHAVE_LIBLWGEOM_INTERNAL_H"])
-fi
-
- AC_CHECK_LIB(proj, pj_init_plus,
-         AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -lproj"]), 
-	     AC_MSG_ERROR([libproj not found a standard locations.]))
+#AC_CHECK_LIB(proj, pj_init_plus,
+#         AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -lproj"]), 
+#	     AC_MSG_ERROR([libproj not found a standard locations.]))
 
 AC_CHECK_LIB(geos_c, GEOS_init_r,
          AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -lgeos_c"]), 
