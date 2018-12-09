@@ -9,7 +9,7 @@ R bindings to the [liblwgeom](https://github.com/postgis/postgis/tree/svn-trunk/
 [![Downloads](http://cranlogs.r-pkg.org/badges/lwgeom?color=brightgreen)](http://www.r-pkg.org/pkg/lwgeom)
 
 
-This package provides a few functions that require
+This package provides functions that use
 `liblwgeom`, including `st_geohash`, `st_make_valid`,
 `st_minimum_bounding_circle`, `st_split`, `st_subdivide`,
 `st_transform_proj` (transform through proj, omitting
@@ -23,45 +23,16 @@ functions `st_geod_area`,
 `st_geod_azimuth`, 
 and `st_geod_segmentize`.
 
-## Installing without liblwgeom preinstalled
+## Installing 
 
-`lwgeom` depends on [sf](https://github.com/r-spatial/sf), which has to be installed first.
-It uses the liblwgeom library. When installing from source, it will compile a shipped (and
-modified) version of this library when the library is not autodetected. In this case, the
-GEOS and Proj.4 libraries have to be available.
+`lwgeom` depends on [sf](https://github.com/r-spatial/sf), which
+has to be installed first.  This package uses the liblwgeom library,
+and compiles a shipped (and modified) version of liblwgeom.  It links
+to the GEOS and PROJ libraries. 
 
-### Windows
+To install from source, it should be enough to have installed `sf`
+from source; the resources for this package are being reused.
 
-The `lwgeom` package on windows compiles the `liblwgeom` sources shipped with the package,
-and uses the external dependencies (GEOS, PROJ) from the `gdal2`
-[winlib](https://github.com/rwinlib/gdal2).
-
-### Linux
-
-If you have liblwgeom installed, but want to install this package using the shipped library, install with
-```
-R CMD INSTALL lwgeom --configure-args="--without-liblwgeom"
-```
-and check with
-```
-R CMD check --install-args="--configure-args=--without-liblwgeom" lwgeom_VERSION.tar.gz
-```
-
-## Installing with liblwgeom preinstalled
-
-### MacOS
-
-According to https://github.com/r-spatial/sf/issues/349, `brew
-install postgis` installs a working `liblwgeom`. In case of problems,
-search for `brew` in the [sf issues](https://github.com/sf/issues)
-before opening a new one.
-
-### Linux
-
-On ubuntu, install the following:
-
-```sh
-sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
-sudo apt-get update
-sudo apt-get install libgdal-dev libgeos-dev libproj-dev libudunits2-dev liblwgeom-dev
-```
+## 
+Previous to version 0.1-6, `lwgeom` would also try to link the system
+library liblwgeom; from 0.1-6 on only the shipped version is used.
