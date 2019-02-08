@@ -37,9 +37,10 @@ Collate:
   bearing.R
   snap_to_grid.R
   startpoint.R
+  endpoint.R
   twkb.R
   perimeter.R
   clockwise.R
   geod.R
   wkt.R
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1

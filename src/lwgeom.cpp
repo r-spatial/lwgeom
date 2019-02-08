@@ -264,6 +264,25 @@ Rcpp::NumericMatrix CPL_startpoint(Rcpp::List sfc) {
 }
 
 // [[Rcpp::export]]
+Rcpp::NumericMatrix CPL_endpoint(Rcpp::List sfc) {
+  
+  std::vector<LWGEOM *> lwgeom_cw = lwgeom_from_sfc(sfc);
+  Rcpp::NumericMatrix m(lwgeom_cw.size(), 2);
+  
+  // no lwgeom_endpoint so reverse in-place and use startpoint
+  POINT4D p;
+  for (size_t i = 0; i < lwgeom_cw.size(); i++) {
+    lwgeom_reverse_in_place(lwgeom_cw[i]);
+    lwgeom_startpoint(lwgeom_cw[i], &p);
+    m(i, 0) = p.x;
+    m(i, 1) = p.y;
+  }
+  
+  return m;
+}
+
+
+// [[Rcpp::export]]
 Rcpp::CharacterVector CPL_sfc_to_wkt(Rcpp::List sfc, Rcpp::IntegerVector precision) {
 
   std::vector<LWGEOM *> lwgeom_cw = lwgeom_from_sfc(sfc);
