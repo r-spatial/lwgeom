@@ -37,7 +37,6 @@ Collate:
   bearing.R
   snap_to_grid.R
   startpoint.R
-  endpoint.R
   twkb.R
   perimeter.R
   clockwise.R
