@@ -85,6 +85,10 @@ CPL_startpoint <- function(sfc) {
     .Call('_lwgeom_CPL_startpoint', PACKAGE = 'lwgeom', sfc)
 }
 
+CPL_endpoint <- function(sfc) {
+    .Call('_lwgeom_CPL_endpoint', PACKAGE = 'lwgeom', sfc)
+}
+
 CPL_sfc_to_wkt <- function(sfc, precision) {
     .Call('_lwgeom_CPL_sfc_to_wkt', PACKAGE = 'lwgeom', sfc, precision)
 }

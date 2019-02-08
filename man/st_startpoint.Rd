@@ -2,9 +2,12 @@
 % Please edit documentation in R/startpoint.R
 \name{st_startpoint}
 \alias{st_startpoint}
+\alias{st_endpoint}
 \title{Return the start and end points from lines}
 \usage{
 st_startpoint(x)
+
+st_endpoint(x)
 }
 \arguments{
 \item{x}{line of class \code{sf}, \code{sfc} or \code{sfg}}
@@ -23,6 +26,8 @@ library(sf)
 m = matrix(c(0, 1, 2, 0, 1, 4), ncol = 2)
 l = st_sfc(st_linestring(m))
 lwgeom::st_startpoint(l)
+lwgeom::st_endpoint(l)
 l2 = st_sfc(st_linestring(m), st_linestring(m[3:1, ]))
 lwgeom::st_startpoint(l2)
+lwgeom::st_endpoint(l2)
 }
