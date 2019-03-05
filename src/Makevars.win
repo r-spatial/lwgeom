@@ -82,28 +82,30 @@ OBJECTS_RCPP= \
 
 OBJECTS= $(OBJECTS_LIBLWGEOM) $(OBJECTS_RCPP)
 
-all:	clean winlibs
+VERSION = 2.2.3
+COMPILED_BY ?= gcc-4.6.3
+RWINLIB = ../windows/gdal2-$(VERSION)
+TARGET = lib$(subst gcc,,$(COMPILED_BY))$(R_ARCH)
+
+PKG_CPPFLAGS = \
+	-I./liblwgeom \
+	-I$(RWINLIB)/include/geos \
+	-I$(RWINLIB)/include/proj \
+	-DPOSTGIS_GEOS_VERSION=35
+
+PKG_LIBS = \
+	-L$(RWINLIB)/$(TARGET) \
+	-L$(RWINLIB)/lib$(R_ARCH) \
+	-lproj -lgeos_c -lgeos -ljson-c -lexpat -lxml2 -liconv
+
+all: clean winlibs
 
 clean:
 	rm -f $(SHLIB) $(OBJECTS)
 
 winlibs:
 	mkdir -p ../inst
-	"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" --vanilla "../tools/winlibs.R"
-	cp -r ../windows/gdal2-2.2.0/share/proj ../inst/
-
-COMPILED_BY ?= gcc-4.6.3
-
-RWINLIB = lib${subst gcc,,${COMPILED_BY}}${R_ARCH}
-
-PKG_CPPFLAGS = \
-	-I./liblwgeom \
-	-I../windows/gdal2-2.2.0/include/geos \
-	-I../windows/gdal2-2.2.0/include/proj \
-	-DPOSTGIS_GEOS_VERSION=35
-
-PKG_LIBS = \
-	-L../windows/gdal2-2.2.0/${RWINLIB} \
-	-lproj -lgeos_c -lgeos -ljson-c -lexpat -lxml2 -liconv 
+	"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" --vanilla "../tools/winlibs.R" $(VERSION)
+	cp -r $(RWINLIB)/share/proj ../inst/
 
 .PHONY: all winlibs clean
