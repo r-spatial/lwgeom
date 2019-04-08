@@ -33,6 +33,7 @@ to the GEOS and PROJ libraries.
 To install from source, it should be enough to have installed `sf`
 from source; the resources for this package are being reused.
 
-## 
+## lwgeom source now included 
+
 Previous to version 0.1-6, `lwgeom` would also try to link the system
 library liblwgeom; from 0.1-6 on only the shipped version is used.
