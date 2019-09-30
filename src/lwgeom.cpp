@@ -11,6 +11,7 @@ extern "C" {
 # include <liblwgeom_internal.h>
 #else /* hard copy from liblwgeom_internal.h: */
 # ifndef NO_GRID_IN_PLACE
+/*
 typedef struct gridspec_t
 {
 	double ipx;
@@ -23,6 +24,7 @@ typedef struct gridspec_t
 	double msize;
 }
 gridspec;
+*/
 void lwgeom_grid_in_place(LWGEOM *lwgeom, const gridspec *grid);
 # endif
 #endif
@@ -122,15 +124,19 @@ Rcpp::List CPL_lwgeom_transform(Rcpp::List sfc, Rcpp::CharacterVector p4s) {
 	if (p4s.size() != 2)
 		Rcpp::stop("st_lwgeom_transform: p4s needs to be a length 2 character vector\n"); // #nocov
 	std::vector<LWGEOM *> lwgeom_v = lwgeom_from_sfc(sfc);
-	projPJ src = lwproj_from_string(p4s[0]);
+	LWPROJ pj;
+
+	projPJ src = projpj_from_string(p4s[0]);
 	if (src == NULL)
 		Rcpp::stop("st_lwgeom_transform: wrong source proj4string\n"); // #nocov
-	projPJ target = lwproj_from_string(p4s[1]);
+	pj.pj_from = src;
+	projPJ target = projpj_from_string(p4s[1]);
 	if (target == NULL)
 		Rcpp::stop("st_lwgeom_transform: wrong target proj4string\n"); // #nocov
+	pj.pj_to = target;
 	for (size_t i = 0; i < lwgeom_v.size(); i++) {
 		// in-place transformation w/o GDAL:
-		if (lwgeom_transform(lwgeom_v[i], src, target) != LW_SUCCESS) {
+		if (lwgeom_transform(lwgeom_v[i], &pj) != LW_SUCCESS) {
 			Rcpp::Rcout << "Failed on geometry " << i + 1 << std::endl; // #nocov
 			Rcpp::stop("st_lwgeom_transform failed\n"); // #nocov
 		}

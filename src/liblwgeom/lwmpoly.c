@@ -37,7 +37,7 @@ lwmpoly_release(LWMPOLY *lwmpoly)
 }
 
 LWMPOLY *
-lwmpoly_construct_empty(int srid, char hasz, char hasm)
+lwmpoly_construct_empty(int32_t srid, char hasz, char hasm)
 {
 	LWMPOLY *ret = (LWMPOLY*)lwcollection_construct_empty(MULTIPOLYGONTYPE, srid, hasz, hasm);
 	return ret;
@@ -52,7 +52,7 @@ LWMPOLY* lwmpoly_add_lwpoly(LWMPOLY *mobj, const LWPOLY *obj)
 
 void lwmpoly_free(LWMPOLY *mpoly)
 {
-	int i;
+	uint32_t i;
 	if ( ! mpoly ) return;
 	if ( mpoly->bbox )
 		lwfree(mpoly->bbox);

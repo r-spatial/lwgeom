@@ -1,0 +1,5 @@
+removed files lwgeom_sfcgal.*
+
+lwutil.c: remove fprintf(), exit(), stderr
+lwin_wkt_lex: remove exit(); remove stderr, stdout
+lwgeodetic_tree.c: circ_tree_print: outcommented

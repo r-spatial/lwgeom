@@ -40,7 +40,7 @@ typedef struct
 	int swap_bytes; /* Do an endian flip? */
 	int check; /* Simple validity checks on geometries */
 	uint32_t lwtype; /* Current type we are handling */
-	uint32_t srid; /* Current SRID we are handling */
+	int32_t srid;    /* Current SRID we are handling */
 	int has_z; /* Z? */
 	int has_m; /* M? */
 	int has_srid; /* SRID? */
@@ -88,7 +88,7 @@ uint8_t* bytes_from_hexbytes(const char *hexbuf, size_t hexsize)
 {
 	uint8_t *buf = NULL;
 	register uint8_t h1, h2;
-	int i;
+	uint32_t i;
 
 	if( hexsize % 2 )
 		lwerror("Invalid hex string, length (%d) has to be a multiple of two!", hexsize);
@@ -368,7 +368,7 @@ static POINTARRAY* ptarray_from_wkb_state(wkb_parse_state *s)
 	/* Otherwise we have to read each double, separately. */
 	else
 	{
-		int i = 0;
+		uint32_t i = 0;
 		double *dlist;
 		pa = ptarray_construct(s->has_z, s->has_m, npoints);
 		dlist = (double*)(pa->serialized_pointlist);
@@ -415,7 +415,7 @@ static LWPOINT* lwpoint_from_wkb_state(wkb_parse_state *s)
 	/* Otherwise we have to read each double, separately */
 	else
 	{
-		int i = 0;
+		uint32_t i = 0;
 		double *dlist;
 		pa = ptarray_construct(s->has_z, s->has_m, npoints);
 		dlist = (double*)(pa->serialized_pointlist);
@@ -507,7 +507,7 @@ static LWCIRCSTRING* lwcircstring_from_wkb_state(wkb_parse_state *s)
 static LWPOLY* lwpoly_from_wkb_state(wkb_parse_state *s)
 {
 	uint32_t nrings = integer_from_wkb_state(s);
-	int i = 0;
+	uint32_t i = 0;
 	LWPOLY *poly = lwpoly_construct_empty(s->srid, s->has_z, s->has_m);
 
 	LWDEBUGF(4,"Polygon has %d rings", nrings);
@@ -608,7 +608,7 @@ static LWCURVEPOLY* lwcurvepoly_from_wkb_state(wkb_parse_state *s)
 	uint32_t ngeoms = integer_from_wkb_state(s);
 	LWCURVEPOLY *cp = lwcurvepoly_construct_empty(s->srid, s->has_z, s->has_m);
 	LWGEOM *geom = NULL;
-	int i;
+	uint32_t i;
 
 	/* Empty collection? */
 	if ( ngeoms == 0 )
@@ -638,7 +638,7 @@ static LWCOLLECTION* lwcollection_from_wkb_state(wkb_parse_state *s)
 	uint32_t ngeoms = integer_from_wkb_state(s);
 	LWCOLLECTION *col = lwcollection_construct_empty(s->lwtype, s->srid, s->has_z, s->has_m);
 	LWGEOM *geom = NULL;
-	int i;
+	uint32_t i;
 
 	LWDEBUGF(4,"Collection has %d components", ngeoms);
 
@@ -689,16 +689,13 @@ LWGEOM* lwgeom_from_wkb_state(wkb_parse_state *s)
 
 	/* Check the endianness of our input  */
 	s->swap_bytes = LW_FALSE;
-	if( getMachineEndian() == NDR ) /* Machine arch is little */
-	{
-		if ( ! wkb_little_endian )    /* Data is big! */
-			s->swap_bytes = LW_TRUE;
-	}
-	else                              /* Machine arch is big */
-	{
-		if ( wkb_little_endian )      /* Data is little! */
-			s->swap_bytes = LW_TRUE;
-	}
+
+	/* Machine arch is big endian, request is for little */
+	if (IS_BIG_ENDIAN && wkb_little_endian)
+		s->swap_bytes = LW_TRUE;
+	/* Machine arch is little endian, request is for big */
+	else if ((!IS_BIG_ENDIAN) && (!wkb_little_endian))
+		s->swap_bytes = LW_TRUE;
 
 	/* Read the type number */
 	wkb_type = integer_from_wkb_state(s);
@@ -748,7 +745,7 @@ LWGEOM* lwgeom_from_wkb_state(wkb_parse_state *s)
 
 		/* Unknown type! */
 		default:
-			lwerror("Unsupported geometry type: %s [%d]", lwtype_name(s->lwtype), s->lwtype);
+			lwerror("%s: Unsupported geometry type: %s", __func__, lwtype_name(s->lwtype));
 	}
 
 	/* Return value to keep compiler happy. */
@@ -782,12 +779,6 @@ LWGEOM* lwgeom_from_wkb(const uint8_t *wkb, const size_t wkb_size, const char ch
 	s.has_m = LW_FALSE;
 	s.has_srid = LW_FALSE;
 	s.pos = wkb;
-
-	/* Hand the check catch-all values */
-	if ( check & LW_PARSER_CHECK_NONE )
-		s.check = 0;
-	else
-		s.check = check;
 
 	return lwgeom_from_wkb_state(&s);
 }

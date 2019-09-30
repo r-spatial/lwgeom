@@ -3,9 +3,9 @@ library(sf)
 
 test_that("Prints Points", {
   pt <- st_sfc(st_point(c(1.0002,2.3030303)), crs = 4326)
-  expect_equal(st_asewkt(pt, 3), "SRID=4326;POINT(1 2.3)")
-  expect_equal(st_astext(pt, 3, EWKT = FALSE), "POINT(1 2.3)")
-  expect_equal(st_astext(pt, 4, EWKT = FALSE), "POINT(1 2.303)")
+  expect_equal(st_asewkt(pt, 1), "SRID=4326;POINT(1 2.3)")
+  expect_equal(st_astext(pt, 2, EWKT = FALSE), "POINT(1 2.3)")
+  expect_equal(st_astext(pt, 3, EWKT = FALSE), "POINT(1 2.303)")
   expect_equal(st_astext(pt, 10, EWKT = FALSE), "POINT(1.0002 2.3030303)")
 })
 

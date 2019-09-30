@@ -28,7 +28,6 @@
 #include "lwgeom_log.h"
 #include <string.h>
 
-
 /** convert decimal degress to radians */
 static void
 to_rad(POINT4D *pt)
@@ -45,35 +44,106 @@ to_dec(POINT4D *pt)
 	pt->y *= 180.0/M_PI;
 }
 
+/***************************************************************************/
+
+#if POSTGIS_PROJ_VERSION < 60
+
+static int
+point4d_transform(POINT4D *pt, LWPROJ *pj)
+{
+	POINT3D orig_pt = {pt->x, pt->y, pt->z}; /* Copy for error report*/
+
+	if (pj_is_latlong(pj->pj_from)) to_rad(pt) ;
+
+	LWDEBUGF(4, "transforming POINT(%f %f) from '%s' to '%s'",
+		 orig_pt.x, orig_pt.y, pj_get_def(pj->pj_from,0), pj_get_def(pj->pj_to,0));
+
+	if (pj_transform(pj->pj_from, pj->pj_to, 1, 0, &(pt->x), &(pt->y), &(pt->z)) != 0)
+	{
+		int pj_errno_val = *pj_get_errno_ref();
+		if (pj_errno_val == -38)
+		{
+			lwnotice("PostGIS was unable to transform the point because either no grid"
+				 " shift files were found, or the point does not lie within the "
+				 "range for which the grid shift is defined. Refer to the "
+				 "ST_Transform() section of the PostGIS manual for details on how "
+				 "to configure PostGIS to alter this behaviour.");
+			lwerror("transform: couldn't project point (%g %g %g): %s (%d)",
+				orig_pt.x, orig_pt.y, orig_pt.z,
+				pj_strerrno(pj_errno_val), pj_errno_val);
+		}
+		else
+		{
+			lwerror("transform: %s (%d)",
+				pj_strerrno(pj_errno_val), pj_errno_val);
+		}
+		return LW_FAILURE;
+	}
+
+	if (pj_is_latlong(pj->pj_to)) to_dec(pt);
+	return LW_SUCCESS;
+}
+
 /**
  * Transform given POINTARRAY
  * from inpj projection to outpj projection
  */
 int
-ptarray_transform(POINTARRAY *pa, projPJ inpj, projPJ outpj)
+ptarray_transform(POINTARRAY *pa, LWPROJ *pj)
 {
-	int i;
+	uint32_t i;
 	POINT4D p;
 
 	for ( i = 0; i < pa->npoints; i++ )
 	{
 		getPoint4d_p(pa, i, &p);
-		if ( ! point4d_transform(&p, inpj, outpj) ) return LW_FAILURE;
+		if ( ! point4d_transform(&p, pj) ) return LW_FAILURE;
 		ptarray_set_point4d(pa, i, &p);
 	}
 
 	return LW_SUCCESS;
 }
 
+int
+lwgeom_transform_from_str(LWGEOM *geom, const char* instr, const char* outstr)
+{
+	char *pj_errstr;
+	int rv;
+	LWPROJ pj;
+
+	pj.pj_from = projpj_from_string(instr);
+	if (!pj.pj_from)
+	{
+		pj_errstr = pj_strerrno(*pj_get_errno_ref());
+		if (!pj_errstr) pj_errstr = "";
+		lwerror("could not parse proj string '%s'", instr);
+		return LW_FAILURE;
+	}
+
+	pj.pj_to = projpj_from_string(outstr);
+	if (!pj.pj_to)
+	{
+		pj_free(pj.pj_from);
+		pj_errstr = pj_strerrno(*pj_get_errno_ref());
+		if (!pj_errstr) pj_errstr = "";
+		lwerror("could not parse proj string '%s'", outstr);
+		return LW_FAILURE;
+	}
+
+	rv = lwgeom_transform(geom, &pj);
+	pj_free(pj.pj_from);
+	pj_free(pj.pj_to);
+	return rv;
+}
 
 /**
- * Transform given SERIALIZED geometry
+ * Transform given LWGEOM geometry
  * from inpj projection to outpj projection
  */
 int
-lwgeom_transform(LWGEOM *geom, projPJ inpj, projPJ outpj)
+lwgeom_transform(LWGEOM *geom, LWPROJ *pj)
 {
-	int i;
+	uint32_t i;
 
 	/* No points to transform in an empty! */
 	if ( lwgeom_is_empty(geom) )
@@ -87,7 +157,7 @@ lwgeom_transform(LWGEOM *geom, projPJ inpj, projPJ outpj)
 		case TRIANGLETYPE:
 		{
 			LWLINE *g = (LWLINE*)geom;
-			if ( ! ptarray_transform(g->points, inpj, outpj) ) return LW_FAILURE;
+			if ( ! ptarray_transform(g->points, pj) ) return LW_FAILURE;
 			break;
 		}
 		case POLYGONTYPE:
@@ -95,7 +165,7 @@ lwgeom_transform(LWGEOM *geom, projPJ inpj, projPJ outpj)
 			LWPOLY *g = (LWPOLY*)geom;
 			for ( i = 0; i < g->nrings; i++ )
 			{
-				if ( ! ptarray_transform(g->rings[i], inpj, outpj) ) return LW_FAILURE;
+				if ( ! ptarray_transform(g->rings[i], pj) ) return LW_FAILURE;
 			}
 			break;
 		}
@@ -113,7 +183,240 @@ lwgeom_transform(LWGEOM *geom, projPJ inpj, projPJ outpj)
 			LWCOLLECTION *g = (LWCOLLECTION*)geom;
 			for ( i = 0; i < g->ngeoms; i++ )
 			{
-				if ( ! lwgeom_transform(g->geoms[i], inpj, outpj) ) return LW_FAILURE;
+				if ( ! lwgeom_transform(g->geoms[i], pj) ) return LW_FAILURE;
+			}
+			break;
+		}
+		default:
+		{
+			lwerror("lwgeom_transform: Cannot handle type '%s'",
+			          lwtype_name(geom->type));
+			return LW_FAILURE;
+		}
+	}
+	return LW_SUCCESS;
+}
+
+projPJ
+projpj_from_string(const char *str1)
+{
+	if (!str1 || str1[0] == '\0')
+	{
+		return NULL;
+	}
+	return pj_init_plus(str1);
+}
+
+/***************************************************************************/
+
+#else /* POSTGIS_PROJ_VERION >= 60 */
+
+static uint8_t
+proj_crs_is_swapped(const PJ *pj_crs)
+{
+	PJ *pj_cs;
+	uint8_t rv = LW_FALSE;
+
+	if (proj_get_type(pj_crs) == PJ_TYPE_COMPOUND_CRS)
+	{
+		PJ *pj_horiz_crs = proj_crs_get_sub_crs(NULL, pj_crs, 0);
+		if (!pj_horiz_crs)
+			lwerror("%s: proj_crs_get_sub_crs returned NULL", __func__);
+		pj_cs = proj_crs_get_coordinate_system(NULL, pj_horiz_crs);
+		proj_destroy(pj_horiz_crs);
+	}
+	else if (proj_get_type(pj_crs) == PJ_TYPE_BOUND_CRS)
+	{
+		PJ *pj_src_crs = proj_get_source_crs(NULL, pj_crs);
+		if (!pj_src_crs)
+			lwerror("%s: proj_get_source_crs returned NULL", __func__);
+		pj_cs = proj_crs_get_coordinate_system(NULL, pj_src_crs);
+		proj_destroy(pj_src_crs);
+	}
+	else
+	{
+		pj_cs = proj_crs_get_coordinate_system(NULL, pj_crs);
+	}
+	if (!pj_cs)
+		lwerror("%s: proj_crs_get_coordinate_system returned NULL", __func__);
+	int axis_count = proj_cs_get_axis_count(NULL, pj_cs);
+	if (axis_count > 0)
+	{
+		const char *out_name, *out_abbrev, *out_direction;
+		double out_unit_conv_factor;
+		const char *out_unit_name, *out_unit_auth_name, *out_unit_code;
+		/* Read only first axis, see if it is degrees / north */
+		proj_cs_get_axis_info(NULL,
+				      pj_cs,
+				      0,
+				      &out_name,
+				      &out_abbrev,
+				      &out_direction,
+				      &out_unit_conv_factor,
+				      &out_unit_name,
+				      &out_unit_auth_name,
+				      &out_unit_code);
+		rv = (strcasecmp(out_direction, "north") == 0);
+	}
+	proj_destroy(pj_cs);
+	return rv;
+}
+
+LWPROJ *
+lwproj_from_PJ(PJ *pj, int8_t extra_geography_data)
+{
+	PJ *pj_source_crs = proj_get_source_crs(NULL, pj);
+	uint8_t source_is_latlong = LW_FALSE;
+	double out_semi_major_metre = DBL_MAX, out_semi_minor_metre = DBL_MAX;
+
+	if (!pj_source_crs)
+	{
+		lwerror("%s: unable to access source crs", __func__);
+		return NULL;
+	}
+	uint8_t source_swapped = proj_crs_is_swapped(pj_source_crs);
+
+	/* We only care about the extra values if there is no transformation */
+	if (!extra_geography_data)
+	{
+		proj_destroy(pj_source_crs);
+	}
+	else
+	{
+		PJ *pj_ellps;
+		double out_inv_flattening;
+		int out_is_semi_minor_computed;
+
+		PJ_TYPE pj_type = proj_get_type(pj_source_crs);
+		if (pj_type == PJ_TYPE_UNKNOWN)
+		{
+			proj_destroy(pj_source_crs);
+			lwerror("%s: unable to access source crs type", __func__);
+			return NULL;
+		}
+		source_is_latlong = (pj_type == PJ_TYPE_GEOGRAPHIC_2D_CRS) || (pj_type == PJ_TYPE_GEOGRAPHIC_3D_CRS);
+
+		pj_ellps = proj_get_ellipsoid(NULL, pj_source_crs);
+		proj_destroy(pj_source_crs);
+		if (!pj_ellps)
+		{
+			lwerror("%s: unable to access source crs ellipsoid", __func__);
+			return NULL;
+		}
+		if (!proj_ellipsoid_get_parameters(NULL,
+						   pj_ellps,
+						   &out_semi_major_metre,
+						   &out_semi_minor_metre,
+						   &out_is_semi_minor_computed,
+						   &out_inv_flattening))
+		{
+			proj_destroy(pj_ellps);
+			lwerror("%s: unable to access source crs ellipsoid parameters", __func__);
+			return NULL;
+		}
+		proj_destroy(pj_ellps);
+	}
+
+	PJ *pj_target_crs = proj_get_target_crs(NULL, pj);
+	if (!pj_target_crs)
+	{
+		lwerror("%s: unable to access target crs", __func__);
+		return NULL;
+	}
+	uint8_t target_swapped = proj_crs_is_swapped(pj_target_crs);
+	proj_destroy(pj_target_crs);
+
+	LWPROJ *lp = lwalloc(sizeof(LWPROJ));
+	lp->pj = pj;
+	lp->source_swapped = source_swapped;
+	lp->target_swapped = target_swapped;
+	lp->source_is_latlong = source_is_latlong;
+	lp->source_semi_major_metre = out_semi_major_metre;
+	lp->source_semi_minor_metre = out_semi_minor_metre;
+
+	return lp;
+}
+
+int
+lwgeom_transform_from_str(LWGEOM *geom, const char* instr, const char* outstr)
+{
+	PJ *pj = proj_create_crs_to_crs(NULL, instr, outstr, NULL);
+	if (!pj)
+	{
+		PJ *pj_in = proj_create(NULL, instr);
+		if (!pj_in)
+		{
+			lwerror("could not parse proj string '%s'", instr);
+		}
+		proj_destroy(pj_in);
+
+		PJ *pj_out = proj_create(NULL, outstr);
+		if (!pj_out)
+		{
+			lwerror("could not parse proj string '%s'", outstr);
+		}
+		proj_destroy(pj_out);
+		lwerror("%s: Failed to transform", __func__);
+		return LW_FAILURE;
+	}
+
+	LWPROJ *lp = lwproj_from_PJ(pj, LW_FALSE);
+
+	int ret = lwgeom_transform(geom, lp);
+
+	proj_destroy(pj);
+	lwfree(lp);
+
+	return ret;
+}
+
+int
+lwgeom_transform(LWGEOM *geom, LWPROJ *pj)
+{
+	uint32_t i;
+
+	/* No points to transform in an empty! */
+	if (lwgeom_is_empty(geom))
+		return LW_SUCCESS;
+
+	switch(geom->type)
+	{
+		case POINTTYPE:
+		case LINETYPE:
+		case CIRCSTRINGTYPE:
+		case TRIANGLETYPE:
+		{
+			LWLINE *g = (LWLINE*)geom;
+			if (!ptarray_transform(g->points, pj))
+				return LW_FAILURE;
+			break;
+		}
+		case POLYGONTYPE:
+		{
+			LWPOLY *g = (LWPOLY*)geom;
+			for (i = 0; i < g->nrings; i++)
+			{
+				if (!ptarray_transform(g->rings[i], pj))
+					return LW_FAILURE;
+			}
+			break;
+		}
+		case MULTIPOINTTYPE:
+		case MULTILINETYPE:
+		case MULTIPOLYGONTYPE:
+		case COLLECTIONTYPE:
+		case COMPOUNDTYPE:
+		case CURVEPOLYTYPE:
+		case MULTICURVETYPE:
+		case MULTISURFACETYPE:
+		case POLYHEDRALSURFACETYPE:
+		case TINTYPE:
+		{
+			LWCOLLECTION *g = (LWCOLLECTION*)geom;
+			for (i = 0; i < g->ngeoms; i++)
+			{
+				if (!lwgeom_transform(g->geoms[i], pj))
+					return LW_FAILURE;
 			}
 			break;
 		}
@@ -128,96 +431,100 @@ lwgeom_transform(LWGEOM *geom, projPJ inpj, projPJ outpj)
 }
 
 int
-point4d_transform(POINT4D *pt, projPJ srcpj, projPJ dstpj)
+ptarray_transform(POINTARRAY *pa, LWPROJ *pj)
 {
-	int* pj_errno_ref;
-	POINT4D orig_pt;
+	uint32_t i;
+	POINT4D p;
+	size_t n_converted;
+	size_t n_points = pa->npoints;
+	size_t point_size = ptarray_point_size(pa);
+	int has_z = ptarray_has_z(pa);
+	double *pa_double = (double*)(pa->serialized_pointlist);
 
-	/* Make a copy of the input point so we can report the original should an error occur */
-	orig_pt.x = pt->x;
-	orig_pt.y = pt->y;
-	orig_pt.z = pt->z;
-
-	if (pj_is_latlong(srcpj)) to_rad(pt) ;
-
-	LWDEBUGF(4, "transforming POINT(%f %f) from '%s' to '%s'", orig_pt.x, orig_pt.y, pj_get_def(srcpj,0), pj_get_def(dstpj,0));
-
-	/* Perform the transform */
-	pj_transform(srcpj, dstpj, 1, 0, &(pt->x), &(pt->y), &(pt->z));
-
-	/* For NAD grid-shift errors, display an error message with an additional hint */
-	pj_errno_ref = pj_get_errno_ref();
-
-	if (*pj_errno_ref != 0)
+	/* Convert to radians if necessary */
+	if (proj_angular_input(pj->pj, PJ_FWD))
 	{
-		if (*pj_errno_ref == -38)
+		for (i = 0; i < pa->npoints; i++)
 		{
-			lwnotice("PostGIS was unable to transform the point because either no grid shift files were found, or the point does not lie within the range for which the grid shift is defined. Refer to the ST_Transform() section of the PostGIS manual for details on how to configure PostGIS to alter this behaviour.");
-			lwerror("transform: couldn't project point (%g %g %g): %s (%d)",
-			        orig_pt.x, orig_pt.y, orig_pt.z, pj_strerrno(*pj_errno_ref), *pj_errno_ref);
-			return 0;
-		}
-		else
-		{
-			lwerror("transform: couldn't project point (%g %g %g): %s (%d)",
-			        orig_pt.x, orig_pt.y, orig_pt.z, pj_strerrno(*pj_errno_ref), *pj_errno_ref);
-			return 0;
+			getPoint4d_p(pa, i, &p);
+			to_rad(&p);
 		}
 	}
 
-	if (pj_is_latlong(dstpj)) to_dec(pt);
-	return 1;
+	if (pj->source_swapped)
+		ptarray_swap_ordinates(pa, LWORD_X, LWORD_Y);
+
+	if (n_points == 1)
+	{
+		/* For single points it's faster to call proj_trans */
+		PJ_XYZT v = {pa_double[0], pa_double[1], has_z ? pa_double[2] : 0.0, 0.0};
+		PJ_COORD t = proj_trans(pj->pj, PJ_FWD, (PJ_COORD)v);
+
+		int pj_errno_val = proj_errno(pj->pj);
+		if (pj_errno_val)
+		{
+			lwerror("transform: %s (%d)", proj_errno_string(pj_errno_val), pj_errno_val);
+			return LW_FAILURE;
+		}
+		pa_double[0] = ((PJ_XYZT)t.xyzt).x;
+		pa_double[1] = ((PJ_XYZT)t.xyzt).y;
+		if (has_z)
+			pa_double[2] = ((PJ_XYZT)t.xyzt).z;
+	}
+	else
+	{
+		/*
+		 * size_t proj_trans_generic(PJ *P, PJ_DIRECTION direction,
+		 * double *x, size_t sx, size_t nx,
+		 * double *y, size_t sy, size_t ny,
+		 * double *z, size_t sz, size_t nz,
+		 * double *t, size_t st, size_t nt)
+		 */
+
+		n_converted = proj_trans_generic(pj->pj,
+						 PJ_FWD,
+						 pa_double,
+						 point_size,
+						 n_points, /* X */
+						 pa_double + 1,
+						 point_size,
+						 n_points, /* Y */
+						 has_z ? pa_double + 2 : NULL,
+						 has_z ? point_size : 0,
+						 has_z ? n_points : 0, /* Z */
+						 NULL,
+						 0,
+						 0 /* M */
+		);
+
+		if (n_converted != n_points)
+		{
+			lwerror("ptarray_transform: converted (%d) != input (%d)", n_converted, n_points);
+			return LW_FAILURE;
+		}
+
+		int pj_errno_val = proj_errno(pj->pj);
+		if (pj_errno_val)
+		{
+			lwerror("transform: %s (%d)", proj_errno_string(pj_errno_val), pj_errno_val);
+			return LW_FAILURE;
+		}
+	}
+
+	if (pj->target_swapped)
+		ptarray_swap_ordinates(pa, LWORD_X, LWORD_Y);
+
+	/* Convert radians to degrees if necessary */
+	if (proj_angular_output(pj->pj, PJ_FWD))
+	{
+		for (i = 0; i < pa->npoints; i++)
+		{
+			getPoint4d_p(pa, i, &p);
+			to_dec(&p);
+		}
+	}
+
+	return LW_SUCCESS;
 }
 
-projPJ
-lwproj_from_string(const char *str1)
-{
-	int t;
-	char *params[1024];  /* one for each parameter */
-	char *loc;
-	char *str;
-	size_t slen;
-	projPJ result;
-
-
-	if (str1 == NULL) return NULL;
-
-	slen = strlen(str1);
-
-	if (slen == 0) return NULL;
-
-	str = lwalloc(slen+1);
-	strcpy(str, str1);
-
-	/*
-	 * first we split the string into a bunch of smaller strings,
-	 * based on the " " separator
-	 */
-
-	params[0] = str; /* 1st param, we'll null terminate at the " " soon */
-
-	loc = str;
-	t = 1;
-	while  ((loc != NULL) && (*loc != 0) )
-	{
-		loc = strchr(loc, ' ');
-		if (loc != NULL)
-		{
-			*loc = 0; /* null terminate */
-			params[t] = loc+1;
-			loc++; /* next char */
-			t++; /*next param */
-		}
-	}
-
-	if (!(result=pj_init(t, params)))
-	{
-		lwfree(str);
-		return NULL;
-	}
-	lwfree(str);
-	return result;
-}
-
-
-
+#endif

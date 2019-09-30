@@ -42,6 +42,7 @@ static uint8_t lwgeom_twkb_type(const LWGEOM *geom)
 		case LINETYPE:
 			twkb_type = WKB_LINESTRING_TYPE;
 			break;
+		case TRIANGLETYPE:
 		case POLYGONTYPE:
 			twkb_type = WKB_POLYGON_TYPE;
 			break;
@@ -54,12 +55,12 @@ static uint8_t lwgeom_twkb_type(const LWGEOM *geom)
 		case MULTIPOLYGONTYPE:
 			twkb_type = WKB_MULTIPOLYGON_TYPE;
 			break;
+		case TINTYPE:
 		case COLLECTIONTYPE:
 			twkb_type = WKB_GEOMETRYCOLLECTION_TYPE;
 			break;
 		default:
-			lwerror("Unsupported geometry type: %s [%d]",
-				lwtype_name(geom->type), geom->type);
+			lwerror("%s: Unsupported geometry type: %s", __func__, lwtype_name(geom->type));
 	}
 	return twkb_type;
 }
@@ -103,15 +104,16 @@ static void write_bbox(TWKB_STATE *ts, int ndims)
 * @register_npoints, controls whether an npoints entry is added to the buffer (used to skip npoints for point types)
 * @dimension, states the dimensionality of object this array is part of (0 = point, 1 = linear, 2 = areal)
 */
-static int ptarray_to_twkb_buf(const POINTARRAY *pa, TWKB_GLOBALS *globals, TWKB_STATE *ts, int register_npoints, int minpoints)
+static int ptarray_to_twkb_buf(const POINTARRAY *pa, TWKB_GLOBALS *globals, TWKB_STATE *ts, int register_npoints, uint32_t minpoints)
 {
-	int ndims = FLAGS_NDIMS(pa->flags);
-	int i, j;
+	uint32_t ndims = FLAGS_NDIMS(pa->flags);
+	uint32_t i, j;
 	bytebuffer_t b;
 	bytebuffer_t *b_p;
 	int64_t nextdelta[MAX_N_DIMS];
 	int npoints = 0;
 	size_t npoints_offset = 0;
+	uint32_t max_points_left = pa->npoints;
 
 	LWDEBUGF(2, "Entered %s", __func__);
 
@@ -156,7 +158,7 @@ static int ptarray_to_twkb_buf(const POINTARRAY *pa, TWKB_GLOBALS *globals, TWKB
 	for ( i = 0; i < pa->npoints; i++ )
 	{
 		double *dbl_ptr = (double*)getPoint_internal(pa, i);
-		int diff = 0;
+		int64_t diff = 0;
 
 		/* Write this coordinate to the buffer as a varint */
 		for ( j = 0; j < ndims; j++ )
@@ -173,8 +175,11 @@ static int ptarray_to_twkb_buf(const POINTARRAY *pa, TWKB_GLOBALS *globals, TWKB
 		/* Skipping the first point is not allowed */
 		/* If the sum(abs()) of all the deltas was zero, */
 		/* then this was a duplicate point, so we can ignore it */
-		if ( i > minpoints && diff == 0 )
+		if ( i > 0 && diff == 0 &&  max_points_left > minpoints )
+		{
+			max_points_left--;
 			continue;
+		}
 
 		/* We really added a point, so... */
 		npoints++;
@@ -250,13 +255,24 @@ static int lwline_to_twkb_buf(const LWLINE *line, TWKB_GLOBALS *globals, TWKB_ST
 	return 0;
 }
 
+static int
+lwtriangle_to_twkb_buf(const LWTRIANGLE *tri, TWKB_GLOBALS *globals, TWKB_STATE *ts)
+{
+	LWDEBUGF(2, "Entered %s", __func__);
+	bytebuffer_append_uvarint(ts->geom_buf, (uint64_t)1);
+
+	/* Set the coordinates (do write npoints) */
+	ptarray_to_twkb_buf(tri->points, globals, ts, 1, 2);
+	return 0;
+}
+
 /******************************************************************
 * POLYGONS
 *******************************************************************/
 
 static int lwpoly_to_twkb_buf(const LWPOLY *poly, TWKB_GLOBALS *globals, TWKB_STATE *ts)
 {
-	int i;
+	uint32_t i;
 
 	/* Set the number of rings */
 	bytebuffer_append_uvarint(ts->geom_buf, (uint64_t) poly->nrings);
@@ -278,7 +294,7 @@ static int lwpoly_to_twkb_buf(const LWPOLY *poly, TWKB_GLOBALS *globals, TWKB_ST
 
 static int lwmulti_to_twkb_buf(const LWCOLLECTION *col, TWKB_GLOBALS *globals, TWKB_STATE *ts)
 {
-	int i;
+	uint32_t i;
 	int nempty = 0;
 
 	LWDEBUGF(2, "Entered %s", __func__);
@@ -328,7 +344,7 @@ static int lwmulti_to_twkb_buf(const LWCOLLECTION *col, TWKB_GLOBALS *globals, T
 
 static int lwcollection_to_twkb_buf(const LWCOLLECTION *col, TWKB_GLOBALS *globals, TWKB_STATE *ts)
 {
-	int i;
+	uint32_t i;
 
 	LWDEBUGF(2, "Entered %s", __func__);
 	LWDEBUGF(4, "Number of geometries in collection is %d", col->ngeoms);
@@ -375,6 +391,11 @@ static int lwgeom_to_twkb_buf(const LWGEOM *geom, TWKB_GLOBALS *globals, TWKB_ST
 			LWDEBUGF(4,"Type found is Linestring, %d", geom->type);
 			return lwline_to_twkb_buf((LWLINE*) geom, globals, ts);
 		}
+		case TRIANGLETYPE:
+		{
+			LWDEBUGF(4, "Type found is Triangle, %d", geom->type);
+			return lwtriangle_to_twkb_buf((LWTRIANGLE *)geom, globals, ts);
+		}
 		/* Polygon has 'nrings' and 'rings' elements */
 		case POLYGONTYPE:
 		{
@@ -391,13 +412,14 @@ static int lwgeom_to_twkb_buf(const LWGEOM *geom, TWKB_GLOBALS *globals, TWKB_ST
 			return lwmulti_to_twkb_buf((LWCOLLECTION*)geom, globals, ts);
 		}
 		case COLLECTIONTYPE:
+		case TINTYPE:
 		{
 			LWDEBUGF(4,"Type found is collection, %d", geom->type);
 			return lwcollection_to_twkb_buf((LWCOLLECTION*) geom, globals, ts);
 		}
 		/* Unknown type! */
 		default:
-			lwerror("Unsupported geometry type: %s [%d]", lwtype_name((geom)->type), (geom)->type);
+			lwerror("%s: Unsupported geometry type: %s", __func__, lwtype_name(geom->type));
 	}
 
 	return 0;
@@ -406,7 +428,7 @@ static int lwgeom_to_twkb_buf(const LWGEOM *geom, TWKB_GLOBALS *globals, TWKB_ST
 
 static int lwgeom_write_to_buffer(const LWGEOM *geom, TWKB_GLOBALS *globals, TWKB_STATE *parent_state)
 {
-	int i, is_empty, has_z, has_m, ndims;
+	int i, is_empty, has_z = 0, has_m = 0, ndims;
 	size_t bbox_size = 0, optional_precision_byte = 0;
 	uint8_t flag = 0, type_prec = 0;
 	bytebuffer_t header_bytebuffer, geom_bytebuffer;
@@ -421,10 +443,13 @@ static int lwgeom_write_to_buffer(const LWGEOM *geom, TWKB_GLOBALS *globals, TWK
 	bytebuffer_init_with_size(child_state.geom_buf, 64);
 
 	/* Read dimensionality from input */
-	has_z = lwgeom_has_z(geom);
-	has_m = lwgeom_has_m(geom);
 	ndims = lwgeom_ndims(geom);
 	is_empty = lwgeom_is_empty(geom);
+	if ( ndims > 2 )
+	{
+		has_z = lwgeom_has_z(geom);
+		has_m = lwgeom_has_m(geom);
+	}
 
 	/* Do we need extended precision? If we have a Z or M we do. */
 	optional_precision_byte = (has_z || has_m);

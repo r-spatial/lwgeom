@@ -34,6 +34,9 @@
  *
  **********************************************************************/
 
+#ifndef _MEASURES_H
+#define _MEASURES_H 1
+
 #include "liblwgeom_internal.h"
 
 /* for the measure functions*/
@@ -49,7 +52,7 @@ typedef struct
 	POINT2D p1;
 	POINT2D p2;
 	int mode;	/*the direction of looking, if thedir = -1 then we look for maxdistance and if it is 1 then we look for mindistance*/
-	int twisted; /*To preserve the order of incoming points to match the first and secon point in shortest and longest line*/
+	int twisted; /*To preserve the order of incoming points to match the first and second point in shortest and longest line*/
 	double tolerance; /*the tolerance for dwithin and dfullywithin*/
 } DISTPTS;
 
@@ -80,13 +83,19 @@ int lw_dist2d_ptarrayarc_ptarrayarc(const POINTARRAY *pa, const POINTARRAY *pb, 
 int lw_dist2d_ptarray_poly(POINTARRAY *pa, LWPOLY *poly, DISTPTS *dl);
 int lw_dist2d_point_point(LWPOINT *point1, LWPOINT *point2, DISTPTS *dl);
 int lw_dist2d_point_line(LWPOINT *point, LWLINE *line, DISTPTS *dl);
+int lw_dist2d_point_tri(LWPOINT *point, LWTRIANGLE *tri, DISTPTS *dl);
 int lw_dist2d_point_circstring(LWPOINT *point, LWCIRCSTRING *circ, DISTPTS *dl);
 int lw_dist2d_point_poly(LWPOINT *point, LWPOLY *poly, DISTPTS *dl);
 int lw_dist2d_point_curvepoly(LWPOINT *point, LWCURVEPOLY *poly, DISTPTS *dl);
 int lw_dist2d_line_line(LWLINE *line1, LWLINE *line2, DISTPTS *dl);
+int lw_dist2d_line_tri(LWLINE *line, LWTRIANGLE *tri, DISTPTS *dl);
 int lw_dist2d_line_circstring(LWLINE *line1, LWCIRCSTRING *line2, DISTPTS *dl);
 int lw_dist2d_line_poly(LWLINE *line, LWPOLY *poly, DISTPTS *dl);
 int lw_dist2d_line_curvepoly(LWLINE *line, LWCURVEPOLY *poly, DISTPTS *dl);
+int lw_dist2d_tri_tri(LWTRIANGLE *tri1, LWTRIANGLE *tri2, DISTPTS *dl);
+int lw_dist2d_tri_circstring(LWTRIANGLE *tri, LWCIRCSTRING *line, DISTPTS *dl);
+int lw_dist2d_tri_poly(LWTRIANGLE *tri, LWPOLY *poly, DISTPTS *dl);
+int lw_dist2d_tri_curvepoly(LWTRIANGLE *tri, LWCURVEPOLY *poly, DISTPTS *dl);
 int lw_dist2d_circstring_circstring(LWCIRCSTRING *line1, LWCIRCSTRING *line2, DISTPTS *dl);
 int lw_dist2d_circstring_poly(LWCIRCSTRING *circ, LWPOLY *poly, DISTPTS *dl);
 int lw_dist2d_circstring_curvepoly(LWCIRCSTRING *circ, LWCURVEPOLY *poly, DISTPTS *dl);
@@ -121,7 +130,7 @@ double lw_arc_length(const POINT2D *A1, const POINT2D *A2, const POINT2D *A3);
 /*
 * Geometry returning functions
 */
-LWGEOM* lw_dist2d_distancepoint(const LWGEOM *lw1, const LWGEOM *lw2, int srid, int mode);
-LWGEOM* lw_dist2d_distanceline(const LWGEOM *lw1, const LWGEOM *lw2, int srid, int mode);
+LWGEOM *lw_dist2d_distancepoint(const LWGEOM *lw1, const LWGEOM *lw2, int32_t srid, int mode);
+LWGEOM *lw_dist2d_distanceline(const LWGEOM *lw1, const LWGEOM *lw2, int32_t srid, int mode);
 
-
+#endif /* !defined _MEASURES_H  */
