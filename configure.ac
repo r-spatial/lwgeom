@@ -423,7 +423,7 @@ AC_SUBST([OBJECTS], ["${OBJECTS} \$(OBJECTS_RCPP)"])
 #	     AC_MSG_ERROR([libproj not found a standard locations.]))
 
 AC_CHECK_LIB(geos_c, GEOS_init_r,
-         AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -lgeos_c"]), 
+         AC_SUBST([PKG_LIBS], ["${PKG_LIBS} ${GEOS_LIBS}"]), 
          AC_SUBST([PKG_LIBS], ["${PKG_LIBS} ${PROJ_LIBS} ${GEOS_LIBS}"]))
 
 AC_SUBST([OBJECTS], ["${OBJECTS} \$(OBJECTS_LIBLWGEOM)"])
