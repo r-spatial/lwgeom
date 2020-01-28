@@ -17,7 +17,7 @@ Type 'q()' to quit R.
 
 > suppressPackageStartupMessages(library(lwgeom))
 > suppressPackageStartupMessages(library(sf))
-> nc = read_sf(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE)
+> nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE)
 > nc = st_transform(nc, 3857)
 > st_perimeter(nc)[1:5]
 Units: [m]
@@ -28,4 +28,4 @@ Units: [m]
 > 
 > proc.time()
    user  system elapsed 
-  0.511   0.040   0.540 
+  0.395   0.038   0.423 

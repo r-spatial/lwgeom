@@ -24,7 +24,7 @@ test_that("st_make_valid works", {
 	x <- st_transform_proj(geom.sf, "+proj=wintri")
 	p = st_crs(4326)$proj4string
 	x <- st_transform_proj(structure(geom.sf[[1]], proj4string = p), "+proj=wintri")
-	nc = read_sf(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE)
+	nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE)
 	st_transform_proj(nc[1,], "+proj=wintri +over")
 	lwgeom_extSoftVersion()
 })
@@ -35,7 +35,7 @@ test_that("st_minimum_bounding_circle works", {
   y = st_multipoint(matrix(c(0,0,1,0,1,1),3,2))
   plot(st_minimum_bounding_circle(x), axes=TRUE); plot(x, add=TRUE)
   plot(st_minimum_bounding_circle(y), axes=TRUE); plot(y, add=TRUE)
-  nc = read_sf(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
+  nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
   state = st_union(st_geometry(nc))
   st_minimum_bounding_circle(state)
   st_minimum_bounding_circle(st_sf(st = "nc", geom = state))
@@ -43,7 +43,7 @@ test_that("st_minimum_bounding_circle works", {
 
 test_that("st_subdivide works", {
 	library(sf)
-	x = read_sf(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE)
+	x = st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE)
 	expect_silent(st_subdivide(x, 10))
 	expect_silent(st_subdivide(st_geometry(x), 10))
 	expect_silent(st_subdivide(st_geometry(x)[[1]], 10))
@@ -52,7 +52,7 @@ test_that("st_subdivide works", {
 test_that("st_snap_to_grid_works", {
 	# make data
 	library(sf)
-	x = read_sf(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE) %>%
+	x = st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE) %>%
 			st_transform(3395)
 	# snap to grid
 	err <- try(y1 <- st_snap_to_grid(x, 5000), silent = TRUE)
@@ -83,10 +83,10 @@ test_that("st_snap_to_grid_works", {
 test_that("st_transform_proj finds sf's PROJ files", {
   skip_on_os("mac") # FIXME: in sf rather than here
   library(sf)
-  nc <- read_sf(system.file("gpkg/nc.gpkg", package="sf"))
+  nc <- st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE)
   bb1 = st_bbox(nc)
-  bb2 = st_bbox(st_transform(nc, 4326))
-  bb3 = st_bbox(st_transform_proj(nc, 4326))
+  bb2 = st_bbox(st_transform(nc, "+proj=longlat"))
+  bb3 = st_bbox(st_transform_proj(nc, "+proj=longlat"))
   bb4 = st_bbox(st_transform_proj(nc, st_crs(4326)$proj4string))
   expect_false(any(bb1 == bb2))
   expect_true(all.equal(as.numeric(bb2), as.numeric(bb3)))

@@ -158,11 +158,13 @@ Rcpp::List CPL_lwgeom_transform(Rcpp::List sfc, Rcpp::CharacterVector p4s) {
 #endif
 	Rcpp::List ret = sfc_from_lwgeom(lwgeom_v); // frees lwgeom_v
 	// FIXME:
+	/*
 	Rcpp::List crs = Rcpp::List::create(
 		_["epsg"] = NA_INTEGER, 
 		_["proj4string"] = CharacterVector::create(p4s[1]));
 	crs.attr("class") = "crs";
 	ret.attr("crs") = crs;
+	*/
 	ret.attr("class") = "sfc";
 	return ret;
 }

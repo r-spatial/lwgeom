@@ -1,3 +1,9 @@
+# version 0.2-0
+
+* update to POSTGIS 3.0.0 liblwgeom version
+
+* update to modern PROJ, using proj.h if available
+
 # version 0.1-5
 
 * check for user interrupts on `st_geod_distance`, #29 by Dan Baston
