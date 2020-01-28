@@ -28,7 +28,6 @@ OBJECTS_LIBLWGEOM= \
   liblwgeom/lwmval.o \
   liblwgeom/lwkmeans.o \
   liblwgeom/lwgeom_geos.o \
-  liblwgeom/lwin_geojson.o \
   liblwgeom/lwout_kml.o \
   liblwgeom/lwutil.o \
   liblwgeom/lwprint.o \

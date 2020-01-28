@@ -1,3 +1,6 @@
+Tue Jan 28 09:42:00 CET 2020
+source from https://download.osgeo.org/postgis/source/postgis-3.0.0.tar.gz
+
 removed files lwgeom_sfcgal.*
 
 lwutil.c: remove fprintf(), exit(), stderr

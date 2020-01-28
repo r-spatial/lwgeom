@@ -12,7 +12,7 @@ st_asewkt(x, digits = options("digits"))
 \arguments{
 \item{x}{object of class \code{sfg}, \code{sfc}, or \code{sf}}
 
-\item{digits}{integer; number of digits to print}
+\item{digits}{integer; number of decimal digits to print}
 
 \item{...}{ignored}
 

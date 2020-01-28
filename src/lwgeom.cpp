@@ -124,26 +124,40 @@ Rcpp::List CPL_lwgeom_transform(Rcpp::List sfc, Rcpp::CharacterVector p4s) {
 	if (p4s.size() != 2)
 		Rcpp::stop("st_lwgeom_transform: p4s needs to be a length 2 character vector\n"); // #nocov
 	std::vector<LWGEOM *> lwgeom_v = lwgeom_from_sfc(sfc);
-	LWPROJ pj;
-
+	LWPROJ *pj;
+#ifdef HAVE_PROJ_H
+	proj_context_use_proj4_init_rules(PJ_DEFAULT_CTX, 1);
+    PJ *P = proj_create_crs_to_crs(PJ_DEFAULT_CTX, p4s[0], p4s[1], NULL);
+	if (P == NULL) 
+		Rcpp::stop("st_lwgeom_transform: one of the proj strings is invalid\n"); // #nocov
+	pj = lwproj_from_PJ(P, 0);
+#else
+	pj = (LWPROJ *) malloc(sizeof(LWPROJ));
 	projPJ src = projpj_from_string(p4s[0]);
 	if (src == NULL)
 		Rcpp::stop("st_lwgeom_transform: wrong source proj4string\n"); // #nocov
-	pj.pj_from = src;
+	pj->pj_from = src;
 	projPJ target = projpj_from_string(p4s[1]);
 	if (target == NULL)
 		Rcpp::stop("st_lwgeom_transform: wrong target proj4string\n"); // #nocov
-	pj.pj_to = target;
+	pj->pj_to = target;
+#endif
 	for (size_t i = 0; i < lwgeom_v.size(); i++) {
 		// in-place transformation w/o GDAL:
-		if (lwgeom_transform(lwgeom_v[i], &pj) != LW_SUCCESS) {
+		if (lwgeom_transform(lwgeom_v[i], pj) != LW_SUCCESS) {
 			Rcpp::Rcout << "Failed on geometry " << i + 1 << std::endl; // #nocov
 			Rcpp::stop("st_lwgeom_transform failed\n"); // #nocov
 		}
 	}
+#ifdef HAVE_PROJ_H
+	proj_destroy(P);
+#else
 	pj_free(src);
 	pj_free(target);
+	free(pj);
+#endif
 	Rcpp::List ret = sfc_from_lwgeom(lwgeom_v); // frees lwgeom_v
+	// FIXME:
 	Rcpp::List crs = Rcpp::List::create(
 		_["epsg"] = NA_INTEGER, 
 		_["proj4string"] = CharacterVector::create(p4s[1]));
