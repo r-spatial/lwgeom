@@ -1,7 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl GDAL stuff largely copied from rgdal, (c) Roger Bivand
 AC_INIT(src/lwgeom.cpp)
-AC_CONFIG_HEADERS([src/postgis_config.h])
 
 : ${R_HOME=`R RHOME`}
 if test -z "${R_HOME}"; then
@@ -119,7 +118,7 @@ POSTGIS_PROJ_VERSION=`echo $proj_version | cut -c "1,2"`
 AC_MSG_NOTICE([POSTGIS_PROJ_VERSION: ${POSTGIS_PROJ_VERSION}])
 #AC_SUBST([POSTGIS_PROJ_VERSION],["${PROJV12}"])
 #AC_DEFINE_UNQUOTED([POSTGIS_PROJ_VERSION], [$POSTGIS_PROJ_VERSION], [PROJ library version])
-AC_SUBST([POSTGIS_PROJ_VERSION])
+AC_SUBST(POSTGIS_PROJ_VERSION)
 
 AC_ARG_WITH([proj-share],
     AC_HELP_STRING([--with-proj-share=SHARE_PATH],
@@ -286,5 +285,6 @@ AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -I./liblwgeom -DHAVE_LIBGEOM_INTERNAL
 AC_MSG_NOTICE([Package CPP flags: ${PKG_CPPFLAGS}])
 AC_MSG_NOTICE([Package LIBS: ${PKG_LIBS}])
 
-AC_CONFIG_FILES(src/Makevars)
+AC_CONFIG_FILES(src/Makevars
+	src/postgis_config.h)
 AC_OUTPUT
