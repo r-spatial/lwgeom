@@ -54,9 +54,9 @@ fi
 #if test "${proj_config_ok}" = yes ; then
 #else
   AC_CHECK_HEADERS(proj.h,,projh=no)
-  if test "{projh}" = no ; then
+  if test "${projh}" = no ; then
     AC_CHECK_HEADERS(proj_api.h,,proj4ok=no)
-    if test "{proj4ok}" = no ; then
+    if test "${proj4ok}" = no ; then
       AC_MSG_ERROR([neither proj.h nor proj_api.h were found.])
 	else
       PROJ_CPPFLAGS="$PROJ_CPPFLAGS -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"

@@ -3302,7 +3302,7 @@ fi
 
 done
 
-  if test "{projh}" = no ; then
+  if test "${projh}" = no ; then
     for ac_header in proj_api.h
 do :
   ac_fn_c_check_header_mongrel "$LINENO" "proj_api.h" "ac_cv_header_proj_api_h" "$ac_includes_default"
@@ -3317,7 +3317,7 @@ fi
 
 done
 
-    if test "{proj4ok}" = no ; then
+    if test "${proj4ok}" = no ; then
       as_fn_error $? "neither proj.h nor proj_api.h were found." "$LINENO" 5
 	else
       PROJ_CPPFLAGS="$PROJ_CPPFLAGS -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
