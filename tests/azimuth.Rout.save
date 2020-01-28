@@ -1,6 +1,6 @@
 
-R version 3.5.1 (2018-07-02) -- "Feather Spray"
-Copyright (C) 2018 The R Foundation for Statistical Computing
+R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
+Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -16,12 +16,11 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > suppressPackageStartupMessages(library(sf))
-> library(lwgeom)
-Linking to liblwgeom 2.4.3 r16312, GEOS 3.6.2, PROJ 4.9.3
+> suppressPackageStartupMessages(library(lwgeom))
 > p = st_sfc(st_point(c(7,52)), st_point(c(8,53)), crs = 4326)
 > st_geod_azimuth(p)
 0.5410385 [rad]
 > 
 > proc.time()
    user  system elapsed 
-   0.30    0.02    0.31 
+  0.372   0.015   0.378 

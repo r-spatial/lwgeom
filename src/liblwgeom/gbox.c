@@ -22,25 +22,14 @@
  *
  **********************************************************************/
 
-
-#if !HAVE_ISFINITE
-#endif
-
 #include "liblwgeom_internal.h"
+#include "lwgeodetic.h"
 #include "lwgeom_log.h"
 #include <stdlib.h>
 #include <math.h>
 
-/* Fall back to older finite() if necessary */
-#ifndef HAVE_ISFINITE
-# ifdef HAVE_GNU_ISFINITE
-#  define _GNU_SOURCE
-# else
-#  define isfinite finite
-# endif
-#endif
 
-GBOX* gbox_new(uint8_t flags)
+GBOX* gbox_new(lwflags_t flags)
 {
 	GBOX *g = (GBOX*)lwalloc(sizeof(GBOX));
 	gbox_init(g);
@@ -111,12 +100,12 @@ void gbox_expand(GBOX *g, double d)
 	g->xmax += d;
 	g->ymin -= d;
 	g->ymax += d;
-	if ( FLAGS_GET_Z(g->flags) )
+	if (FLAGS_GET_Z(g->flags) || FLAGS_GET_GEODETIC(g->flags))
 	{
 		g->zmin -= d;
 		g->zmax += d;
 	}
-	if ( FLAGS_GET_M(g->flags) )
+	if (FLAGS_GET_M(g->flags))
 	{
 		g->mmin -= d;
 		g->mmax += d;
@@ -147,13 +136,12 @@ int gbox_union(const GBOX *g1, const GBOX *g2, GBOX *gout)
 {
 	if ( ( ! g1 ) && ( ! g2 ) )
 		return LW_FALSE;
-
-	if  ( ! g1 )
+	else if (!g1)
 	{
 		memcpy(gout, g2, sizeof(GBOX));
 		return LW_TRUE;
 	}
-	if ( ! g2 )
+	else if (!g2)
 	{
 		memcpy(gout, g1, sizeof(GBOX));
 		return LW_TRUE;
@@ -259,7 +247,7 @@ int gbox_init_point3d(const POINT3D *p, GBOX *gbox)
 int gbox_contains_point3d(const GBOX *gbox, const POINT3D *pt)
 {
 	if ( gbox->xmin > pt->x || gbox->ymin > pt->y || gbox->zmin > pt->z ||
-	        gbox->xmax < pt->x || gbox->ymax < pt->y || gbox->zmax < pt->z )
+	     gbox->xmax < pt->x || gbox->ymax < pt->y || gbox->zmax < pt->z )
 	{
 		return LW_FALSE;
 	}
@@ -378,7 +366,7 @@ GBOX* gbox_from_string(const char *str)
 	const char *ptr = str;
 	char *nextptr;
 	char *gbox_start = strstr(str, "GBOX((");
-	GBOX *gbox = gbox_new(gflags(0,0,1));
+	GBOX *gbox = gbox_new(lwflags(0,0,1));
 	if ( ! gbox_start ) return NULL; /* No header found */
 	ptr += 6;
 	gbox->xmin = strtod(ptr, &nextptr);
@@ -403,11 +391,11 @@ GBOX* gbox_from_string(const char *str)
 
 char* gbox_to_string(const GBOX *gbox)
 {
-	static int sz = 138;
+	const size_t sz = 138;
 	char *str = NULL;
 
 	if ( ! gbox )
-		return strdup("NULL POINTER");
+		return lwstrdup("NULL POINTER");
 
 	str = (char*)lwalloc(sz);
 
@@ -445,12 +433,13 @@ GBOX* gbox_copy(const GBOX *box)
 void gbox_duplicate(const GBOX *original, GBOX *duplicate)
 {
 	assert(duplicate);
+	assert(original);
 	memcpy(duplicate, original, sizeof(GBOX));
 }
 
-size_t gbox_serialized_size(uint8_t flags)
+size_t gbox_serialized_size(lwflags_t flags)
 {
-	if ( FLAGS_GET_GEODETIC(flags) )
+	if (FLAGS_GET_GEODETIC(flags))
 		return 6 * sizeof(float);
 	else
 		return 2 * FLAGS_NDIMS(flags) * sizeof(float);
@@ -472,7 +461,7 @@ int lw_arc_calculate_gbox_cartesian_2d(const POINT2D *A1, const POINT2D *A2, con
 
 	radius_A = lw_arc_center(A1, A2, A3, &C);
 
-	/* Negative radius signals straight line, p1/p2/p3 are colinear */
+	/* Negative radius signals straight line, p1/p2/p3 are collinear */
 	if (radius_A < 0.0)
 	{
         gbox->xmin = FP_MIN(A1->x, A3->x);
@@ -544,61 +533,129 @@ static int lw_arc_calculate_gbox_cartesian(const POINT4D *p1, const POINT4D *p2,
 	return rv;
 }
 
-int ptarray_calculate_gbox_cartesian(const POINTARRAY *pa, GBOX *gbox )
+static void
+ptarray_calculate_gbox_cartesian_2d(const POINTARRAY *pa, GBOX *gbox)
 {
-	int i;
-	POINT4D p;
-	int has_z, has_m;
+	const POINT2D *p = getPoint2d_cp(pa, 0);
 
-	if ( ! pa ) return LW_FAILURE;
-	if ( ! gbox ) return LW_FAILURE;
-	if ( pa->npoints < 1 ) return LW_FAILURE;
+	gbox->xmax = gbox->xmin = p->x;
+	gbox->ymax = gbox->ymin = p->y;
 
-	has_z = FLAGS_GET_Z(pa->flags);
-	has_m = FLAGS_GET_M(pa->flags);
-	gbox->flags = gflags(has_z, has_m, 0);
-	LWDEBUGF(4, "ptarray_calculate_gbox Z: %d M: %d", has_z, has_m);
-
-	getPoint4d_p(pa, 0, &p);
-	gbox->xmin = gbox->xmax = p.x;
-	gbox->ymin = gbox->ymax = p.y;
-	if ( has_z )
-		gbox->zmin = gbox->zmax = p.z;
-	if ( has_m )
-		gbox->mmin = gbox->mmax = p.m;
-
-	for ( i = 1 ; i < pa->npoints; i++ )
+	for (uint32_t i = 1; i < pa->npoints; i++)
 	{
-		getPoint4d_p(pa, i, &p);
-		gbox->xmin = FP_MIN(gbox->xmin, p.x);
-		gbox->xmax = FP_MAX(gbox->xmax, p.x);
-		gbox->ymin = FP_MIN(gbox->ymin, p.y);
-		gbox->ymax = FP_MAX(gbox->ymax, p.y);
-		if ( has_z )
+		p = getPoint2d_cp(pa, i);
+		gbox->xmin = FP_MIN(gbox->xmin, p->x);
+		gbox->xmax = FP_MAX(gbox->xmax, p->x);
+		gbox->ymin = FP_MIN(gbox->ymin, p->y);
+		gbox->ymax = FP_MAX(gbox->ymax, p->y);
+	}
+}
+
+/* Works with X/Y/Z. Needs to be adjusted after if X/Y/M was required */
+static void
+ptarray_calculate_gbox_cartesian_3d(const POINTARRAY *pa, GBOX *gbox)
+{
+	const POINT3D *p = getPoint3d_cp(pa, 0);
+
+	gbox->xmax = gbox->xmin = p->x;
+	gbox->ymax = gbox->ymin = p->y;
+	gbox->zmax = gbox->zmin = p->z;
+
+	for (uint32_t i = 1; i < pa->npoints; i++)
+	{
+		p = getPoint3d_cp(pa, i);
+		gbox->xmin = FP_MIN(gbox->xmin, p->x);
+		gbox->xmax = FP_MAX(gbox->xmax, p->x);
+		gbox->ymin = FP_MIN(gbox->ymin, p->y);
+		gbox->ymax = FP_MAX(gbox->ymax, p->y);
+		gbox->zmin = FP_MIN(gbox->zmin, p->z);
+		gbox->zmax = FP_MAX(gbox->zmax, p->z);
+	}
+}
+
+static void
+ptarray_calculate_gbox_cartesian_4d(const POINTARRAY *pa, GBOX *gbox)
+{
+	const POINT4D *p = getPoint4d_cp(pa, 0);
+
+	gbox->xmax = gbox->xmin = p->x;
+	gbox->ymax = gbox->ymin = p->y;
+	gbox->zmax = gbox->zmin = p->z;
+	gbox->mmax = gbox->mmin = p->m;
+
+	for (uint32_t i = 1; i < pa->npoints; i++)
+	{
+		p = getPoint4d_cp(pa, i);
+		gbox->xmin = FP_MIN(gbox->xmin, p->x);
+		gbox->xmax = FP_MAX(gbox->xmax, p->x);
+		gbox->ymin = FP_MIN(gbox->ymin, p->y);
+		gbox->ymax = FP_MAX(gbox->ymax, p->y);
+		gbox->zmin = FP_MIN(gbox->zmin, p->z);
+		gbox->zmax = FP_MAX(gbox->zmax, p->z);
+		gbox->mmin = FP_MIN(gbox->mmin, p->m);
+		gbox->mmax = FP_MAX(gbox->mmax, p->m);
+	}
+}
+
+int
+ptarray_calculate_gbox_cartesian(const POINTARRAY *pa, GBOX *gbox)
+{
+	if (!pa || pa->npoints == 0)
+		return LW_FAILURE;
+	if (!gbox)
+		return LW_FAILURE;
+
+	int has_z = FLAGS_GET_Z(pa->flags);
+	int has_m = FLAGS_GET_M(pa->flags);
+	gbox->flags = lwflags(has_z, has_m, 0);
+	LWDEBUGF(4, "ptarray_calculate_gbox Z: %d M: %d", has_z, has_m);
+	int coordinates = 2 + has_z + has_m;
+
+	switch (coordinates)
+	{
+	case 2:
+	{
+		ptarray_calculate_gbox_cartesian_2d(pa, gbox);
+		break;
+	}
+	case 3:
+	{
+		if (has_z)
 		{
-			gbox->zmin = FP_MIN(gbox->zmin, p.z);
-			gbox->zmax = FP_MAX(gbox->zmax, p.z);
+			ptarray_calculate_gbox_cartesian_3d(pa, gbox);
 		}
-		if ( has_m )
+		else
 		{
-			gbox->mmin = FP_MIN(gbox->mmin, p.m);
-			gbox->mmax = FP_MAX(gbox->mmax, p.m);
+			double zmin = gbox->zmin;
+			double zmax = gbox->zmax;
+			ptarray_calculate_gbox_cartesian_3d(pa, gbox);
+			gbox->mmin = gbox->zmin;
+			gbox->mmax = gbox->zmax;
+			gbox->zmin = zmin;
+			gbox->zmax = zmax;
 		}
+		break;
+	}
+	default:
+	{
+		ptarray_calculate_gbox_cartesian_4d(pa, gbox);
+		break;
+	}
 	}
 	return LW_SUCCESS;
 }
 
 static int lwcircstring_calculate_gbox_cartesian(LWCIRCSTRING *curve, GBOX *gbox)
 {
-	uint8_t flags = gflags(FLAGS_GET_Z(curve->flags), FLAGS_GET_M(curve->flags), 0);
 	GBOX tmp;
 	POINT4D p1, p2, p3;
-	int i;
+	uint32_t i;
 
-	if ( ! curve ) return LW_FAILURE;
-	if ( curve->points->npoints < 3 ) return LW_FAILURE;
+	if (!curve) return LW_FAILURE;
+	if (curve->points->npoints < 3) return LW_FAILURE;
 
-	tmp.flags = flags;
+	tmp.flags =
+	    lwflags(FLAGS_GET_Z(curve->flags), FLAGS_GET_M(curve->flags), 0);
 
 	/* Initialize */
 	gbox->xmin = gbox->ymin = gbox->zmin = gbox->mmin = FLT_MAX;
@@ -648,7 +705,7 @@ static int lwpoly_calculate_gbox_cartesian(LWPOLY *poly, GBOX *gbox)
 static int lwcollection_calculate_gbox_cartesian(LWCOLLECTION *coll, GBOX *gbox)
 {
 	GBOX subbox;
-	int i;
+	uint32_t i;
 	int result = LW_FAILURE;
 	int first = LW_TRUE;
 	assert(coll);
@@ -735,3 +792,154 @@ void gbox_float_round(GBOX *gbox)
 	}
 }
 
+inline static uint64_t
+uint64_interleave_2(uint64_t x, uint64_t y)
+{
+	x = (x | (x << 16)) & 0x0000FFFF0000FFFFULL;
+	x = (x | (x << 8)) & 0x00FF00FF00FF00FFULL;
+	x = (x | (x << 4)) & 0x0F0F0F0F0F0F0F0FULL;
+	x = (x | (x << 2)) & 0x3333333333333333ULL;
+	x = (x | (x << 1)) & 0x5555555555555555ULL;
+
+	y = (y | (y << 16)) & 0x0000FFFF0000FFFFULL;
+	y = (y | (y << 8)) & 0x00FF00FF00FF00FFULL;
+	y = (y | (y << 4)) & 0x0F0F0F0F0F0F0F0FULL;
+	y = (y | (y << 2)) & 0x3333333333333333ULL;
+	y = (y | (y << 1)) & 0x5555555555555555ULL;
+
+	return x | (y << 1);
+}
+
+/* Based on https://github.com/rawrunprotected/hilbert_curves Public Domain code */
+inline static uint64_t
+uint32_hilbert(uint32_t px, uint32_t py)
+{
+	uint64_t x = px;
+	uint64_t y = py;
+
+	uint64_t A, B, C, D;
+
+	// Initial prefix scan round, prime with x and y
+	{
+		uint64_t a = x ^ y;
+		uint64_t b = 0xFFFFFFFFULL ^ a;
+		uint64_t c = 0xFFFFFFFFULL ^ (x | y);
+		uint64_t d = x & (y ^ 0xFFFFFFFFULL);
+
+		A = a | (b >> 1);
+		B = (a >> 1) ^ a;
+		C = ((c >> 1) ^ (b & (d >> 1))) ^ c;
+		D = ((a & (c >> 1)) ^ (d >> 1)) ^ d;
+	}
+
+	{
+		uint64_t a = A;
+		uint64_t b = B;
+		uint64_t c = C;
+		uint64_t d = D;
+
+		A = ((a & (a >> 2)) ^ (b & (b >> 2)));
+		B = ((a & (b >> 2)) ^ (b & ((a ^ b) >> 2)));
+		C ^= ((a & (c >> 2)) ^ (b & (d >> 2)));
+		D ^= ((b & (c >> 2)) ^ ((a ^ b) & (d >> 2)));
+	}
+
+	{
+		uint64_t a = A;
+		uint64_t b = B;
+		uint64_t c = C;
+		uint64_t d = D;
+
+		A = ((a & (a >> 4)) ^ (b & (b >> 4)));
+		B = ((a & (b >> 4)) ^ (b & ((a ^ b) >> 4)));
+		C ^= ((a & (c >> 4)) ^ (b & (d >> 4)));
+		D ^= ((b & (c >> 4)) ^ ((a ^ b) & (d >> 4)));
+	}
+
+	{
+		uint64_t a = A;
+		uint64_t b = B;
+		uint64_t c = C;
+		uint64_t d = D;
+
+		A = ((a & (a >> 8)) ^ (b & (b >> 8)));
+		B = ((a & (b >> 8)) ^ (b & ((a ^ b) >> 8)));
+		C ^= ((a & (c >> 8)) ^ (b & (d >> 8)));
+		D ^= ((b & (c >> 8)) ^ ((a ^ b) & (d >> 8)));
+	}
+
+	{
+		uint64_t a = A;
+		uint64_t b = B;
+		uint64_t c = C;
+		uint64_t d = D;
+
+		C ^= ((a & (c >> 16)) ^ (b & (d >> 16)));
+		D ^= ((b & (c >> 16)) ^ ((a ^ b) & (d >> 16)));
+	}
+
+	// Undo transformation prefix scan
+	uint64_t a = C ^ (C >> 1);
+	uint64_t b = D ^ (D >> 1);
+
+	// Recover index bits
+	uint64_t i0 = x ^ y;
+	uint64_t i1 = b | (0xFFFFFFFFULL ^ (i0 | a));
+
+	return uint64_interleave_2(i0, i1);
+}
+
+uint64_t
+gbox_get_sortable_hash(const GBOX *g, const int32_t srid)
+{
+	union floatuint {
+		uint32_t u;
+		float f;
+	};
+
+	union floatuint x, y;
+
+	/*
+	* Since in theory the bitwise representation of an IEEE
+	* float is sortable (exponents come before mantissa, etc)
+	* we just copy the bits directly into an int and then
+	* interleave those ints.
+	*/
+	if (FLAGS_GET_GEODETIC(g->flags))
+	{
+		GEOGRAPHIC_POINT gpt;
+		POINT3D p;
+		p.x = (g->xmax + g->xmin) / 2.0;
+		p.y = (g->ymax + g->ymin) / 2.0;
+		p.z = (g->zmax + g->zmin) / 2.0;
+		normalize(&p);
+		cart2geog(&p, &gpt);
+		/* We know range for geography, so build the curve taking it into account */
+		x.f = 1.5 + gpt.lon / 512.0;
+		y.f = 1.5 + gpt.lat / 256.0;
+	}
+	else
+	{
+		x.f = (g->xmax + g->xmin) / 2;
+		y.f = (g->ymax + g->ymin) / 2;
+		/*
+		 * Tweak for popular SRID values: push floating point values into 1..2 range,
+		 * a region where exponent is constant and thus Hilbert curve
+		 * doesn't have compression artifact when X or Y value is close to 0.
+		 * If someone has out of bounds value it will still expose the arifact but not crash.
+		 * TODO: reconsider when we will have machinery to properly get bounds by SRID.
+		 */
+		if (srid == 3857 || srid == 3395)
+		{
+			x.f = 1.5 + x.f / 67108864.0;
+			y.f = 1.5 + y.f / 67108864.0;
+		}
+		else if (srid == 4326)
+		{
+			x.f = 1.5 + x.f / 512.0;
+			y.f = 1.5 + y.f / 256.0;
+		}
+	}
+
+	return uint32_hilbert(y.u, x.u);
+}

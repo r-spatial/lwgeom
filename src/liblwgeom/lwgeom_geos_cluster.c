@@ -81,6 +81,10 @@ static struct STRTree
 make_strtree(void** geoms, uint32_t num_geoms, char is_lwgeom)
 {
 	struct STRTree tree;
+	tree.envelopes = 0;
+	tree.num_geoms = 0;
+	tree.geom_ids = 0;
+
 	tree.tree = GEOSSTRtree_create(STRTREE_NODE_CAPACITY);
 	if (tree.tree == NULL)
 	{
@@ -178,7 +182,7 @@ union_intersecting_pairs(GEOSGeometry** geoms, uint32_t num_geoms, UNIONFIND* uf
 	{
 		const GEOSPreparedGeometry* prep = NULL;
 
-		if (GEOSisEmpty(geoms[p]))
+		if (!geoms[p] || GEOSisEmpty(geoms[p]))
 			continue;
 
 		cxt.num_items_found = 0;
@@ -570,7 +574,10 @@ combine_geometries(UNIONFIND* uf, void** geoms, uint32_t num_geoms, void*** clus
 			}
 			else
 			{
-				(*clusterGeoms)[k++] = GEOSGeom_createCollection(GEOS_GEOMETRYCOLLECTION, (GEOSGeometry**) geoms_in_cluster, j);
+				int srid = GEOSGetSRID(((GEOSGeometry**) geoms_in_cluster)[0]);
+				GEOSGeometry* combined = GEOSGeom_createCollection(GEOS_GEOMETRYCOLLECTION, (GEOSGeometry**) geoms_in_cluster, j);
+				GEOSSetSRID(combined, srid);
+				(*clusterGeoms)[k++] = combined;
 			}
 			j = 0;
 		}

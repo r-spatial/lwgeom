@@ -49,13 +49,15 @@ circ_node_is_leaf(const CIRC_NODE* node)
 void
 circ_tree_free(CIRC_NODE* node)
 {
-	int i;
+	uint32_t i;
 	if ( ! node ) return;
 
-	for ( i = 0; i < node->num_nodes; i++ )
-		circ_tree_free(node->nodes[i]);
-
-	if ( node->nodes ) lwfree(node->nodes);
+	if (node->nodes)
+	{
+		for (i = 0; i < node->num_nodes; i++)
+			circ_tree_free(node->nodes[i]);
+		lwfree(node->nodes);
+	}
 	lwfree(node);
 }
 
@@ -226,13 +228,13 @@ circ_center_cartesian(const GEOGRAPHIC_POINT* c1, const GEOGRAPHIC_POINT* c2, do
 * and storing pointers to the child nodes.
 */
 static CIRC_NODE*
-circ_node_internal_new(CIRC_NODE** c, int num_nodes)
+circ_node_internal_new(CIRC_NODE** c, uint32_t num_nodes)
 {
 	CIRC_NODE *node = NULL;
 	GEOGRAPHIC_POINT new_center, c1;
 	double new_radius;
 	double offset1, dist, D, r1, ri;
-	int i, new_geom_type;
+	uint32_t i, new_geom_type;
 
 	LWDEBUGF(3, "called with %d nodes --", num_nodes);
 
@@ -320,7 +322,7 @@ circ_node_internal_new(CIRC_NODE** c, int num_nodes)
 			LWDEBUGF(3,"    offset1 is %g", offset1);
 
 			/* Sometimes the sphere_direction function fails... this causes the center calculation */
-			/* to fail too. In that case, we're going to fall back ot a cartesian calculation, which */
+			/* to fail too. In that case, we're going to fall back to a cartesian calculation, which */
 			/* is less exact, so we also have to pad the radius by (hack alert) an arbitrary amount */
 			/* which is hopefully always big enough to contain the input edges */
 			if ( circ_center_spherical(&c1, &(c[i]->center), dist, offset1, &new_center) == LW_FAILURE )
@@ -470,6 +472,19 @@ int circ_tree_get_point(const CIRC_NODE* node, POINT2D* pt)
 	}
 }
 
+int circ_tree_get_point_outside(const CIRC_NODE* node, POINT2D* pt)
+{
+	POINT3D center3d;
+	GEOGRAPHIC_POINT g;
+	if (node->radius >= M_PI) return LW_FAILURE;
+	geog2cart(&(node->center), &center3d);
+	vector_scale(&center3d, -1.0);
+	cart2geog(&center3d, &g);
+	pt->x = rad2deg(g.lon);
+	pt->y = rad2deg(g.lat);
+	return LW_SUCCESS;
+}
+
 
 /**
 * Walk the tree and count intersections between the stab line and the edges.
@@ -477,13 +492,13 @@ int circ_tree_get_point(const CIRC_NODE* node, POINT2D* pt)
 * KNOWN PROBLEM: Grazings (think of a sharp point, just touching the
 *   stabline) will be counted for one, which will throw off the count.
 */
-int circ_tree_contains_point(const CIRC_NODE* node, const POINT2D* pt, const POINT2D* pt_outside, int* on_boundary)
+int circ_tree_contains_point(const CIRC_NODE* node, const POINT2D* pt, const POINT2D* pt_outside, int level, int* on_boundary)
 {
 	GEOGRAPHIC_POINT closest;
 	GEOGRAPHIC_EDGE stab_edge, edge;
 	POINT3D S1, S2, E1, E2;
 	double d;
-	int i, c;
+	uint32_t i, c;
 
 	/* Construct a stabline edge from our "inside" to our known outside point */
 	geographic_point_init(pt->x, pt->y, &(stab_edge.start));
@@ -491,48 +506,65 @@ int circ_tree_contains_point(const CIRC_NODE* node, const POINT2D* pt, const POI
 	geog2cart(&(stab_edge.start), &S1);
 	geog2cart(&(stab_edge.end), &S2);
 
-	LWDEBUG(3, "entered");
+	LWDEBUGF(3, "%*s entered", level, "");
 
 	/*
 	* If the stabline doesn't cross within the radius of a node, there's no
 	* way it can cross.
 	*/
 
-	LWDEBUGF(3, "working on node %p, edge_num %d, radius %g, center POINT(%g %g)", node, node->edge_num, node->radius, rad2deg(node->center.lon), rad2deg(node->center.lat));
+	LWDEBUGF(3, "%*s :working on node %p, edge_num %d, radius %g, center POINT(%.12g %.12g)", level, "", node, node->edge_num, node->radius, rad2deg(node->center.lon), rad2deg(node->center.lat));
 	d = edge_distance_to_point(&stab_edge, &(node->center), &closest);
-	LWDEBUGF(3, "edge_distance_to_point=%g, node_radius=%g", d, node->radius);
+	LWDEBUGF(3, "%*s :edge_distance_to_point=%g, node_radius=%g", level, "", d, node->radius);
 	if ( FP_LTEQ(d, node->radius) )
 	{
-		LWDEBUGF(3,"entering this branch (%p)", node);
+		LWDEBUGF(3,"%*s :entering this branch (%p)", level, "", node);
 
 		/* Return the crossing number of this leaf */
 		if ( circ_node_is_leaf(node) )
 		{
 			int inter;
-			LWDEBUGF(3, "leaf node calculation (edge %d)", node->edge_num);
+			LWDEBUGF(3, "%*s :leaf node calculation (edge %d)", level, "", node->edge_num);
 			geographic_point_init(node->p1->x, node->p1->y, &(edge.start));
 			geographic_point_init(node->p2->x, node->p2->y, &(edge.end));
 			geog2cart(&(edge.start), &E1);
 			geog2cart(&(edge.end), &E2);
 
 			inter = edge_intersects(&S1, &S2, &E1, &E2);
+			LWDEBUGF(3, "%*s :inter = %d", level, "", inter);
 
 			if ( inter & PIR_INTERSECTS )
 			{
-				LWDEBUG(3," got stab line edge_intersection with this edge!");
+				LWDEBUGF(3,"%*s ::got stab line edge_intersection with this edge!", level, "");
 				/* To avoid double counting crossings-at-a-vertex, */
 				/* always ignore crossings at "lower" ends of edges*/
+				GEOGRAPHIC_POINT e1, e2;
+				cart2geog(&E1,&e1); cart2geog(&E2,&e2);
+
+				LWDEBUGF(3,"%*s LINESTRING(%.15g %.15g,%.15g %.15g)", level, "",
+					pt->x, pt->y,
+					pt_outside->x, pt_outside->y
+					);
+
+				LWDEBUGF(3,"%*s LINESTRING(%.15g %.15g,%.15g %.15g)", level, "",
+					rad2deg(e1.lon), rad2deg(e1.lat),
+					rad2deg(e2.lon), rad2deg(e2.lat)
+					);
 
 				if ( inter & PIR_B_TOUCH_RIGHT || inter & PIR_COLINEAR )
 				{
-					LWDEBUG(3,"  rejecting stab line grazing by left-side edge");
+					LWDEBUGF(3,"%*s ::rejecting stab line grazing by left-side edge", level, "");
 					return 0;
 				}
 				else
 				{
-					LWDEBUG(3,"  accepting stab line intersection");
+					LWDEBUGF(3,"%*s ::accepting stab line intersection", level, "");
 					return 1;
 				}
+			}
+			else
+			{
+				LWDEBUGF(3,"%*s edge does not intersect", level, "");
 			}
 		}
 		/* Or, add up the crossing numbers of all children of this node. */
@@ -541,18 +573,16 @@ int circ_tree_contains_point(const CIRC_NODE* node, const POINT2D* pt, const POI
 			c = 0;
 			for ( i = 0; i < node->num_nodes; i++ )
 			{
-				LWDEBUG(3,"internal node calculation");
-				LWDEBUGF(3," calling circ_tree_contains_point on child %d!", i);
-				c += circ_tree_contains_point(node->nodes[i], pt, pt_outside, on_boundary);
+				LWDEBUGF(3,"%*s calling circ_tree_contains_point on child %d!", level, "", i);
+				c += circ_tree_contains_point(node->nodes[i], pt, pt_outside, level + 1, on_boundary);
 			}
 			return c % 2;
 		}
 	}
 	else
 	{
-		LWDEBUGF(3,"skipping this branch (%p)", node);
+		LWDEBUGF(3,"%*s skipping this branch (%p)", level, "", node);
 	}
-
 	return 0;
 }
 
@@ -599,18 +629,64 @@ circ_tree_distance_tree(const CIRC_NODE* n1, const CIRC_NODE* n2, const SPHEROID
 	}
 }
 
+
+/***********************************************************************
+* Internal node sorting routine to make distance calculations faster?
+*/
+
+struct sort_node {
+	CIRC_NODE *node;
+	double d;
+};
+
+static int
+circ_nodes_sort_cmp(const void *a, const void *b)
+{
+	struct sort_node *node_a = (struct sort_node *)(a);
+	struct sort_node *node_b = (struct sort_node *)(b);
+	if (node_a->d < node_b->d) return -1;
+	else if (node_a->d > node_b->d) return 1;
+	else return 0;
+}
+
+static void
+circ_internal_nodes_sort(CIRC_NODE **nodes, uint32_t num_nodes, const CIRC_NODE *target_node)
+{
+	uint32_t i;
+	struct sort_node sort_nodes[CIRC_NODE_SIZE];
+
+	/* Copy incoming nodes into sorting array and calculate */
+	/* distance to the target node */
+	for (i = 0; i < num_nodes; i++)
+	{
+		sort_nodes[i].node = nodes[i];
+		sort_nodes[i].d = sphere_distance(&(nodes[i]->center), &(target_node->center));
+	}
+
+	/* Sort the nodes and copy the result back into the input array */
+	qsort(sort_nodes, num_nodes, sizeof(struct sort_node), circ_nodes_sort_cmp);
+	for (i = 0; i < num_nodes; i++)
+	{
+		nodes[i] = sort_nodes[i].node;
+	}
+	return;
+}
+
+/***********************************************************************/
+
 static double
 circ_tree_distance_tree_internal(const CIRC_NODE* n1, const CIRC_NODE* n2, double threshold, double* min_dist, double* max_dist, GEOGRAPHIC_POINT* closest1, GEOGRAPHIC_POINT* closest2)
 {
 	double max;
 	double d, d_min;
-	int i;
+	uint32_t i;
 
 	LWDEBUGF(4, "entered, min_dist=%.8g max_dist=%.8g, type1=%d, type2=%d", *min_dist, *max_dist, n1->geom_type, n2->geom_type);
-/*
-	circ_tree_print(n1, 0);
-	circ_tree_print(n2, 0);
-*/
+
+	// printf("-==-\n");
+	// circ_tree_print(n1, 0);
+	// printf("--\n");
+	// circ_tree_print(n2, 0);
 
 	/* Short circuit if we've already hit the minimum */
 	if( *min_dist < threshold || *min_dist == 0.0 )
@@ -636,7 +712,7 @@ circ_tree_distance_tree_internal(const CIRC_NODE* n1, const CIRC_NODE* n2, doubl
 		POINT2D pt;
 		circ_tree_get_point(n2, &pt);
 		LWDEBUGF(4, "n1 is polygon, testing if contains (%.5g,%.5g)", pt.x, pt.y);
-		if ( circ_tree_contains_point(n1, &pt, &(n1->pt_outside), NULL) )
+		if ( circ_tree_contains_point(n1, &pt, &(n1->pt_outside), 0, NULL) )
 		{
 			LWDEBUG(4, "it does");
 			*min_dist = 0.0;
@@ -652,7 +728,7 @@ circ_tree_distance_tree_internal(const CIRC_NODE* n1, const CIRC_NODE* n2, doubl
 		POINT2D pt;
 		circ_tree_get_point(n1, &pt);
 		LWDEBUGF(4, "n2 is polygon, testing if contains (%.5g,%.5g)", pt.x, pt.y);
-		if ( circ_tree_contains_point(n2, &pt, &(n2->pt_outside), NULL) )
+		if ( circ_tree_contains_point(n2, &pt, &(n2->pt_outside), 0, NULL) )
 		{
 			LWDEBUG(4, "it does");
 			geographic_point_init(pt.x, pt.y, closest1);
@@ -744,6 +820,7 @@ circ_tree_distance_tree_internal(const CIRC_NODE* n1, const CIRC_NODE* n2, doubl
 		/* tests above. */
 		if ( n1->geom_type && lwtype_is_collection(n1->geom_type) )
 		{
+			circ_internal_nodes_sort(n1->nodes, n1->num_nodes, n2);
 			for ( i = 0; i < n1->num_nodes; i++ )
 			{
 				d = circ_tree_distance_tree_internal(n1->nodes[i], n2, threshold, min_dist, max_dist, closest1, closest2);
@@ -752,6 +829,7 @@ circ_tree_distance_tree_internal(const CIRC_NODE* n1, const CIRC_NODE* n2, doubl
 		}
 		else if ( n2->geom_type && lwtype_is_collection(n2->geom_type) )
 		{
+			circ_internal_nodes_sort(n2->nodes, n2->num_nodes, n1);
 			for ( i = 0; i < n2->num_nodes; i++ )
 			{
 				d = circ_tree_distance_tree_internal(n1, n2->nodes[i], threshold, min_dist, max_dist, closest1, closest2);
@@ -760,6 +838,7 @@ circ_tree_distance_tree_internal(const CIRC_NODE* n1, const CIRC_NODE* n2, doubl
 		}
 		else if ( ! circ_node_is_leaf(n1) )
 		{
+			circ_internal_nodes_sort(n1->nodes, n1->num_nodes, n2);
 			for ( i = 0; i < n1->num_nodes; i++ )
 			{
 				d = circ_tree_distance_tree_internal(n1->nodes[i], n2, threshold, min_dist, max_dist, closest1, closest2);
@@ -768,6 +847,7 @@ circ_tree_distance_tree_internal(const CIRC_NODE* n1, const CIRC_NODE* n2, doubl
 		}
 		else if ( ! circ_node_is_leaf(n2) )
 		{
+			circ_internal_nodes_sort(n2->nodes, n2->num_nodes, n1);
 			for ( i = 0; i < n2->num_nodes; i++ )
 			{
 				d = circ_tree_distance_tree_internal(n1, n2->nodes[i], threshold, min_dist, max_dist, closest1, closest2);
@@ -790,7 +870,7 @@ circ_tree_distance_tree_internal(const CIRC_NODE* n1, const CIRC_NODE* n2, doubl
 void circ_tree_print(const CIRC_NODE* node, int depth)
 {
 	/*
-	int i;
+	uint32_t i;
 
 	if (circ_node_is_leaf(node))
 	{
@@ -825,7 +905,7 @@ void circ_tree_print(const CIRC_NODE* node, int depth)
 		}
   		if ( node->geom_type == POLYGONTYPE )
   		{
-  			printf(" O(%.5g %.5g)", node->pt_outside.x, node->pt_outside.y);
+  			printf(" O(%.15g %.15g)", node->pt_outside.x, node->pt_outside.y);
   		}
 		printf("\n");
 	}
@@ -859,7 +939,7 @@ lwline_calculate_circ_tree(const LWLINE* lwline)
 static CIRC_NODE*
 lwpoly_calculate_circ_tree(const LWPOLY* lwpoly)
 {
-	int i = 0, j = 0;
+	uint32_t i = 0, j = 0;
 	CIRC_NODE** nodes;
 	CIRC_NODE* node;
 
@@ -886,7 +966,7 @@ lwpoly_calculate_circ_tree(const LWPOLY* lwpoly)
 		lwfree(nodes);
 	}
 
-	/* Metatdata about polygons, we need this to apply P-i-P tests */
+	/* Metadata about polygons, we need this to apply P-i-P tests */
 	/* selectively when doing distance calculations */
 	node->geom_type = lwgeom_get_type((LWGEOM*)lwpoly);
 	lwpoly_pt_outside(lwpoly, &(node->pt_outside));
@@ -897,7 +977,7 @@ lwpoly_calculate_circ_tree(const LWPOLY* lwpoly)
 static CIRC_NODE*
 lwcollection_calculate_circ_tree(const LWCOLLECTION* lwcol)
 {
-	int i = 0, j = 0;
+	uint32_t i = 0, j = 0;
 	CIRC_NODE** nodes;
 	CIRC_NODE* node;
 

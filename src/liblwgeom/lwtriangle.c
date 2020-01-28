@@ -36,8 +36,8 @@
 /* construct a new LWTRIANGLE.
  * use SRID=SRID_UNKNOWN for unknown SRID (will have 8bit type's S = 0)
  */
-LWTRIANGLE*
-lwtriangle_construct(int srid, GBOX *bbox, POINTARRAY *points)
+LWTRIANGLE *
+lwtriangle_construct(int32_t srid, GBOX *bbox, POINTARRAY *points)
 {
 	LWTRIANGLE *result;
 
@@ -54,12 +54,12 @@ lwtriangle_construct(int srid, GBOX *bbox, POINTARRAY *points)
 	return result;
 }
 
-LWTRIANGLE*
-lwtriangle_construct_empty(int srid, char hasz, char hasm)
+LWTRIANGLE *
+lwtriangle_construct_empty(int32_t srid, char hasz, char hasm)
 {
 	LWTRIANGLE *result = lwalloc(sizeof(LWTRIANGLE));
 	result->type = TRIANGLETYPE;
-	result->flags = gflags(hasz,hasm,0);
+	result->flags = lwflags(hasz,hasm,0);
 	result->srid = srid;
 	result->points = ptarray_construct_empty(hasz, hasm, 1);
 	result->bbox = NULL;
@@ -146,7 +146,7 @@ lwtriangle_is_repeated_points(LWTRIANGLE *triangle)
 /*
  * Construct a triangle from a LWLINE being
  * the shell
- * Pointarray from intput geom are cloned.
+ * Pointarray from input geom is cloned.
  * Input line must have 4 points, and be closed.
  */
 LWTRIANGLE *
@@ -171,13 +171,6 @@ lwtriangle_from_lwline(const LWLINE *shell)
 	return ret;
 }
 
-int lwtriangle_is_empty(const LWTRIANGLE *triangle)
-{
-	if ( !triangle->points || triangle->points->npoints < 1 )
-		return LW_TRUE;
-	return LW_FALSE;
-}
-
 /**
  * Find the area of the outer ring
  */
@@ -185,7 +178,7 @@ double
 lwtriangle_area(const LWTRIANGLE *triangle)
 {
 	double area=0.0;
-	int i;
+	uint32_t i;
 	POINT2D p1;
 	POINT2D p2;
 

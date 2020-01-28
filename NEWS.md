@@ -1,3 +1,11 @@
+# version 0.2-0
+
+* constrain argument `crs` in `st_transform_proj` to take one or two character strings
+
+* update to POSTGIS 3.0.0 liblwgeom version
+
+* update to modern PROJ, using proj.h if available
+
 # version 0.1-5
 
 * check for user interrupts on `st_geod_distance`, #29 by Dan Baston

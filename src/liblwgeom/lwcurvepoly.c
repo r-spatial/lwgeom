@@ -31,15 +31,14 @@
 #include "liblwgeom_internal.h"
 #include "lwgeom_log.h"
 
-
 LWCURVEPOLY *
-lwcurvepoly_construct_empty(int srid, char hasz, char hasm)
+lwcurvepoly_construct_empty(int32_t srid, char hasz, char hasm)
 {
 	LWCURVEPOLY *ret;
 
 	ret = lwalloc(sizeof(LWCURVEPOLY));
 	ret->type = CURVEPOLYTYPE;
-	ret->flags = gflags(hasz, hasm, 0);
+	ret->flags = lwflags(hasz, hasm, 0);
 	ret->srid = srid;
 	ret->nrings = 0;
 	ret->maxrings = 1; /* Allocate room for sub-members, just in case. */
@@ -53,7 +52,7 @@ LWCURVEPOLY *
 lwcurvepoly_construct_from_lwpoly(LWPOLY *lwpoly)
 {
 	LWCURVEPOLY *ret;
-	int i;
+	uint32_t i;
 	ret = lwalloc(sizeof(LWCURVEPOLY));
 	ret->type = CURVEPOLYTYPE;
 	ret->flags = lwpoly->flags;
@@ -71,7 +70,7 @@ lwcurvepoly_construct_from_lwpoly(LWPOLY *lwpoly)
 
 int lwcurvepoly_add_ring(LWCURVEPOLY *poly, LWGEOM *ring)
 {
-	int i;
+	uint32_t i;
 
 	/* Can't do anything with NULLs */
 	if( ! poly || ! ring )
@@ -85,6 +84,7 @@ int lwcurvepoly_add_ring(LWCURVEPOLY *poly, LWGEOM *ring)
 	{
 		LWDEBUG(4,"mismatched nrings/maxrings");
 		lwerror("Curvepolygon is in inconsistent state. Null memory but non-zero collection counts.");
+		return LW_FAILURE;
 	}
 
 	/* Check that we're adding an allowed ring type */
@@ -147,7 +147,7 @@ double
 lwcurvepoly_perimeter(const LWCURVEPOLY *poly)
 {
 	double result=0.0;
-	int i;
+	uint32_t i;
 
 	for (i=0; i<poly->nrings; i++)
 		result += lwgeom_length(poly->rings[i]);
@@ -159,7 +159,7 @@ double
 lwcurvepoly_perimeter_2d(const LWCURVEPOLY *poly)
 {
 	double result=0.0;
-	int i;
+	uint32_t i;
 
 	for (i=0; i<poly->nrings; i++)
 		result += lwgeom_length_2d(poly->rings[i]);

@@ -22,7 +22,7 @@ AC_MSG_NOTICE([CC: ${CC}])
 AC_MSG_NOTICE([CXX: ${CXX}])
 
 #
-# PROJ.4
+# PROJ
 #
 
 PROJ_CONFIG="pkg-config proj"
@@ -51,25 +51,23 @@ fi
 # for CPPFLAGS we will superfluously double R's flags
 # since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
 
-PROJ6="no"
-if test "${proj_config_ok}" = yes; then
-  PROJ_VERSION=`${PROJ_CONFIG} --modversion`
-  PROJV1=`echo "${PROJ_VERSION}" | cut -c 1`
-  if test "${PROJV1}" = "6"; then
-    AC_MSG_NOTICE([Support for PROJ >= 6.0.0 not yet available, deprecated API defined])
-    PROJ_CPPFLAGS="${PROJ_CPPFLAGS} -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
-    PROJ6="yes"
+#if test "${proj_config_ok}" = yes ; then
+#else
+  AC_CHECK_HEADERS(proj.h,,projh=no)
+  if test "${projh}" = no ; then
+    AC_CHECK_HEADERS(proj_api.h,,proj4ok=no)
+    if test "${proj4ok}" = no ; then
+      AC_MSG_ERROR([neither proj.h nor proj_api.h were found.])
+	else
+      PROJ_CPPFLAGS="$PROJ_CPPFLAGS -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
+	fi
+  else
+    PROJ_CPPFLAGS="$PROJ_CPPFLAGS -DHAVE_PROJ_H"
   fi
-fi
+#fi
 
 CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS} ${PROJ_CPPFLAGS}"
 PKG_CPPFLAGS="${PKG_CPPFLAGS} ${PROJ_CPPFLAGS}"
-
-proj4ok=yes
-AC_CHECK_HEADERS(proj_api.h,,proj4ok=no)
-if test "${proj4ok}" = no; then
-   AC_MSG_ERROR([proj_api.h not found in standard or given locations.])
-fi
 
 # dnl ditto for a library path
 AC_ARG_WITH([proj-lib],
@@ -92,27 +90,35 @@ fi
 PKG_LIBS="${PKG_LIBS} ${PROJ_LIBS}"
 LIBS="${INLIBS} ${PKG_LIBS}"
 
-proj4ok=yes
-AC_CHECK_LIB(proj,pj_init_plus,,proj4ok=no)
-if test "${proj4ok}" = no; then
-   AC_MSG_ERROR([libproj not found in standard or given locations.])
-fi
-
 [cat > proj_conf_test.c <<_EOCONF
 #include <stdio.h>
+#ifdef HAVE_PROJ_H
+#include <proj.h>
+int main() {
+    printf("%d%d%d\n", PROJ_VERSION_MAJOR, PROJ_VERSION_MINOR, PROJ_VERSION_PATCH);
+    return 0;
+}
+#else
 #include <proj_api.h>
-
 int main() {
     printf("%d\n", PJ_VERSION);
-    exit(0);
+    return 0;
 }
+#endif
 _EOCONF]
 
-#AC_MSG_NOTICE([PKG_LIBS: ${PKG_LIBS}])
+# AC_MSG_NOTICE([PKG_LIBS: ${PKG_LIBS}])
 
 ${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
 
 proj_version=`./proj_conf_test`
+
+# xxx
+POSTGIS_PROJ_VERSION=`echo $proj_version | cut -c "1,2"`
+AC_MSG_NOTICE([POSTGIS_PROJ_VERSION: ${POSTGIS_PROJ_VERSION}])
+#AC_SUBST([POSTGIS_PROJ_VERSION],["${PROJV12}"])
+#AC_DEFINE_UNQUOTED([POSTGIS_PROJ_VERSION], [$POSTGIS_PROJ_VERSION], [PROJ library version])
+AC_SUBST(POSTGIS_PROJ_VERSION)
 
 AC_ARG_WITH([proj-share],
     AC_HELP_STRING([--with-proj-share=SHARE_PATH],
@@ -120,163 +126,6 @@ AC_ARG_WITH([proj-share],
                [proj_share_path=$withval])
 if test [ -n "$proj_share_path" ] ; then
     AC_MSG_NOTICE([PROJ_LIB: ${proj_share_path}])
-fi
-
-if test ${PROJ6} = "no"; then
-
-[cat > proj_conf_test.c <<_EOCONF
-#include <stdio.h>
-#include <proj_api.h>
-#if PJ_VERSION <= 480
-FILE *pj_open_lib(projCtx, const char *, const char *);
-#endif
-
-int main() {
-#if PJ_VERSION <= 480
-    FILE *fp;
-#else
-    PAFile fp;
-#endif
-    projCtx ctx;
-    ctx = pj_get_default_ctx();
-    fp = pj_open_lib(ctx, "epsg", "rb");
-    if (fp == NULL) exit(1);
-#if PJ_VERSION <= 480
-    fclose(fp);
-#else
-    pj_ctx_fclose(ctx, fp);
-#endif
-    exit(0);
-}
-_EOCONF]
-
-${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
-if test [ -n "$proj_share_path" ] ; then
-  PROJ_LIB="${proj_share_path}" ./proj_conf_test
-  proj_share=`echo $?`
-else
-  ./proj_conf_test
-  proj_share=`echo $?`
-fi
-
-AC_MSG_CHECKING(PROJ.4: epsg found and readable)
-if test ${proj_share} -eq 1 ; then
-    AC_MSG_RESULT(no)
-    STOP="stop"
-else
-    AC_MSG_RESULT(yes)
-fi
-
-rm -f proj_conf_test.c proj_conf_test
-
-if test "$STOP" = "stop" ; then
-    echo "Error: proj/epsg not found"
-    echo "Either install missing proj support files, for example"
-    echo "the proj-nad and proj-epsg RPMs on systems using RPMs,"
-    echo "or if installed but not autodetected, set PROJ_LIB to the"
-    echo "correct path, and if need be use the --with-proj-share="
-    echo "configure argument."
-    exit 1
-fi
-
-else # proj >= 6
-
-[cat > proj_conf_test.c <<_EOCONF
-#include <stdio.h>
-#include <proj_api.h>
-
-int main() {
-    PAFile fp;
-    projCtx ctx;
-    ctx = pj_get_default_ctx();
-    fp = pj_open_lib(ctx, "proj.db", "rb");
-    if (fp == NULL) exit(1);
-    pj_ctx_fclose(ctx, fp);
-    exit(0);
-}
-_EOCONF]
-
-${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
-if test [ -n "$proj_share_path" ] ; then
-  PROJ_LIB="${proj_share_path}" ./proj_conf_test
-  proj_share=`echo $?`
-else
-  ./proj_conf_test
-  proj_share=`echo $?`
-fi
-
-AC_MSG_CHECKING(PROJ: proj.db found and readable)
-if test ${proj_share} -eq 1 ; then
-    AC_MSG_RESULT(no)
-    STOP="stop"
-else
-    AC_MSG_RESULT(yes)
-fi
-
-rm -f proj_conf_test.c proj_conf_test
-
-if test "$STOP" = "stop" ; then
-    echo "Error: proj/proj.db not found"
-    echo "Either install missing proj support files, set PROJ_LIB to the"
-    echo "correct path, and if need be use the --with-proj-share="
-    echo "configure argument."
-    exit 1
-fi
-
-
-fi
-
-
-[cat > proj_conf_test.c <<_EOCONF
-#include <stdio.h>
-#include <proj_api.h>
-#if PJ_VERSION <= 480
-FILE *pj_open_lib(projCtx, const char *, const char *);
-#endif
-
-int main() {
-#if PJ_VERSION <= 480
-    FILE *fp;
-#else
-    PAFile fp;
-#endif
-    projCtx ctx;
-    ctx = pj_get_default_ctx();
-    fp = pj_open_lib(ctx, "conus", "rb");
-    if (fp == NULL) exit(1);
-#if PJ_VERSION <= 480
-    fclose(fp);
-#else
-    pj_ctx_fclose(ctx, fp);
-#endif
-    exit(0);
-}
-_EOCONF]
-
-${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
-if test [ -n "$proj_share_path" ] ; then
-  PROJ_LIB="${proj_share_path}" ./proj_conf_test
-  proj_share=`echo $?`
-else
-  ./proj_conf_test
-  proj_share=`echo $?`
-fi
-
-AC_MSG_CHECKING(PROJ.4: conus found and readable)
-if test ${proj_share} -eq 1 ; then
-    WARN="warn"
-    AC_MSG_RESULT(no)
-else
-    AC_MSG_RESULT(yes)
-fi
-
-rm -f proj_conf_test.c proj_conf_test
-
-if test "$WARN" = "warn" ; then
-    echo "Note: proj/conus not found"
-    echo "No support available in PROJ4 for NAD grid datum transformations"
-    echo "If required, consider re-installing from source with the contents"
-    echo "of proj-datumgrid-1.<latest>.zip from http://download.osgeo.org/proj/ in nad/."
 fi
 
 #
@@ -436,5 +285,6 @@ AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -I./liblwgeom -DHAVE_LIBGEOM_INTERNAL
 AC_MSG_NOTICE([Package CPP flags: ${PKG_CPPFLAGS}])
 AC_MSG_NOTICE([Package LIBS: ${PKG_LIBS}])
 
-AC_CONFIG_FILES(src/Makevars)
+AC_CONFIG_FILES(src/Makevars
+	src/postgis_config.h)
 AC_OUTPUT

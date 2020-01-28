@@ -35,7 +35,7 @@ lwmline_release(LWMLINE *lwmline)
 }
 
 LWMLINE *
-lwmline_construct_empty(int srid, char hasz, char hasm)
+lwmline_construct_empty(int32_t srid, char hasz, char hasm)
 {
 	LWMLINE *ret = (LWMLINE*)lwcollection_construct_empty(MULTILINETYPE, srid, hasz, hasm);
 	return ret;
@@ -55,7 +55,7 @@ LWMLINE* lwmline_add_lwline(LWMLINE *mobj, const LWLINE *obj)
 LWMLINE*
 lwmline_measured_from_lwmline(const LWMLINE *lwmline, double m_start, double m_end)
 {
-	int i = 0;
+	uint32_t i = 0;
 	int hasm = 0, hasz = 0;
 	double length = 0.0, length_so_far = 0.0;
 	double m_range = m_end - m_start;
@@ -111,18 +111,19 @@ lwmline_measured_from_lwmline(const LWMLINE *lwmline, double m_start, double m_e
 
 void lwmline_free(LWMLINE *mline)
 {
-	int i;
-	if ( ! mline ) return;
+	if (!mline)
+		return;
 
-	if ( mline->bbox )
+	if (mline->bbox)
 		lwfree(mline->bbox);
 
-	for ( i = 0; i < mline->ngeoms; i++ )
-		if ( mline->geoms && mline->geoms[i] )
-			lwline_free(mline->geoms[i]);
-
-	if ( mline->geoms )
+	if (mline->geoms)
+	{
+		for (uint32_t i = 0; i < mline->ngeoms; i++)
+			if (mline->geoms[i])
+				lwline_free(mline->geoms[i]);
 		lwfree(mline->geoms);
+	}
 
 	lwfree(mline);
 }

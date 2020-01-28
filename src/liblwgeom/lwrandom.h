@@ -18,31 +18,16 @@
  *
  **********************************************************************
  *
- * Copyright (C) 2004-2015 Sandro Santilli <strk@kbt.io>
- * Copyright (C) 2008-2011 Paul Ramsey <pramsey@cleverelephant.ca>
- * Copyright (C) 2008 Mark Cave-Ayland <mark.cave-ayland@siriusit.co.uk>
+ * Copyright 2019 Mike Taves
  *
  **********************************************************************/
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <stddef.h>
+#include <stdint.h>
 
-#include "liblwgeom_internal.h"
+void lwrandom_set_seed(int32_t seed);
+double lwrandom_uniform(void);
 
-#ifndef EPSILON
-#define EPSILON        1.0E-06
-#endif
-#ifndef FPeq
-#define FPeq(A,B)     (fabs((A) - (B)) <= EPSILON)
-#endif
-
-
-
-GBOX *
-box2d_clone(const GBOX *in)
-{
-	GBOX *ret = lwalloc(sizeof(GBOX));
-	memcpy(ret, in, sizeof(GBOX));
-	return ret;
-}
+/* for low-level external debugging */
+void _lwrandom_set_seeds(int32_t s1, int32_t s2);
+int32_t _lwrandom_get_seed(size_t idx);
