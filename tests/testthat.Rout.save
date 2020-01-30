@@ -21,8 +21,8 @@ Type 'q()' to quit R.
 > 
 > test_check("lwgeom")
 ══ testthat results  ═══════════════════════════════════════════════════════════
-[ OK: 60 | SKIPPED: 2 | WARNINGS: 0 | FAILED: 0 ]
+[ OK: 57 | SKIPPED: 3 | WARNINGS: 0 | FAILED: 0 ]
 > 
 > proc.time()
    user  system elapsed 
-  1.355   0.062   1.406 
+  1.176   0.073   1.243 
