@@ -1,5 +1,5 @@
 # lwgeom
-R bindings to the [liblwgeom](https://github.com/postgis/postgis/tree/svn-trunk/liblwgeom) library
+R bindings to the [liblwgeom](https://github.com/postgis/postgis/tree/master/liblwgeom) library
 
 [![Build Status](https://travis-ci.org/r-spatial/lwgeom.png?branch=master)](https://travis-ci.org/r-spatial/lwgeom)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/r-spatial/lwgeom?branch=master&svg=true)](https://ci.appveyor.com/project/edzer/lwgeom)
