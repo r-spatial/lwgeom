@@ -21,7 +21,6 @@ OBJECTS_LIBLWGEOM= \
   liblwgeom/lwgeom_wrapx.o \
   liblwgeom/lwiterator.o \
   liblwgeom/lwgeom_geos_node.o \
-  liblwgeom/lwtree.o \
   liblwgeom/lwout_geojson.o \
   liblwgeom/lwgeom_debug.o \
   liblwgeom/lwgeom_median.o \
@@ -68,7 +67,6 @@ OBJECTS_LIBLWGEOM= \
   liblwgeom/lwin_wkb.o \
   liblwgeom/ptarray.o \
   liblwgeom/lwout_wkb.o \
-  liblwgeom/gutil.o \
   liblwgeom/lwpoly.o \
   liblwgeom/lwpoint.o \
   liblwgeom/lwout_gml.o \
