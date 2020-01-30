@@ -1,10 +1,12 @@
 # version 0.2-0
 
+* export `lwgeom_make_valid`, to gradually move `st_make_valid` from `lwgeom` to `sf`; https://github.com/r-spatial/sf/issues/989
+
 * constrain argument `crs` in `st_transform_proj` to take one or two character strings
 
 * update to POSTGIS 3.0.0 liblwgeom version
 
-* update to modern PROJ, using proj.h if available
+* update to modern PROJ, use proj.h when available
 
 # version 0.1-5
 

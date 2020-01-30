@@ -25,7 +25,13 @@ st_transform_proj.sfc = function(x, crs, ...) {
 	stopifnot(length(crs) %in% c(1,2))
 	if (length(crs) == 1) # only output CRS
 		crs = c(st_crs(x)$proj4string, crs) # c(input, output)
-	st_sfc(CPL_lwgeom_transform(x, crs), crs = crs[2])
+	ret = CPL_lwgeom_transform(x, crs)
+	ret = try(st_sfc(ret, crs = crs[2]))
+	if (inherits(ret, "try-error")) {
+		warning("CRS of returned object is NA, since the target CRS is not recognized by GDAL")
+		st_sfc(ret, crs = NA_crs_)
+	} else
+		ret
 }
 
 #' @name st_transform_proj

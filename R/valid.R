@@ -27,3 +27,10 @@ st_make_valid.sfc = function(x) {
 st_make_valid.sf = function(x) {
 	st_set_geometry(x, st_make_valid(st_geometry(x)))
 }
+
+#' @name valid
+#' @export
+lwgeom_make_valid = function(x) {
+	stopifnot(inherits(x, "sfc"))
+	st_sfc(CPL_make_valid(x), crs = st_crs(x))
+}
