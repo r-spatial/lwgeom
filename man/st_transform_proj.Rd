@@ -18,9 +18,9 @@ st_transform_proj(x, crs, ...)
 \arguments{
 \item{x}{object of class sf, sfc or sfg}
 
-\item{...}{ignored}
+\item{crs}{character; target CRS, or, in case of a length 2 character vector, source and target CRS}
 
-\item{character}{string, describing the CRS, or a length 2 character vector with input and output CRS}
+\item{...}{ignored}
 }
 \description{
 Transform or convert coordinates of simple features directly with Proj.4 (bypassing GDAL)

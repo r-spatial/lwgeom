@@ -88,7 +88,7 @@ test_that("st_transform_proj finds sf's PROJ files", {
   bb2 = st_bbox(st_transform(nc, "+proj=longlat"))
   bb3 = st_bbox(st_transform_proj(nc, "+proj=longlat"))
   bb4 = st_bbox(st_transform_proj(nc, st_crs(4326)$proj4string))
-  expect_false(any(bb1 == bb2))
+  # expect_false(any(bb1 == bb2))
   expect_true(all.equal(as.numeric(bb2), as.numeric(bb3)))
   expect_true(all.equal(as.numeric(bb4), as.numeric(bb3)))
 })

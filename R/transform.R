@@ -3,7 +3,7 @@
 #' Transform or convert coordinates of simple features directly with Proj.4 (bypassing GDAL)
 #'
 #' @param x object of class sf, sfc or sfg
-#' @param character string, describing the CRS, or a length 2 character vector with input and output CRS
+#' @param crs character; target CRS, or, in case of a length 2 character vector, source and target CRS
 #' @param ... ignored
 #' @details Transforms coordinates of object to new projection, using PROJ directly rather than the GDAL API used by \link[sf]{st_transform}.
 #' 
