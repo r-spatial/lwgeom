@@ -460,7 +460,7 @@ ptarray_transform(POINTARRAY *pa, LWPROJ *pj)
 		PJ_XYZT v = {pa_double[0], pa_double[1], has_z ? pa_double[2] : 0.0, 0.0};
 		PJ_COORD v2;
 		v2.xyzt = v;
-		PJ_COORD t = proj_trans(pj->pj, PJ_FWD, (PJ_COORD)v2);
+		PJ_COORD t = proj_trans(pj->pj, PJ_FWD, v2);
 
 		int pj_errno_val = proj_errno(pj->pj);
 		if (pj_errno_val)
