@@ -3,9 +3,12 @@
 \name{valid}
 \alias{valid}
 \alias{st_make_valid}
+\alias{lwgeom_make_valid}
 \title{Make an invalid geometry valid}
 \usage{
 st_make_valid(x)
+
+lwgeom_make_valid(x)
 }
 \arguments{
 \item{x}{object of class \code{sfg}, \code{sfg} or \code{sf}}

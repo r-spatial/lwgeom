@@ -1,6 +1,6 @@
 #include <iostream>
 #include "Rcpp.h"
-#ifdef HAVE_PROJ_H
+#ifdef USE_PROJ_H
 
 #include <proj.h>
 std::string CPL_proj_version(bool b = false) {

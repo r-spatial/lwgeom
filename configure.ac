@@ -113,12 +113,17 @@ ${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
 
 proj_version=`./proj_conf_test`
 
-# xxx
 POSTGIS_PROJ_VERSION=`echo $proj_version | cut -c "1,2"`
 AC_MSG_NOTICE([POSTGIS_PROJ_VERSION: ${POSTGIS_PROJ_VERSION}])
 #AC_SUBST([POSTGIS_PROJ_VERSION],["${PROJV12}"])
 #AC_DEFINE_UNQUOTED([POSTGIS_PROJ_VERSION], [$POSTGIS_PROJ_VERSION], [PROJ library version])
 AC_SUBST(POSTGIS_PROJ_VERSION)
+# xxx
+if test ${POSTGIS_PROJ_VERSION} -lt 60 ; then
+  PKG_CPPFLAGS="${PKG_CPPFLAGS} -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
+else
+  PKG_CPPFLAGS="${PKG_CPPFLAGS} -DUSE_PROJ_H"
+fi
 
 AC_ARG_WITH([proj-share],
     AC_HELP_STRING([--with-proj-share=SHARE_PATH],

@@ -125,7 +125,7 @@ Rcpp::List CPL_lwgeom_transform(Rcpp::List sfc, Rcpp::CharacterVector p4s) {
 		Rcpp::stop("st_lwgeom_transform: p4s needs to be a length 2 character vector\n"); // #nocov
 	std::vector<LWGEOM *> lwgeom_v = lwgeom_from_sfc(sfc);
 	LWPROJ *pj;
-#ifdef HAVE_PROJ_H
+#ifdef USE_PROJ_H
 	proj_context_use_proj4_init_rules(PJ_DEFAULT_CTX, 1);
     PJ *P = proj_create_crs_to_crs(PJ_DEFAULT_CTX, p4s[0], p4s[1], NULL);
 	if (P == NULL) 
@@ -149,7 +149,7 @@ Rcpp::List CPL_lwgeom_transform(Rcpp::List sfc, Rcpp::CharacterVector p4s) {
 			Rcpp::stop("st_lwgeom_transform failed\n"); // #nocov
 		}
 	}
-#ifdef HAVE_PROJ_H
+#ifdef USE_PROJ_H
 	proj_destroy(P);
 #else
 	pj_free(src);
