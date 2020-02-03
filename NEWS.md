@@ -1,3 +1,9 @@
+# version 0.2-2
+
+# version 0.2-1
+
+* fix PROJ 5.x installation issue (has proj.h, but shouldn't use it)
+
 # version 0.2-0
 
 * export `lwgeom_make_valid`, to gradually move `st_make_valid` from `lwgeom` to `sf`; https://github.com/r-spatial/sf/issues/989
