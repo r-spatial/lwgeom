@@ -626,6 +626,7 @@ OBJECTS
 GEOS_LIBS
 PKG_CPPFLAGS
 GEOS_CONFIG
+POSTGIS_PROJ_VERSION
 PROJ_LIBS
 EGREP
 GREP
@@ -3672,6 +3673,41 @@ fi # PROJH = no
 
 fi # proj >= 6
 
+cat > proj_conf_test.c <<_EOCONF
+#include <stdio.h>
+#ifdef HAVE_PROJ_H
+#include <proj.h>
+int main() {
+    printf("%d%d%d\n", PROJ_VERSION_MAJOR, PROJ_VERSION_MINOR, PROJ_VERSION_PATCH);
+    return 0;
+}
+#else
+#include <proj_api.h>
+int main() {
+    printf("%d\n", PJ_VERSION);
+    return 0;
+}
+#endif
+_EOCONF
+
+# AC_MSG_NOTICE([PKG_LIBS: ${PKG_LIBS}])
+
+${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
+
+proj_version=`./proj_conf_test`
+
+POSTGIS_PROJ_VERSION=`echo $proj_version | cut -c "1,2"`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: POSTGIS_PROJ_VERSION: ${POSTGIS_PROJ_VERSION}" >&5
+$as_echo "$as_me: POSTGIS_PROJ_VERSION: ${POSTGIS_PROJ_VERSION}" >&6;}
+#AC_SUBST([POSTGIS_PROJ_VERSION],["${PROJV12}"])
+#AC_DEFINE_UNQUOTED([POSTGIS_PROJ_VERSION], [$POSTGIS_PROJ_VERSION], [PROJ library version])
+
+# xxx
+if test ${POSTGIS_PROJ_VERSION} -lt 60 ; then
+  PKG_CPPFLAGS="${PKG_CPPFLAGS} -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
+else
+  PKG_CPPFLAGS="${PKG_CPPFLAGS} -DUSE_PROJ_H"
+fi
 
 
 
@@ -3814,24 +3850,11 @@ else
   # 34 or 35 is all liblwgeom cares about, now
 fi
 
-geosok=yes
-for ac_header in geos_c.h
-do :
-  ac_fn_c_check_header_mongrel "$LINENO" "geos_c.h" "ac_cv_header_geos_c_h" "$ac_includes_default"
-if test "x$ac_cv_header_geos_c_h" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_GEOS_C_H 1
-_ACEOF
-
-else
-  geosok=no
-fi
-
-done
-
-if test "${geosok}" = no; then
-   as_fn_error $? "geos_c.h not found in given locations." "$LINENO" 5
-fi
+#geosok=yes
+#AC_CHECK_HEADERS(geos_c.h,,geosok=no)
+#if test "${geosok}" = no; then
+#   AC_MSG_ERROR([geos_c.h not found in given locations.])
+#fi
 
 cat > geos_test.cpp <<_EOCONF
 #include <geos_c.h>
@@ -3938,10 +3961,10 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_geos_c_GEOS_init_r" >&5
 $as_echo "$ac_cv_lib_geos_c_GEOS_init_r" >&6; }
 if test "x$ac_cv_lib_geos_c_GEOS_init_r" = xyes; then :
-  PKG_LIBS="${PKG_LIBS} -lgeos_c"
+  PKG_LIBS="${LIBS} -lgeos_c"
 
 else
-  PKG_LIBS="${PKG_LIBS} ${PROJ_LIBS} ${GEOS_LIBS}"
+  PKG_LIBS="${LIBS} ${PROJ_LIBS} ${GEOS_LIBS}"
 
 fi
 
@@ -3957,8 +3980,8 @@ PKG_CPPFLAGS="${PKG_CPPFLAGS} -I./liblwgeom -DHAVE_LIBGEOM_INTERNAL_H"
 #
 { $as_echo "$as_me:${as_lineno-$LINENO}: Package CPP flags: ${PKG_CPPFLAGS}" >&5
 $as_echo "$as_me: Package CPP flags: ${PKG_CPPFLAGS}" >&6;}
-{ $as_echo "$as_me:${as_lineno-$LINENO}: Package LIBS: ${PKG_LIBS}" >&5
-$as_echo "$as_me: Package LIBS: ${PKG_LIBS}" >&6;}
+{ $as_echo "$as_me:${as_lineno-$LINENO}: Package LIBS: ${LIBS}" >&5
+$as_echo "$as_me: Package LIBS: ${LIBS}" >&6;}
 
 ac_config_files="$ac_config_files src/Makevars src/postgis_config.h"
 

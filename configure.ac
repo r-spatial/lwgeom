@@ -339,6 +339,40 @@ fi # PROJH = no
 
 fi # proj >= 6
 
+[cat > proj_conf_test.c <<_EOCONF
+#include <stdio.h>
+#ifdef HAVE_PROJ_H
+#include <proj.h>
+int main() {
+    printf("%d%d%d\n", PROJ_VERSION_MAJOR, PROJ_VERSION_MINOR, PROJ_VERSION_PATCH);
+    return 0;
+}
+#else
+#include <proj_api.h>
+int main() {
+    printf("%d\n", PJ_VERSION);
+    return 0;
+}
+#endif
+_EOCONF]
+
+# AC_MSG_NOTICE([PKG_LIBS: ${PKG_LIBS}])
+
+${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
+
+proj_version=`./proj_conf_test`
+
+POSTGIS_PROJ_VERSION=`echo $proj_version | cut -c "1,2"`
+AC_MSG_NOTICE([POSTGIS_PROJ_VERSION: ${POSTGIS_PROJ_VERSION}])
+#AC_SUBST([POSTGIS_PROJ_VERSION],["${PROJV12}"])
+#AC_DEFINE_UNQUOTED([POSTGIS_PROJ_VERSION], [$POSTGIS_PROJ_VERSION], [PROJ library version])
+AC_SUBST(POSTGIS_PROJ_VERSION)
+# xxx
+if test ${POSTGIS_PROJ_VERSION} -lt 60 ; then
+  PKG_CPPFLAGS="${PKG_CPPFLAGS} -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
+else
+  PKG_CPPFLAGS="${PKG_CPPFLAGS} -DUSE_PROJ_H"
+fi
 
 
 
@@ -421,11 +455,11 @@ else
   # 34 or 35 is all liblwgeom cares about, now
 fi
 
-geosok=yes
-AC_CHECK_HEADERS(geos_c.h,,geosok=no)
-if test "${geosok}" = no; then
-   AC_MSG_ERROR([geos_c.h not found in given locations.])
-fi
+#geosok=yes
+#AC_CHECK_HEADERS(geos_c.h,,geosok=no)
+#if test "${geosok}" = no; then
+#   AC_MSG_ERROR([geos_c.h not found in given locations.])
+#fi
 
 [cat > geos_test.cpp <<_EOCONF
 #include <geos_c.h>
@@ -486,8 +520,8 @@ AC_SUBST([OBJECTS], ["${OBJECTS} \$(OBJECTS_RCPP)"])
 #	     AC_MSG_ERROR([libproj not found a standard locations.]))
 
 AC_CHECK_LIB(geos_c, GEOS_init_r,
-         AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -lgeos_c"]), 
-         AC_SUBST([PKG_LIBS], ["${PKG_LIBS} ${PROJ_LIBS} ${GEOS_LIBS}"]))
+         AC_SUBST([PKG_LIBS], ["${LIBS} -lgeos_c"]), 
+         AC_SUBST([PKG_LIBS], ["${LIBS} ${PROJ_LIBS} ${GEOS_LIBS}"]))
 
 AC_SUBST([OBJECTS], ["${OBJECTS} \$(OBJECTS_LIBLWGEOM)"])
 
@@ -497,7 +531,7 @@ AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -I./liblwgeom -DHAVE_LIBGEOM_INTERNAL
 # concluding substitution
 #
 AC_MSG_NOTICE([Package CPP flags: ${PKG_CPPFLAGS}])
-AC_MSG_NOTICE([Package LIBS: ${PKG_LIBS}])
+AC_MSG_NOTICE([Package LIBS: ${LIBS}])
 
 AC_CONFIG_FILES(src/Makevars
 	src/postgis_config.h)
