@@ -4302,7 +4302,7 @@ _lwt_HealEdges( LWT_TOPOLOGY* topo, LWT_ELEMID eid1, LWT_ELEMID eid2,
       commonnode = -1;
       /* append to string, for error message */
       if ( bufleft > 0 ) {
-        r = snprintf(ptr, bufleft, "%s%" LWTFMT_ELEMID,
+        r = snprintf(ptr, bufleft, "%s%ld", /* LWTFMT_ELEMID, */
                      ( ptr==buf ? "" : "," ), node_edges[i].edge_id);
         if ( r >= (int) bufleft )
         {
@@ -4354,7 +4354,7 @@ _lwt_HealEdges( LWT_TOPOLOGY* topo, LWT_ELEMID eid1, LWT_ELEMID eid2,
         commonnode = -1;
         /* append to string, for error message */
         if ( bufleft > 0 ) {
-          r = snprintf(ptr, bufleft, "%s%" LWTFMT_ELEMID,
+          r = snprintf(ptr, bufleft, "%s%ld", /* LWTFMT_ELEMID, // EJP: changed format */
                        ( ptr==buf ? "" : "," ), node_edges[i].edge_id);
           if ( r >= (int) bufleft )
           {
