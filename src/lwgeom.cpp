@@ -42,7 +42,7 @@ Rcpp::CharacterVector CPL_lwgeom_version(bool b = false) {
 // in
 std::vector<LWGEOM *> lwgeom_from_sfc(Rcpp::List sfc) {
 	std::vector<LWGEOM *> lwgeom_v(sfc.size()); // return
-	Rcpp::List wkblst = sf::CPL_write_wkb(sfc, true); // true: write EWKB, puts EPSG inside the wkb
+	Rcpp::List wkblst = sf::CPL_write_wkb(sfc, true, 0); // true: write EWKB, puts EPSG inside the wkb
 	for (int i = 0; i < wkblst.size(); i++) {
 		Rcpp::RawVector rv = wkblst[i];
 		const uint8_t *wkb = &(rv[0]); 
