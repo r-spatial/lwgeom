@@ -2,6 +2,8 @@
 
 * adjust to sf 0.9-0 crs representation
 
+* use `st_make_valid` generic from package sf; https://github.com/r-spatial/sf/issues/1300
+
 # version 0.2-1
 
 * fix PROJ 5.x installation issue (has proj.h, but shouldn't use it)
