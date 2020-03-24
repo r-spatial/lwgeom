@@ -1,5 +1,7 @@
 # version 0.2-2
 
+* adjust to sf 0.9-0 crs representation
+
 # version 0.2-1
 
 * fix PROJ 5.x installation issue (has proj.h, but shouldn't use it)

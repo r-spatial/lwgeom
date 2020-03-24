@@ -1,2 +1,2 @@
 #!/bin/sh
-rm -fr src/Makevars config.log config.status autom4te.cache src/*.o src/*.so src/liblwgeom/*.o */Rplots.pdf proj_conf_test proj_conf_test.c
+rm -fr src/Makevars config.log config.status autom4te.cache src/*.o src/*.so src/liblwgeom/*.o */Rplots.pdf proj_conf_test proj_conf_test.c proj_conf_test.cpp

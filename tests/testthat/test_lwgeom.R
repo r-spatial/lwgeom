@@ -8,8 +8,9 @@ test_that("st_make_valid works", {
 
    	y = st_make_valid(x)
 	expect_true(st_is_valid(y))
-   	expect_true(st_is_valid(lwgeom::st_make_valid(x[[1]])))
-   	expect_true(st_is_valid(lwgeom::st_make_valid(st_sf(a = 1, geom = x))))
+   	expect_true(st_is_valid(st_make_valid(x[[1]])))
+   	expect_true(st_is_valid(lwgeom_make_valid(x)))
+   	expect_true(st_is_valid(st_make_valid(st_sf(a = 1, geom = x))))
 	expect_equal(lwgeom::st_geohash(st_sfc(st_point(c(1.5,3.5)), st_point(c(0,90))), 2), c( "s0","up"))
 	expect_equal(lwgeom::st_geohash(st_sfc(st_point(c(1.5,3.5)), st_point(c(0,90))), 10),
 		c("s095fjhkbx","upbpbpbpbp"))
