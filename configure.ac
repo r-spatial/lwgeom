@@ -83,7 +83,6 @@ else
 fi
 
 CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS} ${PROJ_CPPFLAGS}"
-PKG_CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS} ${PROJ_CPPFLAGS}"
 
 if test "${PROJH}" = no
 then
@@ -340,6 +339,10 @@ fi # PROJH = no
 
 fi # proj >= 6
 
+#
+# POSTGIS/PROJ version:
+#
+
 [cat > proj_conf_test.c <<_EOCONF
 #include <stdio.h>
 #ifdef HAVE_PROJ_H
@@ -374,7 +377,6 @@ if test ${POSTGIS_PROJ_VERSION} -lt 60 ; then
 else
   PKG_CPPFLAGS="${PKG_CPPFLAGS} -DUSE_PROJ_H"
 fi
-
 
 
 #
