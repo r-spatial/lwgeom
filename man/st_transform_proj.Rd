@@ -38,7 +38,7 @@ p1 = st_point(c(7,52))
 p2 = st_point(c(-30,20))
 sfc = st_sfc(p1, p2, crs = 4326)
 sfc
-st_transform_proj(sfc, "+proj=wintri")
+# st_transform_proj(sfc, "+proj=wintri")
 library(sf)
 nc = st_read(system.file("shape/nc.shp", package="sf"))
 st_transform_proj(nc[1,], "+proj=wintri +over")

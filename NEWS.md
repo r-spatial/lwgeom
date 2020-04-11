@@ -1,6 +1,6 @@
 # version 0.2-2
 
-* adjust to sf 0.9-0 crs representation
+* adjust to sf >= 0.9-0 new crs representation
 
 * use `st_make_valid` generic from package sf; https://github.com/r-spatial/sf/issues/1300
 
