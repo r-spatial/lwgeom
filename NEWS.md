@@ -1,3 +1,7 @@
+# version 0.2-3
+
+* fix configure script to work with PROJ 5.x versions
+
 # version 0.2-2
 
 * adjust to sf >= 0.9-0 new crs representation
