@@ -1,5 +1,9 @@
 # version 0.2-3
 
+* fix configure script to work with ubuntu/bionic and PROJ 4.9.3; #28
+
+# version 0.2-3
+
 * fix configure script to work with PROJ 5.x versions
 
 # version 0.2-2
