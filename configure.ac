@@ -84,14 +84,15 @@ fi
 
 CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS} ${PROJ_CPPFLAGS}"
 
-if test "${PROJH}" = no
-then
-  proj4ok=yes
-  AC_CHECK_HEADERS(proj_api.h,,proj4ok=no)
-  if test "${proj4ok}" = no; then
-     AC_MSG_ERROR([proj_api.h not found in standard or given locations.])
-  fi
-fi
+# see https://github.com/r-spatial/lwgeom/issues/28
+#if test "${PROJH}" = no
+#then
+#  proj4ok=yes
+#  AC_CHECK_HEADERS(proj_api.h,,proj4ok=no)
+#  if test "${proj4ok}" = no; then
+#     AC_MSG_ERROR([proj_api.h not found in standard or given locations.])
+#  fi
+#fi
 
 # dnl ditto for a library path
 AC_ARG_WITH([proj-lib],
