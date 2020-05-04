@@ -436,11 +436,11 @@ fi
 
 GEOS_VERSION=`${GEOS_CONFIG} --version`
 AC_MSG_NOTICE([GEOS: ${GEOS_VERSION}])
-AC_MSG_CHECKING([GEOS version >= 3.3.0]) # GDAL 2.0.1 requires GEOS 3.1.0
+AC_MSG_CHECKING([GEOS version >= 3.6.0]) # PostGIS 3.0.0 requires this
 GEOS_VER_DOT=`echo $GEOS_VERSION | tr -d "."`
-if test ${GEOS_VER_DOT} -lt 330 ; then
+if test ${GEOS_VER_DOT} -lt 360 ; then
   AC_MSG_RESULT(no)
-  AC_MSG_ERROR([upgrade GEOS to 3.3.0 or later])
+  AC_MSG_ERROR([upgrade GEOS to 3.6.0 or later])
 else
   AC_MSG_RESULT(yes)
 fi
@@ -452,12 +452,7 @@ PKG_CPPFLAGS="${PKG_CPPFLAGS} ${GEOS_CPPFLAGS}"
 CPPFLAGS="${CPPFLAGS} ${PKG_CPPFLAGS}"
 LIBS="${LIBS} ${PKG_LIBS} ${GEOS_CLIBS}"
 
-if test ${GEOS_VER_DOT} -lt 350 ; then
-  AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DPOSTGIS_GEOS_VERSION=34"])
-else
-  AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DPOSTGIS_GEOS_VERSION=35"])
-  # 34 or 35 is all liblwgeom cares about, now
-fi
+AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DPOSTGIS_GEOS_VERSION=35"])
 
 #geosok=yes
 #AC_CHECK_HEADERS(geos_c.h,,geosok=no)

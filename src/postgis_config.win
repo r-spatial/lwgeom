@@ -100,7 +100,7 @@
 /* #undef POSTGIS_GDAL_VERSION */
 
 /* GEOS library version */
-/* #define POSTGIS_GEOS_VERSION 38 */
+#define POSTGIS_GEOS_VERSION 38
 
 /* PostGIS libxml2 version */
 #define POSTGIS_LIBXML2_VERSION "2.9.4"
@@ -121,7 +121,7 @@
 #define POSTGIS_PGSQL_VERSION 100
 
 /* PROJ library version */
-#define POSTGIS_PROJ_VERSION 49
+#define POSTGIS_PROJ_VERSION 63
 
 /* PostGIS Raster build date */
 /* #undef POSTGIS_RASTER_BUILD_DATE */

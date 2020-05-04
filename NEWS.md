@@ -1,3 +1,9 @@
+# version 0.2-4
+
+* update to new GEOS (3.8.0) and PROJ (6.3.1) versions for CRAN windows binary builds
+
+* require GEOS 3.6.0 (required by PostGIS 3.0.0), and add check to configure
+
 # version 0.2-3
 
 * fix configure script to work with ubuntu/bionic and PROJ 4.9.3; #28
