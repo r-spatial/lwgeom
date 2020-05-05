@@ -9,6 +9,17 @@ std::string CPL_proj_version(bool b = false) {
 	return buffer.str();
 }
 
+Rcpp::LogicalVector CPL_use_proj4_init_rules(Rcpp::IntegerVector v) {
+	proj_context_use_proj4_init_rules(PJ_DEFAULT_CTX, v[0]);
+	return true;
+}
+
+Rcpp::LogicalVector CPL_set_data_dir(std::string data_dir) {
+	const char *cp = data_dir.c_str();
+	proj_context_set_search_paths(PJ_DEFAULT_CTX, 1, &cp);
+	return true;
+}
+
 #else
 
 #include <proj_api.h>
@@ -20,4 +31,15 @@ std::string CPL_proj_version(bool b = false) {
 	return buffer.str();
 }
 
+// [[Rcpp::export]]
+Rcpp::LogicalVector CPL_use_proj4_init_rules(Rcpp::IntegerVector v) {
+	return false;
+}
+
+// [[Rcpp::export]]
+Rcpp::LogicalVector CPL_set_data_dir(std::string data_dir) { // #nocov start
+	return false;
+}
+
 #endif
+

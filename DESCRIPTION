@@ -11,7 +11,7 @@ Depends:
 Imports: 
 	Rcpp,
 	units,
-	sf (>= 0.9-0)
+	sf (>= 0.9-3)
 Suggests:
 	covr,
 	sp,

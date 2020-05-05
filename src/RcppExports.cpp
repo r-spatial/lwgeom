@@ -291,6 +291,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_use_proj4_init_rules
+Rcpp::LogicalVector CPL_use_proj4_init_rules(Rcpp::IntegerVector v);
+RcppExport SEXP _lwgeom_CPL_use_proj4_init_rules(SEXP vSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type v(vSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_use_proj4_init_rules(v));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_set_data_dir
+Rcpp::LogicalVector CPL_set_data_dir(std::string data_dir);
+RcppExport SEXP _lwgeom_CPL_set_data_dir(SEXP data_dirSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type data_dir(data_dirSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_set_data_dir(data_dir));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_linesubstring
 Rcpp::List CPL_linesubstring(Rcpp::List sfc, double from, double to, double tolerance);
 RcppExport SEXP _lwgeom_CPL_linesubstring(SEXP sfcSEXP, SEXP fromSEXP, SEXP toSEXP, SEXP toleranceSEXP) {
@@ -331,6 +353,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_lwgeom_CPL_endpoint", (DL_FUNC) &_lwgeom_CPL_endpoint, 1},
     {"_lwgeom_CPL_sfc_to_wkt", (DL_FUNC) &_lwgeom_CPL_sfc_to_wkt, 2},
     {"_lwgeom_CPL_proj_version", (DL_FUNC) &_lwgeom_CPL_proj_version, 1},
+    {"_lwgeom_CPL_use_proj4_init_rules", (DL_FUNC) &_lwgeom_CPL_use_proj4_init_rules, 1},
+    {"_lwgeom_CPL_set_data_dir", (DL_FUNC) &_lwgeom_CPL_set_data_dir, 1},
     {"_lwgeom_CPL_linesubstring", (DL_FUNC) &_lwgeom_CPL_linesubstring, 4},
     {NULL, NULL, 0}
 };
