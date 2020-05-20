@@ -1,3 +1,5 @@
+# version 0.2-5
+
 # version 0.2-4
 
 * require sf >= 0.9-3, and use C API PROJ path setting (to work on CRAN windows binaries)
