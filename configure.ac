@@ -436,11 +436,11 @@ fi
 
 GEOS_VERSION=`${GEOS_CONFIG} --version`
 AC_MSG_NOTICE([GEOS: ${GEOS_VERSION}])
-AC_MSG_CHECKING([GEOS version >= 3.6.0]) # PostGIS 3.0.0 requires this
+AC_MSG_CHECKING([GEOS version >= 3.5.0]) # PostGIS 3.0.0 requires this
 GEOS_VER_DOT=`echo $GEOS_VERSION | tr -d "."`
-if test ${GEOS_VER_DOT} -lt 360 ; then
+if test ${GEOS_VER_DOT} -lt 350 ; then
   AC_MSG_RESULT(no)
-  AC_MSG_ERROR([upgrade GEOS to 3.6.0 or later])
+  AC_MSG_ERROR([upgrade GEOS to 3.5.0 or later])
 else
   AC_MSG_RESULT(yes)
 fi
