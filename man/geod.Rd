@@ -42,7 +42,7 @@ liblwgeom geodetic functions for length, area, segmentizing, covers
 longitude coordinates returned are rescaled to [-180,180)
 }
 \note{
-this function should is used by \link[sf]{st_distance}, do not use it directly
+this function should is used by \link[sf:geos_measures]{st_distance}, do not use it directly
 }
 \examples{
 library(sf)
