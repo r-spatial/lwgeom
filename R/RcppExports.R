@@ -97,6 +97,14 @@ CPL_proj_version <- function(b = FALSE) {
     .Call('_lwgeom_CPL_proj_version', PACKAGE = 'lwgeom', b)
 }
 
+CPL_use_proj4_init_rules <- function(v) {
+    .Call('_lwgeom_CPL_use_proj4_init_rules', PACKAGE = 'lwgeom', v)
+}
+
+CPL_set_data_dir <- function(data_dir) {
+    .Call('_lwgeom_CPL_set_data_dir', PACKAGE = 'lwgeom', data_dir)
+}
+
 CPL_linesubstring <- function(sfc, from, to, tolerance = 0.0) {
     .Call('_lwgeom_CPL_linesubstring', PACKAGE = 'lwgeom', sfc, from, to, tolerance)
 }

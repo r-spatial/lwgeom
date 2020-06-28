@@ -28,8 +28,8 @@
 #include "lwgeodetic.h"
 #include "lwgeom_log.h"
 
-/* GeographicLib */
-#if PROJ_GEODESIC
+/* In proj4.9, GeographicLib is in special header */
+#ifdef PROJ_GEODESIC
 #include <geodesic.h>
 #endif
 
@@ -45,7 +45,7 @@ void spheroid_init(SPHEROID *s, double a, double b)
 	s->radius = (2.0 * a + b ) / 3.0;
 }
 
-#if ! PROJ_GEODESIC
+#ifndef PROJ_GEODESIC
 static double spheroid_mu2(double alpha, const SPHEROID *s)
 {
 	double b2 = POW2(s->b);
@@ -64,7 +64,7 @@ static double spheroid_big_b(double u2)
 #endif /* ! PROJ_GEODESIC */
 
 
-#if PROJ_GEODESIC
+#ifdef PROJ_GEODESIC
 
 /**
 * Computes the shortest distance along the surface of the spheroid
@@ -84,7 +84,7 @@ double spheroid_distance(const GEOGRAPHIC_POINT *a, const GEOGRAPHIC_POINT *b, c
 	double lon1 = a->lon * 180.0 / M_PI;
 	double lat2 = b->lat * 180.0 / M_PI;
 	double lon2 = b->lon * 180.0 / M_PI;
-	double s12; /* return distance */
+	double s12 = 0.0; /* return distance */
 	geod_inverse(&gd, lat1, lon1, lat2, lon2, &s12, 0, 0);
 	return s12;
 }
@@ -144,7 +144,7 @@ static double ptarray_area_spheroid(const POINTARRAY *pa, const SPHEROID *sphero
 	geod_init(&gd, spheroid->a, spheroid->f);
 	struct geod_polygon poly;
 	geod_polygon_init(&poly, 0);
-	int i;
+	uint32_t i;
 	double area; /* returned polygon area */
 	POINT2D p; /* long/lat units are degrees */
 
@@ -165,7 +165,7 @@ static double ptarray_area_spheroid(const POINTARRAY *pa, const SPHEROID *sphero
 	return fabs(area);
 }
 
-/* Above use GeographicLib */
+/* Above use Proj GeographicLib */
 #else /* ! PROJ_GEODESIC */
 /* Below use pre-version 2.2 geodesic functions */
 
@@ -495,14 +495,14 @@ static double ptarray_area_spheroid(const POINTARRAY *pa, const SPHEROID *sphero
 {
 	GEOGRAPHIC_POINT a, b;
 	POINT2D p;
-	int i;
+	uint32_t i;
 	double area = 0.0;
 	GBOX gbox2d;
 	int in_south = LW_FALSE;
 	double delta_lon_tolerance;
 	double latitude_min;
 
-	gbox2d.flags = gflags(0, 0, 0);
+	gbox2d.flags = lwflags(0, 0, 0);
 
 	/* Return zero on non-sensical inputs */
 	if ( ! pa || pa->npoints < 4 )
@@ -660,7 +660,7 @@ double lwgeom_area_spheroid(const LWGEOM *lwgeom, const SPHEROID *spheroid)
 	if ( type == POLYGONTYPE )
 	{
 		LWPOLY *poly = (LWPOLY*)lwgeom;
-		int i;
+		uint32_t i;
 		double area = 0.0;
 
 		/* Just in case there's no rings */
@@ -682,7 +682,7 @@ double lwgeom_area_spheroid(const LWGEOM *lwgeom, const SPHEROID *spheroid)
 	if ( type == MULTIPOLYGONTYPE || type == COLLECTIONTYPE )
 	{
 		LWCOLLECTION *col = (LWCOLLECTION*)lwgeom;
-		int i;
+		uint32_t i;
 		double area = 0.0;
 
 		for ( i = 0; i < col->ngeoms; i++ )

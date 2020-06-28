@@ -96,7 +96,7 @@ st_geod_covered_by = function(x, y, sparse = TRUE) {
 #' @name geod
 #' @export
 #' @param tolerance double or length \code{units} value: if positive, the first distance less than \code{tolerance} is returned, rather than the true distance
-#' @note this function should is used by \link[sf]{st_distance}, do not use it directly
+#' @note this function should is used by \link[sf:geos_measures]{st_distance}, do not use it directly
 #' @examples
 #' pole = st_polygon(list(rbind(c(0,80), c(120,80), c(240,80), c(0,80))))
 #' pt = st_point(c(30,70))

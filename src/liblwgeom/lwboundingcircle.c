@@ -24,7 +24,6 @@
 
 
 #include <string.h>
-#include <float.h>
 #include "liblwgeom_internal.h"
 
 typedef struct {

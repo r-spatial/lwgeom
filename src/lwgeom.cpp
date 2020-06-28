@@ -11,6 +11,7 @@ extern "C" {
 # include <liblwgeom_internal.h>
 #else /* hard copy from liblwgeom_internal.h: */
 # ifndef NO_GRID_IN_PLACE
+/*
 typedef struct gridspec_t
 {
 	double ipx;
@@ -23,6 +24,7 @@ typedef struct gridspec_t
 	double msize;
 }
 gridspec;
+*/
 void lwgeom_grid_in_place(LWGEOM *lwgeom, const gridspec *grid);
 # endif
 #endif
@@ -122,27 +124,47 @@ Rcpp::List CPL_lwgeom_transform(Rcpp::List sfc, Rcpp::CharacterVector p4s) {
 	if (p4s.size() != 2)
 		Rcpp::stop("st_lwgeom_transform: p4s needs to be a length 2 character vector\n"); // #nocov
 	std::vector<LWGEOM *> lwgeom_v = lwgeom_from_sfc(sfc);
-	projPJ src = lwproj_from_string(p4s[0]);
+	LWPROJ *pj;
+#ifdef USE_PROJ_H
+	proj_context_use_proj4_init_rules(PJ_DEFAULT_CTX, 1);
+    PJ *P = proj_create_crs_to_crs(PJ_DEFAULT_CTX, p4s[0], p4s[1], NULL);
+	if (P == NULL) 
+		Rcpp::stop("st_lwgeom_transform: one of the proj strings is invalid\n"); // #nocov
+	pj = lwproj_from_PJ(P, 0);
+#else
+	pj = (LWPROJ *) malloc(sizeof(LWPROJ));
+	projPJ src = projpj_from_string(p4s[0]);
 	if (src == NULL)
 		Rcpp::stop("st_lwgeom_transform: wrong source proj4string\n"); // #nocov
-	projPJ target = lwproj_from_string(p4s[1]);
+	pj->pj_from = src;
+	projPJ target = projpj_from_string(p4s[1]);
 	if (target == NULL)
 		Rcpp::stop("st_lwgeom_transform: wrong target proj4string\n"); // #nocov
+	pj->pj_to = target;
+#endif
 	for (size_t i = 0; i < lwgeom_v.size(); i++) {
 		// in-place transformation w/o GDAL:
-		if (lwgeom_transform(lwgeom_v[i], src, target) != LW_SUCCESS) {
+		if (lwgeom_transform(lwgeom_v[i], pj) != LW_SUCCESS) {
 			Rcpp::Rcout << "Failed on geometry " << i + 1 << std::endl; // #nocov
 			Rcpp::stop("st_lwgeom_transform failed\n"); // #nocov
 		}
 	}
+#ifdef USE_PROJ_H
+	proj_destroy(P);
+#else
 	pj_free(src);
 	pj_free(target);
+	free(pj);
+#endif
 	Rcpp::List ret = sfc_from_lwgeom(lwgeom_v); // frees lwgeom_v
+	// FIXME:
+	/*
 	Rcpp::List crs = Rcpp::List::create(
 		_["epsg"] = NA_INTEGER, 
 		_["proj4string"] = CharacterVector::create(p4s[1]));
 	crs.attr("class") = "crs";
 	ret.attr("crs") = crs;
+	*/
 	ret.attr("class") = "sfc";
 	return ret;
 }

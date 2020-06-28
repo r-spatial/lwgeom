@@ -18,7 +18,7 @@ st_transform_proj(x, crs, ...)
 \arguments{
 \item{x}{object of class sf, sfc or sfg}
 
-\item{crs}{either an object of class \code{crs}, or input to \link[sf]{st_crs} (proj4string, or EPSG code), or a length 2 character vector with input proj4string and output proj4string}
+\item{crs}{character; target CRS, or, in case of a length 2 character vector, source and target CRS}
 
 \item{...}{ignored}
 }
@@ -26,7 +26,7 @@ st_transform_proj(x, crs, ...)
 Transform or convert coordinates of simple features directly with Proj.4 (bypassing GDAL)
 }
 \details{
-Transforms coordinates of object to new projection, using Proj.4 directly rather than the GDAL API used by \link[sf]{st_transform}.
+Transforms coordinates of object to new projection, using PROJ directly rather than the GDAL API used by \link[sf]{st_transform}.
 
 If \code{crs} is a single CRS, it forms the target CRS, and in that case the source CRS is obtained as \code{st_crs(x)}. Since this presumes that the source CRS is accepted by GDAL (which is not always the case), a second option is to specify the source and target CRS as two proj4strings in argument \code{crs}. In the latter case, \code{st_crs(x)} is ignored and may well be \code{NA}.
 

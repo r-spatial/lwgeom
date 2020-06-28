@@ -1,3 +1,43 @@
+# version 0.2-5
+
+* GEOS requirement lowered to 3.5.0, which also seems to work; #59.
+
+# version 0.2-4
+
+* require sf >= 0.9-3, and use C API PROJ path setting (to work on CRAN windows binaries)
+
+* update to new GEOS (3.8.0) and PROJ (6.3.1) versions for CRAN windows binary builds
+
+* require GEOS 3.6.0 (required by PostGIS 3.0.0), and add check to configure
+
+# version 0.2-3
+
+* fix configure script to work with ubuntu/bionic and PROJ 4.9.3; #28
+
+# version 0.2-3
+
+* fix configure script to work with PROJ 5.x versions
+
+# version 0.2-2
+
+* adjust to sf >= 0.9-0 new crs representation
+
+* use `st_make_valid` generic from package sf; https://github.com/r-spatial/sf/issues/1300
+
+# version 0.2-1
+
+* fix PROJ 5.x installation issue (has proj.h, but shouldn't use it)
+
+# version 0.2-0
+
+* export `lwgeom_make_valid`, to gradually move `st_make_valid` from `lwgeom` to `sf`; https://github.com/r-spatial/sf/issues/989
+
+* constrain argument `crs` in `st_transform_proj` to take one or two character strings
+
+* update to POSTGIS 3.0.0 liblwgeom version
+
+* update to modern PROJ, use proj.h when available
+
 # version 0.1-5
 
 * check for user interrupts on `st_geod_distance`, #29 by Dan Baston

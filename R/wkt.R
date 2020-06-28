@@ -2,7 +2,7 @@
 #'
 #' Return Well-known Text representation of simple feature geometry or coordinate reference system
 #' @param x object of class `sfg`, `sfc`, or `sf`
-#' @param digits integer; number of digits to print
+#' @param digits integer; number of decimal digits to print
 #' @param ... ignored
 #' @param EWKT logical; use PostGIS Enhanced WKT (includes srid)
 #' @name st_astext

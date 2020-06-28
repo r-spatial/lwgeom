@@ -1,7 +1,7 @@
 Package: lwgeom
-Version: 0.1-7
+Version: 0.2-5
 Title: Bindings to Selected 'liblwgeom' Functions for Simple Features 
-Description: Access to selected functions found in 'liblwgeom' <https://github.com/postgis/postgis/tree/svn-trunk/liblwgeom>, the light-weight geometry library used by 'PostGIS' <http://postgis.net/>.
+Description: Access to selected functions found in 'liblwgeom' <https://github.com/postgis/postgis/tree/master/liblwgeom>, the light-weight geometry library used by 'PostGIS' <http://postgis.net/>.
 Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.pebesma@uni-muenster.de", comment = c(ORCID = "0000-0001-8049-7069")),
 	person("Colin", "Rundel", role = "ctb"),
 	person("Andy", "Teucher", role = "ctb"),
@@ -11,7 +11,7 @@ Depends:
 Imports: 
 	Rcpp,
 	units,
-	sf (>= 0.6-0)
+	sf (>= 0.9-3)
 Suggests:
 	covr,
 	sp,
@@ -20,7 +20,7 @@ Suggests:
 LinkingTo:
 	Rcpp,
 	sf (>= 0.6-0)
-SystemRequirements: GEOS (>= 3.3.0), PROJ (>= 4.8.0)
+SystemRequirements: GEOS (>= 3.5.0), PROJ (>= 4.8.0)
 License: GPL-2
 Copyright: file COPYRIGHTS
 URL: https://github.com/r-spatial/lwgeom/
@@ -42,4 +42,4 @@ Collate:
   clockwise.R
   geod.R
   wkt.R
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0

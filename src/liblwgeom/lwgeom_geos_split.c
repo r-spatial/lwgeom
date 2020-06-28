@@ -34,7 +34,7 @@ static LWGEOM* lwline_split_by_line(const LWLINE* lwgeom_in, const LWGEOM* blade
 static LWGEOM* lwline_split_by_point(const LWLINE* lwgeom_in, const LWPOINT* blade_in);
 static LWGEOM* lwline_split_by_mpoint(const LWLINE* lwgeom_in, const LWMPOINT* blade_in);
 static LWGEOM* lwline_split(const LWLINE* lwgeom_in, const LWGEOM* blade_in);
-static LWGEOM* lwpoly_split_by_line(const LWPOLY* lwgeom_in, const LWLINE* blade_in);
+static LWGEOM* lwpoly_split_by_line(const LWPOLY* lwgeom_in, const LWGEOM* blade_in);
 static LWGEOM* lwcollection_split(const LWCOLLECTION* lwcoll_in, const LWGEOM* blade_in);
 static LWGEOM* lwpoly_split(const LWPOLY* lwpoly_in, const LWGEOM* blade_in);
 
@@ -172,7 +172,7 @@ static LWGEOM*
 lwline_split_by_mpoint(const LWLINE* lwline_in, const LWMPOINT* mp)
 {
   LWMLINE* out;
-  int i, j;
+  uint32_t i, j;
 
   out = lwmline_construct_empty(lwline_in->srid,
           FLAGS_GET_Z(lwline_in->flags),
@@ -209,13 +209,13 @@ int
 lwline_split_by_point_to(const LWLINE* lwline_in, const LWPOINT* blade_in,
                          LWMLINE* v)
 {
-	double mindist = -1;
+	double mindist_sqr = -1;
 	POINT4D pt, pt_projected;
 	POINT4D p1, p2;
 	POINTARRAY *ipa = lwline_in->points;
 	POINTARRAY* pa1;
 	POINTARRAY* pa2;
-	int i, nsegs, seg = -1;
+	uint32_t i, nsegs, seg = UINT32_MAX;
 
 	/* Possible outcomes:
 	 *
@@ -238,26 +238,31 @@ lwline_split_by_point_to(const LWLINE* lwline_in, const LWPOINT* blade_in,
 	for ( i = 0; i < nsegs; i++ )
 	{
 		getPoint4d_p(ipa, i+1, &p2);
-		double dist;
-		dist = distance2d_pt_seg((POINT2D*)&pt, (POINT2D*)&p1, (POINT2D*)&p2);
-		LWDEBUGF(4, " Distance of point %g %g to segment %g %g, %g %g: %g", pt.x, pt.y, p1.x, p1.y, p2.x, p2.y, dist);
-		if (i==0 || dist < mindist )
+		double dist_sqr = distance2d_sqr_pt_seg((POINT2D *)&pt, (POINT2D *)&p1, (POINT2D *)&p2);
+		LWDEBUGF(4, "Distance (squared) of point %g %g to segment %g %g, %g %g: %g",
+				 pt.x, pt.y,
+				 p1.x, p1.y,
+				 p2.x, p2.y,
+				 dist_sqr);
+		if (i == 0 || dist_sqr < mindist_sqr)
 		{
-			mindist = dist;
+			mindist_sqr = dist_sqr;
 			seg=i;
-			if ( mindist == 0.0 ) break; /* can't be closer than ON line */
+			if (mindist_sqr == 0.0)
+				break; /* can't be closer than ON line */
 		}
 		p1 = p2;
 	}
 
 	LWDEBUGF(3, "Closest segment: %d", seg);
-	LWDEBUGF(3, "mindist: %g", mindist);
+	LWDEBUGF(3, "mindist: %g", mindist_sqr);
 
 	/* No intersection */
-	if ( mindist > 0 ) return 0;
+	if (mindist_sqr > 0)
+		return 0;
 
 	/* empty or single-point line, intersection on boundary */
-	if ( seg < 0 ) return 1;
+	if ( seg == UINT32_MAX ) return 1;
 
 	/*
 	 * We need to project the
@@ -342,7 +347,7 @@ lwline_split(const LWLINE* lwline_in, const LWGEOM* blade_in)
 
 /* Initializes and uses GEOS internally */
 static LWGEOM*
-lwpoly_split_by_line(const LWPOLY* lwpoly_in, const LWLINE* blade_in)
+lwpoly_split_by_line(const LWPOLY* lwpoly_in, const LWGEOM* blade_in)
 {
 	LWCOLLECTION* out;
 	GEOSGeometry* g1;
@@ -378,7 +383,7 @@ lwpoly_split_by_line(const LWPOLY* lwpoly_in, const LWLINE* blade_in)
 		return NULL;
 	}
 
-	g2 = LWGEOM2GEOS((LWGEOM*)blade_in, 0);
+	g2 = LWGEOM2GEOS(blade_in, 0);
 	if ( NULL == g2 )
 	{
 		GEOSGeom_destroy(g1);
@@ -547,8 +552,9 @@ lwpoly_split(const LWPOLY* lwpoly_in, const LWGEOM* blade_in)
 {
 	switch (blade_in->type)
 	{
+	case MULTILINETYPE:
 	case LINETYPE:
-		return lwpoly_split_by_line(lwpoly_in, (LWLINE*)blade_in);
+		return lwpoly_split_by_line(lwpoly_in, blade_in);
 	default:
 		lwerror("Splitting a Polygon by a %s is unsupported",
 		        lwtype_name(blade_in->type));

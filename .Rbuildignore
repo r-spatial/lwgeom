@@ -6,3 +6,4 @@ codecov.yml
 tic.R
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^.github$

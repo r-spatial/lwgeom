@@ -22,7 +22,7 @@ AC_MSG_NOTICE([CC: ${CC}])
 AC_MSG_NOTICE([CXX: ${CXX}])
 
 #
-# PROJ.4
+# PROJ
 #
 
 PROJ_CONFIG="pkg-config proj"
@@ -51,25 +51,48 @@ fi
 # for CPPFLAGS we will superfluously double R's flags
 # since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
 
+AC_ARG_WITH([proj-api],
+    AC_HELP_STRING([--with-proj-api=yes/no],
+               [use the deprecated proj_api.h even when PROJ 6 is available; default no]),
+               [proj_api=$withval])
 PROJ6="no"
+PROJH="no"
 if test "${proj_config_ok}" = yes; then
   PROJ_VERSION=`${PROJ_CONFIG} --modversion`
   PROJV1=`echo "${PROJ_VERSION}" | cut -c 1`
-  if test "${PROJV1}" = "6"; then
-    AC_MSG_NOTICE([Support for PROJ >= 6.0.0 not yet available, deprecated API defined])
-    PROJ_CPPFLAGS="${PROJ_CPPFLAGS} -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
+  if test "${PROJV1}" -ge 5; then
     PROJ6="yes"
+    PROJ_CPPFLAGS="${PROJ_CPPFLAGS} -DHAVE_PROJ_H"
+    if test "${proj_api}" = yes; then
+        AC_MSG_NOTICE([using proj_api.h even with PROJ 5/6])
+        PROJ_CPPFLAGS="${PROJ_CPPFLAGS} -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
+    else
+        AC_MSG_NOTICE([using proj.h.])
+        PROJH="yes"
+    fi
+  fi
+else
+  if test "${PROJH}" = no ; then
+    PROJH=yes
+    AC_CHECK_HEADERS(proj.h,,PROJH=no)
+    if test "${PROJH}" = yes; then
+      PROJ6="yes"
+      PROJ_CPPFLAGS="${PROJ_CPPFLAGS} -DHAVE_PROJ_H"
+    fi
   fi
 fi
 
 CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS} ${PROJ_CPPFLAGS}"
-PKG_CPPFLAGS="${PKG_CPPFLAGS} ${PROJ_CPPFLAGS}"
 
-proj4ok=yes
-AC_CHECK_HEADERS(proj_api.h,,proj4ok=no)
-if test "${proj4ok}" = no; then
-   AC_MSG_ERROR([proj_api.h not found in standard or given locations.])
-fi
+# see https://github.com/r-spatial/lwgeom/issues/28
+#if test "${PROJH}" = no
+#then
+#  proj4ok=yes
+#  AC_CHECK_HEADERS(proj_api.h,,proj4ok=no)
+#  if test "${proj4ok}" = no; then
+#     AC_MSG_ERROR([proj_api.h not found in standard or given locations.])
+#  fi
+#fi
 
 # dnl ditto for a library path
 AC_ARG_WITH([proj-lib],
@@ -89,17 +112,17 @@ else
   fi
 fi
 
-PKG_LIBS="${PKG_LIBS} ${PROJ_LIBS}"
-LIBS="${INLIBS} ${PKG_LIBS}"
+LIBS="${PROJ_LIBS} ${INLIBS} ${PKG_LIBS}"
 
-proj4ok=yes
-AC_CHECK_LIB(proj,pj_init_plus,,proj4ok=no)
-if test "${proj4ok}" = no; then
-   AC_MSG_ERROR([libproj not found in standard or given locations.])
-fi
-
+if test "${PROJH}" = no; then
+  proj4ok=yes
+  AC_CHECK_LIB(proj,pj_init_plus,,proj4ok=no)
+  if test "${proj4ok}" = no; then
+     AC_MSG_ERROR([libproj not found in standard or given locations.])
+  fi
 [cat > proj_conf_test.c <<_EOCONF
 #include <stdio.h>
+#include <stdlib.h>
 #include <proj_api.h>
 
 int main() {
@@ -107,6 +130,42 @@ int main() {
     exit(0);
 }
 _EOCONF]
+else
+[cat > proj_conf_test.cpp <<_EOCONF
+#include <stdio.h>
+#include <stdlib.h>
+#include <proj.h>
+
+int main() {
+	proj_context_create();
+    exit(0);
+}
+_EOCONF]
+  #AC_CHECK_LIB(proj,proj_context_create,,proj6ok=no)
+  AC_MSG_CHECKING(PROJ: checking whether PROJ and sqlite3 are available for linking:)
+  ${CXX} ${CPPFLAGS} -o proj_conf_test proj_conf_test.cpp ${LIBS} -lsqlite3 2> errors.txt
+  if test `echo $?` -ne 0 ; then
+    proj6ok=no
+    AC_MSG_RESULT(no)
+  else
+    proj6ok=yes
+    AC_MSG_RESULT(yes)
+  fi
+  if test "${proj6ok}" = no; then
+     AC_MSG_ERROR([libproj not found in standard or given locations.])
+  fi
+
+[cat > proj_conf_test.c <<_EOCONF
+#include <stdio.h>
+#include <stdlib.h>
+#include <proj.h>
+
+int main() {
+    printf("%d.%d.%d\n", PROJ_VERSION_MAJOR, PROJ_VERSION_MINOR, PROJ_VERSION_PATCH);
+    exit(0);
+}
+_EOCONF]
+fi
 
 #AC_MSG_NOTICE([PKG_LIBS: ${PKG_LIBS}])
 
@@ -159,7 +218,7 @@ else
   proj_share=`echo $?`
 fi
 
-AC_MSG_CHECKING(PROJ.4: epsg found and readable)
+AC_MSG_CHECKING(PROJ: epsg found and readable)
 if test ${proj_share} -eq 1 ; then
     AC_MSG_RESULT(no)
     STOP="stop"
@@ -180,6 +239,8 @@ if test "$STOP" = "stop" ; then
 fi
 
 else # proj >= 6
+
+if test "${PROJH}" = no; then
 
 [cat > proj_conf_test.c <<_EOCONF
 #include <stdio.h>
@@ -223,10 +284,6 @@ if test "$STOP" = "stop" ; then
     exit 1
 fi
 
-
-fi
-
-
 [cat > proj_conf_test.c <<_EOCONF
 #include <stdio.h>
 #include <proj_api.h>
@@ -262,7 +319,7 @@ else
   proj_share=`echo $?`
 fi
 
-AC_MSG_CHECKING(PROJ.4: conus found and readable)
+AC_MSG_CHECKING(PROJ: conus found and readable)
 if test ${proj_share} -eq 1 ; then
     WARN="warn"
     AC_MSG_RESULT(no)
@@ -278,6 +335,50 @@ if test "$WARN" = "warn" ; then
     echo "If required, consider re-installing from source with the contents"
     echo "of proj-datumgrid-1.<latest>.zip from http://download.osgeo.org/proj/ in nad/."
 fi
+
+fi # PROJH = no
+
+fi # proj >= 6
+
+#
+# POSTGIS/PROJ version:
+#
+
+[cat > proj_conf_test.c <<_EOCONF
+#include <stdio.h>
+#ifdef HAVE_PROJ_H
+#include <proj.h>
+int main() {
+    printf("%d%d%d\n", PROJ_VERSION_MAJOR, PROJ_VERSION_MINOR, PROJ_VERSION_PATCH);
+    return 0;
+}
+#else
+#include <proj_api.h>
+int main() {
+    printf("%d\n", PJ_VERSION);
+    return 0;
+}
+#endif
+_EOCONF]
+
+# AC_MSG_NOTICE([PKG_LIBS: ${PKG_LIBS}])
+
+${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
+
+proj_version=`./proj_conf_test`
+
+POSTGIS_PROJ_VERSION=`echo $proj_version | cut -c "1,2"`
+AC_MSG_NOTICE([POSTGIS_PROJ_VERSION: ${POSTGIS_PROJ_VERSION}])
+#AC_SUBST([POSTGIS_PROJ_VERSION],["${PROJV12}"])
+#AC_DEFINE_UNQUOTED([POSTGIS_PROJ_VERSION], [$POSTGIS_PROJ_VERSION], [PROJ library version])
+AC_SUBST(POSTGIS_PROJ_VERSION)
+# xxx
+if test ${POSTGIS_PROJ_VERSION} -lt 60 ; then
+  PKG_CPPFLAGS="${PKG_CPPFLAGS} -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
+else
+  PKG_CPPFLAGS="${PKG_CPPFLAGS} -DUSE_PROJ_H"
+fi
+
 
 #
 # GEOS:
@@ -335,11 +436,11 @@ fi
 
 GEOS_VERSION=`${GEOS_CONFIG} --version`
 AC_MSG_NOTICE([GEOS: ${GEOS_VERSION}])
-AC_MSG_CHECKING([GEOS version >= 3.3.0]) # GDAL 2.0.1 requires GEOS 3.1.0
+AC_MSG_CHECKING([GEOS version >= 3.5.0]) # PostGIS 3.0.0 requires this
 GEOS_VER_DOT=`echo $GEOS_VERSION | tr -d "."`
-if test ${GEOS_VER_DOT} -lt 330 ; then
+if test ${GEOS_VER_DOT} -lt 350 ; then
   AC_MSG_RESULT(no)
-  AC_MSG_ERROR([upgrade GEOS to 3.3.0 or later])
+  AC_MSG_ERROR([upgrade GEOS to 3.5.0 or later])
 else
   AC_MSG_RESULT(yes)
 fi
@@ -351,18 +452,13 @@ PKG_CPPFLAGS="${PKG_CPPFLAGS} ${GEOS_CPPFLAGS}"
 CPPFLAGS="${CPPFLAGS} ${PKG_CPPFLAGS}"
 LIBS="${LIBS} ${PKG_LIBS} ${GEOS_CLIBS}"
 
-if test ${GEOS_VER_DOT} -lt 350 ; then
-  AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DPOSTGIS_GEOS_VERSION=34"])
-else
-  AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DPOSTGIS_GEOS_VERSION=35"])
-  # 34 or 35 is all liblwgeom cares about, now
-fi
+AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DPOSTGIS_GEOS_VERSION=35"])
 
-geosok=yes
-AC_CHECK_HEADERS(geos_c.h,,geosok=no)
-if test "${geosok}" = no; then
-   AC_MSG_ERROR([geos_c.h not found in given locations.])
-fi
+#geosok=yes
+#AC_CHECK_HEADERS(geos_c.h,,geosok=no)
+#if test "${geosok}" = no; then
+#   AC_MSG_ERROR([geos_c.h not found in given locations.])
+#fi
 
 [cat > geos_test.cpp <<_EOCONF
 #include <geos_c.h>
@@ -434,7 +530,8 @@ AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -I./liblwgeom -DHAVE_LIBGEOM_INTERNAL
 # concluding substitution
 #
 AC_MSG_NOTICE([Package CPP flags: ${PKG_CPPFLAGS}])
-AC_MSG_NOTICE([Package LIBS: ${PKG_LIBS}])
+AC_MSG_NOTICE([Package LIBS: ${LIBS}])
 
-AC_CONFIG_FILES(src/Makevars)
+AC_CONFIG_FILES(src/Makevars
+	src/postgis_config.h)
 AC_OUTPUT

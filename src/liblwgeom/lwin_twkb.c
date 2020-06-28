@@ -173,7 +173,7 @@ static POINTARRAY* ptarray_from_twkb_state(twkb_parse_state *s, uint32_t npoints
 {
 	POINTARRAY *pa = NULL;
 	uint32_t ndims = s->ndims;
-	int i;
+	uint32_t i;
 	double *dlist;
 
 	LWDEBUG(2,"Entering ptarray_from_twkb_state");
@@ -272,7 +272,7 @@ static LWLINE* lwline_from_twkb_state(twkb_parse_state *s)
 static LWPOLY* lwpoly_from_twkb_state(twkb_parse_state *s)
 {
 	uint32_t nrings;
-	int i;
+	uint32_t i;
 	LWPOLY *poly;
 
 	LWDEBUG(2,"Entering lwpoly_from_twkb_state");
@@ -583,7 +583,7 @@ LWGEOM* lwgeom_from_twkb_state(twkb_parse_state *s)
 		/* Initialize */
 		has_bbox = s->has_bbox;
 		memset(&bbox, 0, sizeof(GBOX));
-		bbox.flags = gflags(s->has_z, s->has_m, 0);
+		bbox.flags = lwflags(s->has_z, s->has_m, 0);
 
 		/* X */
 		bbox.xmin = twkb_parse_state_double(s, s->factor);
@@ -598,7 +598,7 @@ LWGEOM* lwgeom_from_twkb_state(twkb_parse_state *s)
 			bbox.zmax = bbox.zmin + twkb_parse_state_double(s, s->factor_z);
 		}
 		/* M */
-		if ( s->has_z )
+		if ( s->has_m )
 		{
 			bbox.mmin = twkb_parse_state_double(s, s->factor_m);
 			bbox.mmax = bbox.mmin + twkb_parse_state_double(s, s->factor_m);
@@ -631,14 +631,12 @@ LWGEOM* lwgeom_from_twkb_state(twkb_parse_state *s)
 			break;
 		/* Unknown type! */
 		default:
-			lwerror("Unsupported geometry type: %s [%d]", lwtype_name(s->lwtype), s->lwtype);
+			lwerror("%s: Unsupported geometry type: %s", __func__, lwtype_name(s->lwtype));
 			break;
 	}
 
 	if ( has_bbox )
-	{
 		geom->bbox = gbox_clone(&bbox);
-	}
 
 	return geom;
 }
@@ -669,13 +667,6 @@ LWGEOM* lwgeom_from_twkb(const uint8_t *twkb, size_t twkb_size, char check)
 	s.twkb_end = twkb + twkb_size;
 	s.check = check;
 	s.coords = coords;
-
-	/* Handle the check catch-all values */
-	if ( check & LW_PARSER_CHECK_NONE )
-		s.check = 0;
-	else
-		s.check = check;
-
 
 	/* Read the rest of the geometry */
 	return lwgeom_from_twkb_state(&s);
