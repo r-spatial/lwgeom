@@ -185,6 +185,7 @@ if test ${PROJ6} = "no"; then
 
 [cat > proj_conf_test.c <<_EOCONF
 #include <stdio.h>
+#include <stdlib.h>
 #include <proj_api.h>
 #if PJ_VERSION <= 480
 FILE *pj_open_lib(projCtx, const char *, const char *);
@@ -244,6 +245,7 @@ if test "${PROJH}" = no; then
 
 [cat > proj_conf_test.c <<_EOCONF
 #include <stdio.h>
+#include <stdlib.h>
 #include <proj_api.h>
 
 int main() {
@@ -286,6 +288,7 @@ fi
 
 [cat > proj_conf_test.c <<_EOCONF
 #include <stdio.h>
+#include <stdlib.h>
 #include <proj_api.h>
 #if PJ_VERSION <= 480
 FILE *pj_open_lib(projCtx, const char *, const char *);
