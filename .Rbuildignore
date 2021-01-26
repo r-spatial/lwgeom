@@ -7,3 +7,6 @@ tic.R
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^.github$
+^\.ccache$
+^\.github$
+^tic\.R$
