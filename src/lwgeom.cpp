@@ -106,6 +106,24 @@ Rcpp::List CPL_split(Rcpp::List sfc, Rcpp::List blade) {
 }
 
 // [[Rcpp::export]]
+Rcpp::List CPL_wrap_x(Rcpp::List sfc, Rcpp::NumericVector wrap, Rcpp::NumericVector move) {
+  if (wrap.size() != 1) {
+    Rcpp::stop("Must supply a scalar value for `wrap`");
+  }
+  if (move.size() != 1) {
+    Rcpp::stop("Must supply a scalar value for `move`");
+  }
+
+	std::vector<LWGEOM *> lwgeom_v = lwgeom_from_sfc(sfc);
+	for (size_t i = 0; i < lwgeom_v.size(); i++) {
+		LWGEOM *lwg_ret = lwgeom_wrapx(lwgeom_v[i], wrap[0], move[0]);
+		lwgeom_free(lwgeom_v[i]);
+		lwgeom_v[i] = lwg_ret;
+	}
+	return sfc_from_lwgeom(lwgeom_v);
+}
+
+// [[Rcpp::export]]
 Rcpp::CharacterVector CPL_geohash(Rcpp::List sfc, int prec) {
 
 	Rcpp::CharacterVector chr(sfc.size()); // return

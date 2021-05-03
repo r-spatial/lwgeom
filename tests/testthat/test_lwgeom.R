@@ -114,3 +114,19 @@ test_that("st_startpoint works", {
   library(lwgeom)
   sp = st_startpoint(st_sfc(st_linestring(matrix(1:10,,2)), st_linestring(matrix(3:12,,2)),crs=4326))
 })
+
+test_that("st_wrap_x works", {
+  library(sf)
+  library(lwgeom)
+  
+  nc <- st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE)
+  
+  splitline <- -78
+  offset <- 10
+  
+  x <- st_wrap_x(nc, splitline, offset)
+  
+  expect_equal(nrow(x), nrow(nc))
+  expect_equal(st_bbox(x)$xmin, splitline, check.attributes = FALSE)
+  expect_equal(st_bbox(x)$xmax, splitline + offset, check.attributes = FALSE)
+})
