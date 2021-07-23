@@ -1,6 +1,6 @@
 
-R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
-Copyright (C) 2020 The R Foundation for Statistical Computing
+R version 4.0.4 (2021-02-15) -- "Lost Library Book"
+Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -20,20 +20,20 @@ Type 'q()' to quit R.
 > suppressPackageStartupMessages(library(lwgeom))
 > st_as_sfc(l)
 Geometry set for 1 feature 
-geometry type:  LINESTRING
-dimension:      XY
-bbox:           xmin: 1 ymin: 1 xmax: 5 ymax: 5
-CRS:            NA
+Geometry type: LINESTRING
+Dimension:     XY
+Bounding box:  xmin: 1 ymin: 1 xmax: 5 ymax: 5
+CRS:           NA
 LINESTRING (1 1, 5 5)
 > st_as_sfc(structure(list(l[[1]], l[[1]]), class = "TWKB"))
 Geometry set for 2 features 
-geometry type:  LINESTRING
-dimension:      XY
-bbox:           xmin: 1 ymin: 1 xmax: 5 ymax: 5
-CRS:            NA
+Geometry type: LINESTRING
+Dimension:     XY
+Bounding box:  xmin: 1 ymin: 1 xmax: 5 ymax: 5
+CRS:           NA
 LINESTRING (1 1, 5 5)
 LINESTRING (1 1, 5 5)
 > 
 > proc.time()
    user  system elapsed 
-  0.358   0.013   0.361 
+  0.355   0.040   0.389 

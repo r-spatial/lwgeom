@@ -42,4 +42,5 @@ Collate:
   clockwise.R
   geod.R
   wkt.R
+  wrap_x.R
 RoxygenNote: 7.1.1

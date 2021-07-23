@@ -49,6 +49,10 @@ CPL_split <- function(sfc, blade) {
     .Call('_lwgeom_CPL_split', PACKAGE = 'lwgeom', sfc, blade)
 }
 
+CPL_wrap_x <- function(sfc, wrap, move) {
+    .Call('_lwgeom_CPL_wrap_x', PACKAGE = 'lwgeom', sfc, wrap, move)
+}
+
 CPL_geohash <- function(sfc, prec) {
     .Call('_lwgeom_CPL_geohash', PACKAGE = 'lwgeom', sfc, prec)
 }
