@@ -1,5 +1,6 @@
 CXX_STD = CXX11
 
+STATLIB = liblwgeom/liblwgeomstatic.a
 OBJECTS_LIBLWGEOM= \
   liblwgeom/varint.o \
   liblwgeom/lwout_twkb.o \
@@ -72,17 +73,6 @@ OBJECTS_LIBLWGEOM= \
   liblwgeom/lwcircstring.o \
   liblwgeom/lwin_wkt_parse.o
 
-OBJECTS_RCPP= \
-  geodetic.o \
-  lwgeom.o \
-  RcppExports.o \
-  proj.o \
-  geos.o \
-  io.o \
-  sub.o
-
-OBJECTS= $(OBJECTS_LIBLWGEOM) $(OBJECTS_RCPP)
-
 VERSION = 3.2.1
 RWINLIB = ../windows/gdal3-$(VERSION)
 TARGET = lib$(subst gcc,,$(COMPILED_BY))$(R_ARCH)
@@ -94,6 +84,7 @@ PKG_CPPFLAGS = \
 	-DUSE_PROJ_H
 
 PKG_LIBS = \
+	-L./liblwgeom -llwgeomstatic \
 	-L$(RWINLIB)/$(TARGET) \
 	-L$(RWINLIB)/lib$(R_ARCH)$(CRT) \
 	-lproj -lgeos_c -lgeos -ljson-c -lexpat -lxml2 -liconv -lsqlite3 \
@@ -101,8 +92,14 @@ PKG_LIBS = \
 
 all: clean winlibs
 
+$(SHLIB): $(STATLIB)
+
+$(STATLIB): $(OBJECTS_LIBLWGEOM)
+
+$(OBJECTS_LIBLWGEOM): winlibs
+
 clean:
-	rm -f $(SHLIB) $(OBJECTS)
+	rm -f $(SHLIB) $(OBJECTS) $(STATLIB) $(OBJECTS_LIBLWGEOM)
 
 winlibs:
 	cp postgis_config.win postgis_config.h
