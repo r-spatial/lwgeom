@@ -1,6 +1,6 @@
 
-R version 3.5.1 (2018-07-02) -- "Feather Spray"
-Copyright (C) 2018 The R Foundation for Statistical Computing
+R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
+Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -41,12 +41,14 @@ Units: [m^2]
 > pt = st_point(c(0,90))
 > x = st_sfc(pole, pt, crs = 4326)
 > st_geod_covers(x[c(1,1,1)], x[c(2,2,2,2)])
-Sparse geometry binary predicate list of length 3, where the predicate was `covers'
+Sparse geometry binary predicate list of length 3, where the predicate
+was `covers'
  1: 1, 2, 3, 4
  2: 1, 2, 3, 4
  3: 1, 2, 3, 4
 > st_geod_covered_by(x[c(2,2)], x[c(1,1,1)])
-Sparse geometry binary predicate list of length 2, where the predicate was `covered_by'
+Sparse geometry binary predicate list of length 2, where the predicate
+was `covered_by'
  1: 1, 2, 3
  2: 1, 2, 3
 > st_geod_covers(x[c(1,1,1)], x[c(2,2,2,2)], sparse = FALSE)
@@ -75,16 +77,18 @@ Units: [m]
 [2,] 1378923       0       0
 [3,] 1378923       0       0
 > st_geod_distance(x, x, sparse = TRUE)
-Sparse geometry binary predicate list of length 3, where the predicate was `st_is_within_distance'
+Sparse geometry binary predicate list of length 3, where the predicate
+was `st_is_within_distance'
  1: 1
  2: 2, 3
  3: 2, 3
 > st_geod_distance(x, x, tolerance = 1, sparse = TRUE)
-Sparse geometry binary predicate list of length 3, where the predicate was `st_is_within_distance'
+Sparse geometry binary predicate list of length 3, where the predicate
+was `st_is_within_distance'
  1: 1
  2: 2, 3
  3: 2, 3
 > 
 > proc.time()
    user  system elapsed 
-  0.404   0.020   0.416 
+  0.525   0.035   0.553 

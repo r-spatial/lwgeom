@@ -1,6 +1,6 @@
 
-R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
-Copyright (C) 2019 The R Foundation for Statistical Computing
+R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
+Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -39,6 +39,8 @@ Type 'q()' to quit R.
 > 
 > st_crs(y) = 4326
 > st_crs(x) = 4326
+> sf_use_s2(FALSE)
+Spherical geometry (s2) switched off
 > (d.sf = st_distance(x, y))
 Units: [m]
         [,1]     [,2]     [,3]     [,4]     [,5]
@@ -49,4 +51,4 @@ Units: [m]
 > 
 > proc.time()
    user  system elapsed 
-  0.560   0.055   0.605 
+  0.542   0.047   0.581 

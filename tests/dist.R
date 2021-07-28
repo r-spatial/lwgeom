@@ -22,4 +22,5 @@ crs = 4326
 
 st_crs(y) = 4326
 st_crs(x) = 4326
+sf_use_s2(FALSE)
 (d.sf = st_distance(x, y))

@@ -1,6 +1,6 @@
 
-R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
-Copyright (C) 2020 The R Foundation for Statistical Computing
+R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
+Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -20,9 +20,11 @@ Type 'q()' to quit R.
 > suppressPackageStartupMessages(library(lwgeom))
 > 
 > test_check("lwgeom")
-══ testthat results  ═══════════════════════════════════════════════════════════
-[ OK: 58 | SKIPPED: 3 | WARNINGS: 0 | FAILED: 0 ]
+══ Skipped tests ═══════════════════════════════════════════════════════════════
+• empty test (3)
+
+[ FAIL 0 | WARN 0 | SKIP 3 | PASS 61 ]
 > 
 > proc.time()
    user  system elapsed 
-  1.390   0.058   1.438 
+  1.428   0.063   1.485 
