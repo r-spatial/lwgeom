@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // CPL_geodetic_area
 Rcpp::NumericVector CPL_geodetic_area(Rcpp::List sfc, double semi_major, double inv_flattening);
 RcppExport SEXP _lwgeom_CPL_geodetic_area(SEXP sfcSEXP, SEXP semi_majorSEXP, SEXP inv_flatteningSEXP) {
