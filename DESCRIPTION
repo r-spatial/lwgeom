@@ -20,7 +20,7 @@ Suggests:
 LinkingTo:
 	Rcpp,
 	sf (>= 0.6-0)
-SystemRequirements: GEOS (>= 3.5.0), PROJ (>= 4.8.0)
+SystemRequirements: GEOS (>= 3.5.0), PROJ (>= 4.8.0), sqlite3
 License: GPL-2
 Copyright: file COPYRIGHTS
 URL: https://github.com/r-spatial/lwgeom/
