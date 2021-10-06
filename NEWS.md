@@ -1,3 +1,7 @@
+# version 0.2-8
+
+* remove PROBLEM ... ERROR constructs from C code
+
 # version 0.2-5
 
 * GEOS requirement lowered to 3.5.0, which also seems to work; #59.

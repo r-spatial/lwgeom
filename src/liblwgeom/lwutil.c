@@ -150,7 +150,7 @@ default_errorreporter(const char *fmt, va_list ap)
 	msg[LW_MSG_MAXLEN]='\0';
 	// fprintf(stderr, "%s\n", msg);
 	// exit(1);
-	PROBLEM "%s\n", msg ERROR;
+	error("%s\n", msg);
 }
 
 /**

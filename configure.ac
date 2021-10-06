@@ -1,6 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl GDAL stuff largely copied from rgdal, (c) Roger Bivand
-AC_INIT(src/lwgeom.cpp)
+AC_INIT
+AC_CONFIG_SRCDIR([src/lwgeom.cpp])
 
 : ${R_HOME=`R RHOME`}
 if test -z "${R_HOME}"; then
@@ -35,8 +36,7 @@ else
 fi
 
 AC_ARG_WITH([proj-include],
-    AC_HELP_STRING([--with-proj-include=DIR],
-                   [location of proj header files]),
+    AS_HELP_STRING([--with-proj-include=DIR],[location of proj header files]),
     [proj_include_path=$withval])
 if test [ -n "$proj_include_path" ] ; then
    AC_SUBST([PROJ_CPPFLAGS],["-I${proj_include_path}"])
@@ -52,8 +52,7 @@ fi
 # since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
 
 AC_ARG_WITH([proj-api],
-    AC_HELP_STRING([--with-proj-api=yes/no],
-               [use the deprecated proj_api.h even when PROJ 6 is available; default no]),
+    AS_HELP_STRING([--with-proj-api=yes/no],[use the deprecated proj_api.h even when PROJ 6 is available; default no]),
                [proj_api=$withval])
 PROJ6="no"
 PROJH="no"
@@ -96,8 +95,7 @@ CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS} ${PROJ_CPPFLAGS}"
 
 # dnl ditto for a library path
 AC_ARG_WITH([proj-lib],
-    AC_HELP_STRING([--with-proj-lib=LIB_PATH],
-               [the location of proj libraries]),
+    AS_HELP_STRING([--with-proj-lib=LIB_PATH],[the location of proj libraries]),
                [proj_lib_path=$withval])
 if test [ -n "$proj_lib_path" ] ; then
     AC_SUBST([PROJ_LIBS], ["-L${proj_lib_path} ${INPKG_LIBS} -lproj"])
@@ -178,8 +176,7 @@ ${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
 proj_version=`./proj_conf_test`
 
 AC_ARG_WITH([proj-share],
-    AC_HELP_STRING([--with-proj-share=SHARE_PATH],
-               [the location of proj metadata files]),
+    AS_HELP_STRING([--with-proj-share=SHARE_PATH],[the location of proj metadata files]),
                [proj_share_path=$withval])
 if test [ -n "$proj_share_path" ] ; then
     AC_MSG_NOTICE([PROJ_LIB: ${proj_share_path}])
@@ -395,8 +392,7 @@ GEOS_CONFIG="geos-config"
 GEOS_CONFIG_SET="no"
 
 AC_ARG_WITH([geos-config],
-    AC_HELP_STRING([--with-geos-config=GEOS_CONFIG],
-           [the location of geos-config]),
+    AS_HELP_STRING([--with-geos-config=GEOS_CONFIG],[the location of geos-config]),
            [geos_config=$withval])
 if test [ -n "$geos_config" ] ; then
     GEOS_CONFIG_SET="yes"
