@@ -1,3 +1,7 @@
+# version 0.2-9
+
+* fix formatting issues for long long int
+
 # version 0.2-8
 
 * remove PROBLEM ... ERROR constructs from C code
