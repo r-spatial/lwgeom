@@ -34,17 +34,17 @@ test_that("st_make_valid works", {
 	lwgeom_extSoftVersion()
 })
 
-test_that("st_minimum_bounding_circle works", {
-  library(sf)
-  x = st_multipoint(matrix(c(0,1,0,1),2,2))
-  y = st_multipoint(matrix(c(0,0,1,0,1,1),3,2))
-  plot(st_minimum_bounding_circle(x), axes=TRUE); plot(x, add=TRUE)
-  plot(st_minimum_bounding_circle(y), axes=TRUE); plot(y, add=TRUE)
-  nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
-  state = st_union(st_geometry(nc))
-  st_minimum_bounding_circle(state)
-  st_minimum_bounding_circle(st_sf(st = "nc", geom = state))
-})
+#test_that("st_minimum_bounding_circle works", {
+#  library(sf)
+#  x = st_multipoint(matrix(c(0,1,0,1),2,2))
+#  y = st_multipoint(matrix(c(0,0,1,0,1,1),3,2))
+#  plot(st_minimum_bounding_circle(x), axes=TRUE); plot(x, add=TRUE)
+#  plot(st_minimum_bounding_circle(y), axes=TRUE); plot(y, add=TRUE)
+#  nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
+#  state = st_union(st_geometry(nc))
+#  st_minimum_bounding_circle(state)
+#  st_minimum_bounding_circle(st_sf(st = "nc", geom = state))
+#})
 
 test_that("st_subdivide works", {
 	library(sf)
@@ -85,18 +85,18 @@ test_that("st_snap_to_grid_works", {
 	expect_true(all(c(as.matrix(st_cast(y3, "MULTIPOINT")) %% 5000) == 0))
 })
 
-test_that("st_transform_proj finds sf's PROJ files", {
-  skip_on_os("mac") # FIXME: in sf rather than here
-  library(sf)
-  nc <- st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE)
-  bb1 = st_bbox(nc)
-  bb2 = st_bbox(st_transform(nc, "+proj=longlat"))
-  bb3 = st_bbox(st_transform_proj(nc, "+proj=longlat"))
-  bb4 = st_bbox(st_transform_proj(nc, st_crs(4326)$proj4string))
-  # expect_false(any(bb1 == bb2))
-  # expect_true(all.equal(as.numeric(bb2), as.numeric(bb3)))
-  # expect_true(all.equal(as.numeric(bb4), as.numeric(bb3)))
-})
+#test_that("st_transform_proj finds sf's PROJ files", {
+#  # skip_on_os("mac") # FIXME: in sf rather than here
+#  library(sf)
+#  nc <- st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE)
+#  bb1 = st_bbox(nc)
+#  bb2 = st_bbox(st_transform(nc, "+proj=longlat"))
+#  bb3 = st_bbox(st_transform_proj(nc, "+proj=longlat"))
+#  bb4 = st_bbox(st_transform_proj(nc, st_crs(4326)$proj4string))
+#  # expect_false(any(bb1 == bb2))
+#  # expect_true(all.equal(as.numeric(bb2), as.numeric(bb3)))
+#  # expect_true(all.equal(as.numeric(bb4), as.numeric(bb3)))
+#})
 
 test_that("st_linesubstring warns on 4326", {
   library(sf)
@@ -109,11 +109,11 @@ test_that("st_linesubstring warns on 4326", {
   plot(spl, col = 'black', lwd = 3, add = TRUE)
 })
 
-test_that("st_startpoint works", {
-  library(sf)
-  library(lwgeom)
-  sp = st_startpoint(st_sfc(st_linestring(matrix(1:10,,2)), st_linestring(matrix(3:12,,2)),crs=4326))
-})
+#test_that("st_startpoint works", {
+#  library(sf)
+#  library(lwgeom)
+#  sp = st_startpoint(st_sfc(st_linestring(matrix(1:10,,2)), st_linestring(matrix(3:12,,2)),crs=4326))
+#})
 
 test_that("st_wrap_x works", {
   library(sf)

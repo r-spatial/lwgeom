@@ -870,7 +870,7 @@ static YY_BUFFER_STATE wkt_yy_buf_state;
 /*
 * Handle errors due to unexpected junk in WKT strings.
 */
-static void wkt_lexer_unknown()
+static void wkt_lexer_unknown(void)
 {
 	/* Set the global error state */
 	global_parser_result.errcode = PARSER_ERROR_OTHER;
@@ -2295,7 +2295,7 @@ void wkt_lexer_init(char *src)
 /*
 * Clean up the lexer!
 */
-void wkt_lexer_close()
+void wkt_lexer_close(void)
 {
 	wkt_yy_delete_buffer(wkt_yy_buf_state);
 }

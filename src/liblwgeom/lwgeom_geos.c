@@ -610,7 +610,7 @@ make_geos_segment(double x1, double y1, double x2, double y2)
 }
 
 const char*
-lwgeom_geos_version()
+lwgeom_geos_version(void)
 {
 	const char* ver = GEOSversion();
 	return ver;

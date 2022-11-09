@@ -127,7 +127,7 @@ if test "${PROJH}" = no; then
 #include <stdlib.h>
 #include <proj_api.h>
 
-int main() {
+int main(void) {
     printf("%d\n", PJ_VERSION);
     exit(0);
 }
@@ -138,7 +138,7 @@ else
 #include <stdlib.h>
 #include <proj.h>
 
-int main() {
+int main(void) {
 	proj_context_create();
     exit(0);
 }
@@ -162,7 +162,7 @@ _EOCONF]
 #include <stdlib.h>
 #include <proj.h>
 
-int main() {
+int main(void) {
     printf("%d.%d.%d\n", PROJ_VERSION_MAJOR, PROJ_VERSION_MINOR, PROJ_VERSION_PATCH);
     exit(0);
 }
@@ -192,7 +192,7 @@ if test ${PROJ6} = "no"; then
 FILE *pj_open_lib(projCtx, const char *, const char *);
 #endif
 
-int main() {
+int main(void) {
 #if PJ_VERSION <= 480
     FILE *fp;
 #else
@@ -249,7 +249,7 @@ if test "${PROJH}" = no; then
 #include <stdlib.h>
 #include <proj_api.h>
 
-int main() {
+int main(void) {
     PAFile fp;
     projCtx ctx;
     ctx = pj_get_default_ctx();
@@ -295,7 +295,7 @@ fi
 FILE *pj_open_lib(projCtx, const char *, const char *);
 #endif
 
-int main() {
+int main(void) {
 #if PJ_VERSION <= 480
     FILE *fp;
 #else
@@ -352,13 +352,13 @@ fi # proj >= 6
 #include <stdio.h>
 #ifdef HAVE_PROJ_H
 #include <proj.h>
-int main() {
+int main(void) {
     printf("%d%d%d\n", PROJ_VERSION_MAJOR, PROJ_VERSION_MINOR, PROJ_VERSION_PATCH);
     return 0;
 }
 #else
 #include <proj_api.h>
-int main() {
+int main(void) {
     printf("%d\n", PJ_VERSION);
     return 0;
 }
@@ -474,7 +474,7 @@ static void __errorHandler(const char *fmt, ...) {
 static void __warningHandler(const char *fmt, ...) {
     return;
 }
-int main() {
+int main(void) {
     GEOSContextHandle_t r = initGEOS_r((GEOSMessageHandler) __warningHandler, (GEOSMessageHandler) __errorHandler);
     finishGEOS_r(r);
 }
