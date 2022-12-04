@@ -1,3 +1,7 @@
+# version 0.2-10
+
+* fix -Wstrict-prototypes warnings
+
 # version 0.2-9
 
 * fix formatting issues for long long int
