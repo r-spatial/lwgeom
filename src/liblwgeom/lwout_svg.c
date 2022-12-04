@@ -128,8 +128,8 @@ assvg_point_buf(const LWPOINT *point, char * output, int circle, int precision)
 	lwprint_double(pt.x, precision, x, OUT_DOUBLE_BUFFER_SIZE);
 	lwprint_double(-pt.y, precision, y, OUT_DOUBLE_BUFFER_SIZE);
 
-	if (circle) ptr += sprintf(ptr, "x=\"%s\" y=\"%s\"", x, y);
-	else ptr += sprintf(ptr, "cx=\"%s\" cy=\"%s\"", x, y);
+	if (circle) ptr += snprintf(ptr, strlen(ptr), "x=\"%s\" y=\"%s\"", x, y);
+	else ptr += snprintf(ptr, strlen(ptr), "cx=\"%s\" cy=\"%s\"", x, y);
 
 	return (ptr-output);
 }
@@ -169,7 +169,7 @@ assvg_line_buf(const LWLINE *line, char * output, int relative, int precision)
 	char *ptr=output;
 
 	/* Start path with SVG MoveTo */
-	ptr += sprintf(ptr, "M ");
+	ptr += snprintf(ptr, strlen(ptr), "M ");
 	if (relative)
 		ptr += pointArray_svg_rel(line->points, ptr, 1, precision);
 	else
@@ -217,18 +217,18 @@ assvg_polygon_buf(const LWPOLY *poly, char * output, int relative, int precision
 
 	for (i=0; i<poly->nrings; i++)
 	{
-		if (i) ptr += sprintf(ptr, " ");	/* Space beetween each ring */
-		ptr += sprintf(ptr, "M ");		/* Start path with SVG MoveTo */
+		if (i) ptr += snprintf(ptr, strlen(ptr), " ");	/* Space beetween each ring */
+		ptr += snprintf(ptr, strlen(ptr), "M ");		/* Start path with SVG MoveTo */
 
 		if (relative)
 		{
 			ptr += pointArray_svg_rel(poly->rings[i], ptr, 0, precision);
-			ptr += sprintf(ptr, " z");	/* SVG closepath */
+			ptr += snprintf(ptr, strlen(ptr), " z");	/* SVG closepath */
 		}
 		else
 		{
 			ptr += pointArray_svg_abs(poly->rings[i], ptr, 0, precision);
-			ptr += sprintf(ptr, " Z");	/* SVG closepath */
+			ptr += snprintf(ptr, strlen(ptr), " Z");	/* SVG closepath */
 		}
 	}
 
@@ -279,7 +279,7 @@ assvg_multipoint_buf(const LWMPOINT *mpoint, char *output, int relative, int pre
 
 	for (i=0 ; i<mpoint->ngeoms ; i++)
 	{
-		if (i) ptr += sprintf(ptr, ",");  /* Arbitrary comma separator */
+		if (i) ptr += snprintf(ptr, strlen(ptr), ",");  /* Arbitrary comma separator */
 		point = mpoint->geoms[i];
 		ptr += assvg_point_buf(point, ptr, relative, precision);
 	}
@@ -331,7 +331,7 @@ assvg_multiline_buf(const LWMLINE *mline, char *output, int relative, int precis
 
 	for (i=0 ; i<mline->ngeoms ; i++)
 	{
-		if (i) ptr += sprintf(ptr, " ");  /* SVG whitespace Separator */
+		if (i) ptr += snprintf(ptr, strlen(ptr), " ");  /* SVG whitespace Separator */
 		line = mline->geoms[i];
 		ptr += assvg_line_buf(line, ptr, relative, precision);
 	}
@@ -383,7 +383,7 @@ assvg_multipolygon_buf(const LWMPOLY *mpoly, char *output, int relative, int pre
 
 	for (i=0 ; i<mpoly->ngeoms ; i++)
 	{
-		if (i) ptr += sprintf(ptr, " ");  /* SVG whitespace Separator */
+		if (i) ptr += snprintf(ptr, strlen(ptr), " ");  /* SVG whitespace Separator */
 		poly = mpoly->geoms[i];
 		ptr += assvg_polygon_buf(poly, ptr, relative, precision);
 	}
@@ -442,7 +442,7 @@ assvg_collection_buf(const LWCOLLECTION *col, char *output, int relative, int pr
 
 	for (i=0; i<col->ngeoms; i++)
 	{
-		if (i) ptr += sprintf(ptr, ";");
+		if (i) ptr += snprintf(ptr, strlen(ptr), ";");
 		subgeom = col->geoms[i];
 		ptr += assvg_geom_buf(subgeom, ptr, relative, precision);
 	}
@@ -576,7 +576,7 @@ pointArray_svg_rel(POINTARRAY *pa, char *output, int close_ring, int precision)
 
 	lwprint_double(x, precision, sx, OUT_DOUBLE_BUFFER_SIZE);
 	lwprint_double(-y, precision, sy, OUT_DOUBLE_BUFFER_SIZE);
-	ptr += sprintf(ptr,"%s %s l", sx, sy);
+	ptr += snprintf(ptr, strlen(ptr), "%s %s l", sx, sy);
 
 	/* accum */
 	accum_x = x;
@@ -600,7 +600,7 @@ pointArray_svg_rel(POINTARRAY *pa, char *output, int close_ring, int precision)
 		accum_x += dx;
 		accum_y += dy;
 
-		ptr += sprintf(ptr," %s %s", sx, sy);
+		ptr += snprintf(ptr, strlen(ptr), " %s %s", sx, sy);
 	}
 
 	return (ptr-output);
@@ -631,9 +631,9 @@ pointArray_svg_abs(POINTARRAY *pa, char *output, int close_ring, int precision)
 		lwprint_double(pt.x, precision, x, OUT_DOUBLE_BUFFER_SIZE);
 		lwprint_double(-pt.y, precision, y, OUT_DOUBLE_BUFFER_SIZE);
 
-		if (i == 1) ptr += sprintf(ptr, " L ");
-		else if (i) ptr += sprintf(ptr, " ");
-		ptr += sprintf(ptr,"%s %s", x, y);
+		if (i == 1) ptr += snprintf(ptr, strlen(ptr), " L ");
+		else if (i) ptr += snprintf(ptr, strlen(ptr), " ");
+		ptr += snprintf(ptr, strlen(ptr), "%s %s", x, y);
 	}
 
 	return (ptr-output);
