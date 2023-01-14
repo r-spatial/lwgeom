@@ -1,3 +1,9 @@
+# version 0.2-12
+
+# version 0.2-11
+
+* replace `sprintf()` instances with `snprintf()`
+
 # version 0.2-10
 
 * fix -Wstrict-prototypes warnings

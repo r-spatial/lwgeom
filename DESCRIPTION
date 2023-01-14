@@ -1,5 +1,5 @@
 Package: lwgeom
-Version: 0.2-11
+Version: 0.2-12
 Title: Bindings to Selected 'liblwgeom' Functions for Simple Features 
 Description: Access to selected functions found in 'liblwgeom' <https://github.com/postgis/postgis/tree/master/liblwgeom>, the light-weight geometry library used by 'PostGIS' <http://postgis.net/>.
 Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.pebesma@uni-muenster.de", comment = c(ORCID = "0000-0001-8049-7069")),
