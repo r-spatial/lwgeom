@@ -73,6 +73,7 @@ OBJECTS_LIBLWGEOM= \
   liblwgeom/lwin_wkt_parse.o
 
 PKG_CPPFLAGS = \
+	-I./liblwgeom \
 	-DHAVE_PROJ_H
 
 PKG_LIBS = \
