@@ -76,8 +76,9 @@ PKG_CPPFLAGS = -I./liblwgeom -DUSE_PROJ_H
 
 PKG_LIBS =  \
 	-L./liblwgeom -llwgeomstatic \
-	-lxml2 -lgeos_c -lgeos -ljson-c -lexpat -lssl -lcrypto -lcurl -lssl -lssh2 -liconv \
-	-lcrypto -lws2_32 -ltiff -ljpeg -lz -lgeotiff -lproj -lsqlite3 -lcrypt32 -lwldap32
+	-lxml2 -lgeos_c -lgeos -ljson-c -lssl -lcrypto -lcurl -lssl -lssh2 -liconv \
+	-lcrypto -lws2_32 -ltiff -ljpeg -lz -lgeotiff -ltiff -lproj -lgeotiff -ltiff -lcurl \
+	-lsqlite3 -lcrypt32 -lwldap32
 
 all: clean winlibs
 
