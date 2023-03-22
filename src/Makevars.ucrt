@@ -78,7 +78,7 @@ PKG_LIBS =  \
 	-L./liblwgeom -llwgeomstatic \
 	-lxml2 -lgeos_c -lgeos -ljson-c -lssl -lcrypto -lcurl -lbcrypt -lrtmp -lssl -lssh2 -lidn2 \
 	-lunistring -liconv -lgcrypt -lcrypto -lgpg-error -lws2_32 -lssl -lssh2 -liconv \
-	-lcrypto -lws2_32 -ltiff -lzma -ljpeg -lz -lgeotiff -ltiff -lproj -lgeotiff -ltiff -lcurl \
+	-lcrypto -lws2_32 -ltiff -llzma -ljpeg -lz -lgeotiff -ltiff -lproj -lgeotiff -ltiff -lcurl \
 	-lsqlite3 -lcrypt32 -lwldap32
 
 all: clean winlibs
