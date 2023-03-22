@@ -72,9 +72,7 @@ OBJECTS_LIBLWGEOM= \
   liblwgeom/lwcircstring.o \
   liblwgeom/lwin_wkt_parse.o
 
-PKG_CPPFLAGS = \
-	-I./liblwgeom \
-	-DHAVE_PROJ_H
+PKG_CPPFLAGS = -I./liblwgeom -DUSE_PROJ_H
 
 PKG_LIBS = \
 	-L./liblwgeom -llwgeomstatic \
