@@ -73,20 +73,19 @@ OBJECTS_LIBLWGEOM= \
   liblwgeom/lwcircstring.o \
   liblwgeom/lwin_wkt_parse.o
 
-VERSION = 3.2.1
+VERSION = 3.4.1
 RWINLIB = ../windows/gdal3-$(VERSION)
 TARGET = lib$(subst gcc,,$(COMPILED_BY))$(R_ARCH)
 
 PKG_CPPFLAGS = \
 	-I./liblwgeom \
-	-I$(RWINLIB)/include/geos-3.9.0 \
-	-I$(RWINLIB)/include/proj-7.2.1 \
+	-I$(RWINLIB)/include \
 	-DUSE_PROJ_H
 
 PKG_LIBS = \
 	-L./liblwgeom -llwgeomstatic \
 	-L$(RWINLIB)/$(TARGET) \
-	-L$(RWINLIB)/lib$(R_ARCH)$(CRT) \
+	-L$(RWINLIB)/lib$(R_ARCH) \
 	-lproj -lgeos_c -lgeos -ljson-c -lexpat -lxml2 -liconv -lsqlite3 \
 	-ltiff -ljpeg -lcurl -lssh2 -lz -lssl -lcrypto -lgdi32 -lws2_32 -lcrypt32 -lwldap32
 
