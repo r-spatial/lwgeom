@@ -1,5 +1,4 @@
-CXX_STD = CXX11
-
+CXX_STD = CXX
 STATLIB = liblwgeom/liblwgeomstatic.a
 OBJECTS_LIBLWGEOM= \
   liblwgeom/varint.o \
