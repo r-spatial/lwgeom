@@ -58,7 +58,7 @@ PROJ6="no"
 PROJH="no"
 if test "${proj_config_ok}" = yes; then
   PROJ_VERSION=`${PROJ_CONFIG} --modversion`
-  PROJV1=`echo "${PROJ_VERSION}" | cut -c 1`
+  PROJV1=`echo "${PROJ_VERSION}" | cut -d "." -f 1`
   if test "${PROJV1}" -ge 5; then
     PROJ6="yes"
     PROJ_CPPFLAGS="${PROJ_CPPFLAGS} -DHAVE_PROJ_H"
@@ -173,7 +173,11 @@ fi
 
 ${CC} ${CFLAGS} ${CPPFLAGS} ${LDFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
 
+if test "x$cross_compiling" = "xyes"; then
+proj_version="${PROJ_VERSION}"
+else
 proj_version=`./proj_conf_test`
+fi
 
 AC_ARG_WITH([proj-share],
     AS_HELP_STRING([--with-proj-share=SHARE_PATH],[the location of proj metadata files]),
@@ -347,31 +351,9 @@ fi # proj >= 6
 #
 # POSTGIS/PROJ version:
 #
-
-[cat > proj_conf_test.c <<_EOCONF
-#include <stdio.h>
-#ifdef HAVE_PROJ_H
-#include <proj.h>
-int main(void) {
-    printf("%d%d%d\n", PROJ_VERSION_MAJOR, PROJ_VERSION_MINOR, PROJ_VERSION_PATCH);
-    return 0;
-}
-#else
-#include <proj_api.h>
-int main(void) {
-    printf("%d\n", PJ_VERSION);
-    return 0;
-}
-#endif
-_EOCONF]
-
-# AC_MSG_NOTICE([PKG_LIBS: ${PKG_LIBS}])
-
-${CC} ${CFLAGS} ${CPPFLAGS} ${LDFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
-
-proj_version=`./proj_conf_test`
-
-POSTGIS_PROJ_VERSION=`echo $proj_version | cut -c "1,2"`
+PROJ_VERSION_MAJOR=`echo $proj_version | cut -d "." -f 1
+PROJ_VERSION_MINOR=`echo $proj_version | cut -d "." -f 2
+POSTGIS_PROJ_VERSION="${PROJ_VERSION_MAJOR}${PROJ_VERSION_MINOR}"
 AC_MSG_NOTICE([POSTGIS_PROJ_VERSION: ${POSTGIS_PROJ_VERSION}])
 #AC_SUBST([POSTGIS_PROJ_VERSION],["${PROJV12}"])
 #AC_DEFINE_UNQUOTED([POSTGIS_PROJ_VERSION], [$POSTGIS_PROJ_VERSION], [PROJ library version])
