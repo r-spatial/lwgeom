@@ -3701,21 +3701,20 @@ fi # proj >= 6
 #
 # POSTGIS/PROJ version:
 #
-PROJ_VERSION_MAJOR=`echo $proj_version | cut -d "." -f 1
-PROJ_VERSION_MINOR=`echo $proj_version | cut -d "." -f 2
+PROJ_VERSION_MAJOR=`echo $proj_version | cut -d "." -f 1`
+PROJ_VERSION_MINOR=`echo $proj_version | cut -d "." -f 2`
 POSTGIS_PROJ_VERSION="${PROJ_VERSION_MAJOR}${PROJ_VERSION_MINOR}"
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: POSTGIS_PROJ_VERSION: ${POSTGIS_PROJ_VERSION}" >&5
 printf "%s\n" "$as_me: POSTGIS_PROJ_VERSION: ${POSTGIS_PROJ_VERSION}" >&6;}
 #AC_SUBST([POSTGIS_PROJ_VERSION],["${PROJV12}"])
 #AC_DEFINE_UNQUOTED([POSTGIS_PROJ_VERSION], [$POSTGIS_PROJ_VERSION], [PROJ library version])
 
-# xxx
+PKG_CPPFLAGS="${PKG_CPPFLAGS} -DPOSTGIS_PROJ_VERSION=${POSTGIS_PROJ_VERSION}"
 if test ${POSTGIS_PROJ_VERSION} -lt 60 ; then
   PKG_CPPFLAGS="${PKG_CPPFLAGS} -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
 else
   PKG_CPPFLAGS="${PKG_CPPFLAGS} -DUSE_PROJ_H"
 fi
-
 
 #
 # GEOS:
