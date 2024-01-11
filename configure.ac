@@ -144,8 +144,8 @@ int main(void) {
 }
 _EOCONF]
   #AC_CHECK_LIB(proj,proj_context_create,,proj6ok=no)
-  AC_MSG_CHECKING(PROJ: checking whether PROJ and sqlite3 are available for linking:)
-  ${CXX} ${CPPFLAGS} ${LDFLAGS} -o proj_conf_test proj_conf_test.cpp ${LIBS} -lsqlite3 2> errors.txt
+  AC_MSG_CHECKING(PROJ: checking whether linking against PROJ works:)
+  ${CXX} ${CPPFLAGS} ${LDFLAGS} -o proj_conf_test proj_conf_test.cpp ${LIBS} 2> errors.txt
   if test `echo $?` -ne 0 ; then
     proj6ok=no
     AC_MSG_RESULT(no)
