@@ -4,7 +4,7 @@
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @return numerical vector with perimeter for each feature (geometry), with unit of measure when possible
 #' @export
-st_perimeter = function(x) {
+st_perimeter_lwgeom = function(x) {
 	if (isTRUE(st_is_longlat(x)))
 		stop("for perimeter of longlat geometry, cast to LINESTRING and use st_length") # nocov
 	ret = CPL_perimeter(st_geometry(x), FALSE)
