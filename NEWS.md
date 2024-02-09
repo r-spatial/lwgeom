@@ -1,4 +1,10 @@
+# version 0.2-14
+
+* `st_perimeter()` is deprecated in favor of `st_perimeter_lwgeom()`, as `sf` takes over `st_perimeter()`
+
 # version 0.2-12
+
+# version 0.2-13
 
 # version 0.2-11
 

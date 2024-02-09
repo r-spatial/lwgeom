@@ -326,10 +326,10 @@ Rcpp::NumericMatrix CPL_endpoint(Rcpp::List sfc) {
 Rcpp::CharacterVector CPL_sfc_to_wkt(Rcpp::List sfc, Rcpp::IntegerVector precision) {
 
   std::vector<LWGEOM *> lwgeom_cw = lwgeom_from_sfc(sfc);
-  Rcpp::CharacterVector out;
+  Rcpp::CharacterVector out(lwgeom_cw.size());
   for (size_t i = 0; i < lwgeom_cw.size(); i++) {
 	char *wkt = lwgeom_to_wkt(lwgeom_cw[i], WKT_EXTENDED, precision[0], NULL);
-    out.push_back(wkt);
+        out[i] = wkt;
 	free(wkt);
   }
   return out;
