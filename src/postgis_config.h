@@ -121,7 +121,7 @@
 #define POSTGIS_PGSQL_VERSION 100
 
 /* PROJ library version */
-/* #define POSTGIS_PROJ_VERSION 91 */
+#define POSTGIS_PROJ_VERSION 93
 
 /* PostGIS Raster build date */
 /* #undef POSTGIS_RASTER_BUILD_DATE */

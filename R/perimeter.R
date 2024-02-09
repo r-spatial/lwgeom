@@ -14,6 +14,10 @@ st_perimeter_lwgeom = function(x) {
 
 #' @export
 #' @name perimeter
+st_perimeter = function(x) .Deprecated("sf::st_perimeter or lwgeom::st_perimeter_lwgeom")
+
+#' @export
+#' @name perimeter
 st_perimeter_2d = function(x) {
 	if (isTRUE(st_is_longlat(x)))
 		stop("for perimeter of longlat geometry, cast to LINESTRING and use st_length") # nocov

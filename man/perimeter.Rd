@@ -3,10 +3,13 @@
 \name{perimeter}
 \alias{perimeter}
 \alias{st_perimeter_lwgeom}
+\alias{st_perimeter}
 \alias{st_perimeter_2d}
 \title{compute perimeter from polygons or other geometries}
 \usage{
 st_perimeter_lwgeom(x)
+
+st_perimeter(x)
 
 st_perimeter_2d(x)
 }
