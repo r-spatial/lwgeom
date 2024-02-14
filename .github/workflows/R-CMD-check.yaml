@@ -43,7 +43,11 @@ jobs:
         with:
           extra-packages: any::rcmdcheck
           needs: check
-
+          
+      - name: Install system dependencies (MacOS)
+        if: runner.os == 'macos'
+        run: brew install gdal proj udunits pkg-config
+        
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
