@@ -1,8 +1,6 @@
 # version 0.2-14
 
-* `st_perimeter()` is deprecated in favor of `st_perimeter_lwgeom()`, as `sf` takes over `st_perimeter()`
-
-# version 0.2-12
+* `st_perimeter()` is deprecated in favor of `st_perimeter_lwgeom()`, as `sf` takes over with `sf::st_perimeter()`.
 
 # version 0.2-13
 
@@ -38,15 +36,13 @@
 
 * fix configure script to work with ubuntu/bionic and PROJ 4.9.3; #28
 
-# version 0.2-3
-
 * fix configure script to work with PROJ 5.x versions
 
 # version 0.2-2
 
 * adjust to sf >= 0.9-0 new crs representation
 
-* use `st_make_valid` generic from package sf; https://github.com/r-spatial/sf/issues/1300
+* use `st_make_valid()` generic from package sf; https://github.com/r-spatial/sf/issues/1300
 
 # version 0.2-1
 
@@ -54,9 +50,9 @@
 
 # version 0.2-0
 
-* export `lwgeom_make_valid`, to gradually move `st_make_valid` from `lwgeom` to `sf`; https://github.com/r-spatial/sf/issues/989
+* export `lwgeom_make_valid()`, to gradually move `st_make_valid()` from `lwgeom` to `sf`; https://github.com/r-spatial/sf/issues/989
 
-* constrain argument `crs` in `st_transform_proj` to take one or two character strings
+* constrain argument `crs` in `st_transform_proj()` to take one or two character strings
 
 * update to POSTGIS 3.0.0 liblwgeom version
 
@@ -64,15 +60,15 @@
 
 # version 0.1-5
 
-* check for user interrupts on `st_geod_distance`, #29 by Dan Baston
+* check for user interrupts on `st_geod_distance()`, #29 by Dan Baston
 
-* add `st_astext` for fast WKT writing, #25 by Etienne Racine
+* add `st_astext()` for fast WKT writing, #25 by Etienne Racine
 
-* add `st_is_polygon_cw`, #21 by Andy Teucher @ateucher; add Andy Teucher to contributors
+* add `st_is_polygon_cw()`, #21 by Andy Teucher @ateucher; add Andy Teucher to contributors
 
-* add `st_perimeter` and `st_perimeter_2d` functions to compute the length measurement of the boundary of a surface.
+* add `st_perimeter()` and `st_perimeter_2d()` functions to compute the length measurement of the boundary of a surface.
 
-* allow `st_transform_proj` to take two proj4 strings as crs, as `c(input_p4s, output_p4s)`, ignoring the CRS of x
+* allow `st_transform_proj()` to take two proj4 strings as crs, as `c(input_p4s, output_p4s)`, ignoring the CRS of x
 
 # version 0.1-4
 
@@ -80,7 +76,7 @@
 
 # version 0.1-3
 
-* add `st_geod_covered_by` binary geometry predicate
+* add `st_geod_covered_by()` binary geometry predicate
 
 # version 0.1-2
 
@@ -88,7 +84,7 @@
 
 # version 0.1-1
 
-* add `st_length`
+* add `st_length()`
 
 * attempt to fix Solaris and OSX
 
@@ -96,7 +92,7 @@
 
 * add minimum bounding circle, by @rundel; #7
 
-* add `st_subdivide`, see https://github.com/r-spatial/sf/issues/597
+* add `st_subdivide()`, see https://github.com/r-spatial/sf/issues/597
 
 # version 0.1-0
 
