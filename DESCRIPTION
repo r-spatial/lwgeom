@@ -23,8 +23,9 @@ LinkingTo:
 SystemRequirements: GEOS (>= 3.5.0), PROJ (>= 4.8.0), sqlite3
 License: GPL-2
 Copyright: file COPYRIGHTS
-URL: https://github.com/r-spatial/lwgeom/
-BugReports: https://github.com/r-spatial/lwgeom/issues/
+Encoding: UTF-8
+URL: https://r-spatial.github.io/lwgeom/, https://github.com/r-spatial/lwgeom
+BugReports: https://github.com/r-spatial/lwgeom/issues
 Collate:
   init.R
   RcppExports.R
@@ -43,4 +44,4 @@ Collate:
   geod.R
   wkt.R
   wrap_x.R
-RoxygenNote: 7.3.0
+RoxygenNote: 7.3.1

@@ -10,3 +10,5 @@ tic.R
 ^\.ccache$
 ^\.github$
 ^tic\.R$
+^_pkgdown\.yml$
+^pkgdown$
