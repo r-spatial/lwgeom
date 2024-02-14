@@ -12,19 +12,19 @@ R bindings to the [liblwgeom](https://github.com/postgis/postgis/tree/master/lib
 
 
 This package provides functions that use
-`liblwgeom`, including `st_geohash`,
-`st_minimum_bounding_circle`, `st_split`, `st_subdivide`,
-`st_transform_proj` (transform through proj, omitting
-GDAL) and `st_as_sfc.TWKB` (creates `sfc` from [tiny
+`liblwgeom`, including `st_geohash()`,
+`st_minimum_bounding_circle()`, `st_split()`, `st_subdivide()`,
+`st_transform_proj()` (transform through proj, omitting
+GDAL) and `st_as_sfc.TWKB()` (creates `sfc` from [tiny
 wkb](https://github.com/TWKB/Specification/blob/master/twkb.md)),
 as well as the geodetic (spherical/ellipsoidal) geometry
-functions `st_geod_area`, 
-`st_geod_length`, 
-`st_geod_distance`, 
-`st_geod_covers`,
-`st_geod_azimuth`, 
-and `st_geod_segmentize`. The previously offered `st_make_valid`
-is now a generic in package `sf`.
+functions `st_geod_area()`, 
+`st_geod_length()`, 
+`st_geod_distance()`, 
+`st_geod_covers()`,
+`st_geod_azimuth()`, 
+and `st_geod_segmentize()`. The previously offered `st_make_valid()`
+is now a generic in package `sf` (`sf::st_make_valid()`).
 
 ## Installing 
 
