@@ -1,14 +1,14 @@
 # lwgeom
 R bindings to the [liblwgeom](https://github.com/postgis/postgis/tree/master/liblwgeom) library
 
-<!--- badges: start --->
-[![R-CMD-check](https://github.com/r-spatial/lwgeom/workflows/tic/badge.svg)](https://github.com/r-spatial/lwgeom/actions)
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/r-spatial/lwgeom/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-spatial/lwgeom/actions/workflows/R-CMD-check.yaml)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/r-spatial/lwgeom?branch=master&svg=true)](https://ci.appveyor.com/project/edzer/lwgeom)
 [![Coverage Status](https://img.shields.io/codecov/c/github/r-spatial/lwgeom/master.svg)](https://app.codecov.io/github/r-spatial/lwgeom?branch=master)
 [![CRAN](http://www.r-pkg.org/badges/version/lwgeom)](https://cran.r-project.org/package=lwgeom)
 [![cran checks](https://badges.cranchecks.info/worst/lwgeom.svg)](https://cran.r-project.org/web/checks/check_results_lwgeom.html)
 [![Downloads](http://cranlogs.r-pkg.org/badges/lwgeom?color=brightgreen)](https://www.r-pkg.org:443/pkg/lwgeom)
-<!--- badges: start --->
+<!-- badges: end -->
 
 
 This package provides functions that use
