@@ -64,9 +64,9 @@
 <div class="page-header"><h1 id="lwgeom">lwgeom<a class="anchor" aria-label="anchor" href="#lwgeom"></a>
 </h1></div>
 <p>R bindings to the <a href="https://github.com/postgis/postgis/tree/master/liblwgeom" class="external-link">liblwgeom</a> library</p>
-<!--- badges: start --->
+<!-- badges: start -->
 
-<p>This package provides functions that use <code>liblwgeom</code>, including <code>st_geohash</code>, <code>st_minimum_bounding_circle</code>, <code>st_split</code>, <code>st_subdivide</code>, <code>st_transform_proj</code> (transform through proj, omitting GDAL) and <code>st_as_sfc.TWKB</code> (creates <code>sfc</code> from <a href="https://github.com/TWKB/Specification/blob/master/twkb.md" class="external-link">tiny wkb</a>), as well as the geodetic (spherical/ellipsoidal) geometry functions <code>st_geod_area</code>, <code>st_geod_length</code>, <code>st_geod_distance</code>, <code>st_geod_covers</code>, <code>st_geod_azimuth</code>, and <code>st_geod_segmentize</code>. The previously offered <code>st_make_valid</code> is now a generic in package <code>sf</code>.</p>
+<p>This package provides functions that use <code>liblwgeom</code>, including <code><a href="reference/st_geohash.html">st_geohash()</a></code>, <code><a href="reference/bounding_circle.html">st_minimum_bounding_circle()</a></code>, <code><a href="reference/st_split.html">st_split()</a></code>, <code><a href="reference/st_subdivide.html">st_subdivide()</a></code>, <code><a href="reference/st_transform_proj.html">st_transform_proj()</a></code> (transform through proj, omitting GDAL) and <code><a href="reference/st_as_sfc.TWKB.html">st_as_sfc.TWKB()</a></code> (creates <code>sfc</code> from <a href="https://github.com/TWKB/Specification/blob/master/twkb.md" class="external-link">tiny wkb</a>), as well as the geodetic (spherical/ellipsoidal) geometry functions <code><a href="reference/geod.html">st_geod_area()</a></code>, <code><a href="reference/geod.html">st_geod_length()</a></code>, <code><a href="reference/geod.html">st_geod_distance()</a></code>, <code><a href="reference/geod.html">st_geod_covers()</a></code>, <code><a href="reference/st_geod_azimuth.html">st_geod_azimuth()</a></code>, and <code><a href="reference/geod.html">st_geod_segmentize()</a></code>. The previously offered <code>st_make_valid()</code> is now a generic in package <code>sf</code> (<code><a href="https://r-spatial.github.io/sf/reference/valid.html" class="external-link">sf::st_make_valid()</a></code>).</p>
 <div class="section level2">
 <h2 id="installing">Installing<a class="anchor" aria-label="anchor" href="#installing"></a>
 </h2>
@@ -114,8 +114,7 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/r-spatial/lwgeom/actions" class="external-link"><img src="https://github.com/r-spatial/lwgeom/workflows/tic/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://ci.appveyor.com/project/edzer/lwgeom" class="external-link"><img src="https://ci.appveyor.com/api/projects/status/github/r-spatial/lwgeom?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a></li>
+<li><a href="https://github.com/r-spatial/lwgeom/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/r-spatial/lwgeom/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://app.codecov.io/github/r-spatial/lwgeom?branch=master" class="external-link"><img src="https://img.shields.io/codecov/c/github/r-spatial/lwgeom/master.svg" alt="Coverage Status"></a></li>
 <li><a href="https://cran.r-project.org/package=lwgeom" class="external-link"><img src="http://www.r-pkg.org/badges/version/lwgeom" alt="CRAN"></a></li>
 <li><a href="https://cran.r-project.org/web/checks/check_results_lwgeom.html" class="external-link"><img src="https://badges.cranchecks.info/worst/lwgeom.svg" alt="cran checks"></a></li>

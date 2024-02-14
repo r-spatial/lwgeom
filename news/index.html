@@ -47,12 +47,8 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2-14" id="version-02-14">version 0.2-14<a class="anchor" aria-label="anchor" href="#version-02-14"></a></h2>
 <ul><li>
-<code><a href="../reference/perimeter.html">st_perimeter()</a></code> is deprecated in favor of <code><a href="../reference/perimeter.html">st_perimeter_lwgeom()</a></code>, as <code>sf</code> takes over <code><a href="../reference/perimeter.html">st_perimeter()</a></code>
-</li>
+<code><a href="../reference/perimeter.html">st_perimeter()</a></code> is deprecated in favor of <code><a href="../reference/perimeter.html">st_perimeter_lwgeom()</a></code>, as <code>sf</code> takes over with <code><a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">sf::st_perimeter()</a></code>.</li>
 </ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2-12" id="version-02-12">version 0.2-12<a class="anchor" aria-label="anchor" href="#version-02-12"></a></h2>
-</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2-13" id="version-02-13">version 0.2-13<a class="anchor" aria-label="anchor" href="#version-02-13"></a></h2><p class="text-muted">CRAN release: 2023-05-22</p>
 </div>
@@ -85,16 +81,13 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2-3" id="version-02-3">version 0.2-3<a class="anchor" aria-label="anchor" href="#version-02-3"></a></h2><p class="text-muted">CRAN release: 2020-04-12</p>
-<ul><li>fix configure script to work with ubuntu/bionic and PROJ 4.9.3; <a href="https://github.com/r-spatial/lwgeom/issues/28" class="external-link">#28</a></li>
-</ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2-3" id="version-02-3-1">version 0.2-3<a class="anchor" aria-label="anchor" href="#version-02-3-1"></a></h2><p class="text-muted">CRAN release: 2020-04-12</p>
-<ul><li>fix configure script to work with PROJ 5.x versions</li>
+<ul><li><p>fix configure script to work with ubuntu/bionic and PROJ 4.9.3; <a href="https://github.com/r-spatial/lwgeom/issues/28" class="external-link">#28</a></p></li>
+<li><p>fix configure script to work with PROJ 5.x versions</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2-2" id="version-02-2">version 0.2-2<a class="anchor" aria-label="anchor" href="#version-02-2"></a></h2><p class="text-muted">CRAN release: 2020-04-11</p>
 <ul><li><p>adjust to sf &gt;= 0.9-0 new crs representation</p></li>
-<li><p>use <code>st_make_valid</code> generic from package sf; <a href="https://github.com/r-spatial/sf/issues/1300" class="external-link uri">https://github.com/r-spatial/sf/issues/1300</a></p></li>
+<li><p>use <code><a href="https://r-spatial.github.io/sf/reference/valid.html" class="external-link">st_make_valid()</a></code> generic from package sf; <a href="https://github.com/r-spatial/sf/issues/1300" class="external-link uri">https://github.com/r-spatial/sf/issues/1300</a></p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2-1" id="version-02-1">version 0.2-1<a class="anchor" aria-label="anchor" href="#version-02-1"></a></h2><p class="text-muted">CRAN release: 2020-01-31</p>
@@ -102,18 +95,18 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2-0" id="version-02-0">version 0.2-0<a class="anchor" aria-label="anchor" href="#version-02-0"></a></h2><p class="text-muted">CRAN release: 2020-01-31</p>
-<ul><li><p>export <code>lwgeom_make_valid</code>, to gradually move <code>st_make_valid</code> from <code>lwgeom</code> to <code>sf</code>; <a href="https://github.com/r-spatial/sf/issues/989" class="external-link uri">https://github.com/r-spatial/sf/issues/989</a></p></li>
-<li><p>constrain argument <code>crs</code> in <code>st_transform_proj</code> to take one or two character strings</p></li>
+<ul><li><p>export <code><a href="../reference/lwgeom_make_valid.html">lwgeom_make_valid()</a></code>, to gradually move <code><a href="https://r-spatial.github.io/sf/reference/valid.html" class="external-link">st_make_valid()</a></code> from <code>lwgeom</code> to <code>sf</code>; <a href="https://github.com/r-spatial/sf/issues/989" class="external-link uri">https://github.com/r-spatial/sf/issues/989</a></p></li>
+<li><p>constrain argument <code>crs</code> in <code><a href="../reference/st_transform_proj.html">st_transform_proj()</a></code> to take one or two character strings</p></li>
 <li><p>update to POSTGIS 3.0.0 liblwgeom version</p></li>
 <li><p>update to modern PROJ, use proj.h when available</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1-5" id="version-01-5">version 0.1-5<a class="anchor" aria-label="anchor" href="#version-01-5"></a></h2><p class="text-muted">CRAN release: 2018-12-07</p>
-<ul><li><p>check for user interrupts on <code>st_geod_distance</code>, <a href="https://github.com/r-spatial/lwgeom/issues/29" class="external-link">#29</a> by Dan Baston</p></li>
-<li><p>add <code>st_astext</code> for fast WKT writing, <a href="https://github.com/r-spatial/lwgeom/issues/25" class="external-link">#25</a> by Etienne Racine</p></li>
-<li><p>add <code>st_is_polygon_cw</code>, <a href="https://github.com/r-spatial/lwgeom/issues/21" class="external-link">#21</a> by Andy Teucher <a href="https://github.com/ateucher" class="external-link">@ateucher</a>; add Andy Teucher to contributors</p></li>
-<li><p>add <code>st_perimeter</code> and <code>st_perimeter_2d</code> functions to compute the length measurement of the boundary of a surface.</p></li>
-<li><p>allow <code>st_transform_proj</code> to take two proj4 strings as crs, as <code>c(input_p4s, output_p4s)</code>, ignoring the CRS of x</p></li>
+<ul><li><p>check for user interrupts on <code><a href="../reference/geod.html">st_geod_distance()</a></code>, <a href="https://github.com/r-spatial/lwgeom/issues/29" class="external-link">#29</a> by Dan Baston</p></li>
+<li><p>add <code><a href="../reference/st_astext.html">st_astext()</a></code> for fast WKT writing, <a href="https://github.com/r-spatial/lwgeom/issues/25" class="external-link">#25</a> by Etienne Racine</p></li>
+<li><p>add <code><a href="../reference/st_is_polygon_cw.html">st_is_polygon_cw()</a></code>, <a href="https://github.com/r-spatial/lwgeom/issues/21" class="external-link">#21</a> by Andy Teucher <a href="https://github.com/ateucher" class="external-link">@ateucher</a>; add Andy Teucher to contributors</p></li>
+<li><p>add <code><a href="../reference/perimeter.html">st_perimeter()</a></code> and <code><a href="../reference/perimeter.html">st_perimeter_2d()</a></code> functions to compute the length measurement of the boundary of a surface.</p></li>
+<li><p>allow <code><a href="../reference/st_transform_proj.html">st_transform_proj()</a></code> to take two proj4 strings as crs, as <code>c(input_p4s, output_p4s)</code>, ignoring the CRS of x</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1-4" id="version-01-4">version 0.1-4<a class="anchor" aria-label="anchor" href="#version-01-4"></a></h2><p class="text-muted">CRAN release: 2018-01-28</p>
@@ -121,7 +114,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1-3" id="version-01-3">version 0.1-3<a class="anchor" aria-label="anchor" href="#version-01-3"></a></h2><p class="text-muted">CRAN release: 2018-01-21</p>
-<ul><li>add <code>st_geod_covered_by</code> binary geometry predicate</li>
+<ul><li>add <code><a href="../reference/geod.html">st_geod_covered_by()</a></code> binary geometry predicate</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1-2" id="version-01-2">version 0.1-2<a class="anchor" aria-label="anchor" href="#version-01-2"></a></h2><p class="text-muted">CRAN release: 2017-12-19</p>
@@ -129,11 +122,11 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1-1" id="version-01-1">version 0.1-1<a class="anchor" aria-label="anchor" href="#version-01-1"></a></h2><p class="text-muted">CRAN release: 2017-12-17</p>
-<ul><li><p>add <code>st_length</code></p></li>
+<ul><li><p>add <code><a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">st_length()</a></code></p></li>
 <li><p>attempt to fix Solaris and OSX</p></li>
 <li><p>report proj.4 and GEOS versions on startup, and on <code>lwgeom_extSoftwareVersions</code>; <a href="https://github.com/r-spatial/lwgeom/issues/10" class="external-link">#10</a></p></li>
 <li><p>add minimum bounding circle, by <a href="https://github.com/rundel" class="external-link">@rundel</a>; <a href="https://github.com/r-spatial/lwgeom/issues/7" class="external-link">#7</a></p></li>
-<li><p>add <code>st_subdivide</code>, see <a href="https://github.com/r-spatial/sf/issues/597" class="external-link uri">https://github.com/r-spatial/sf/issues/597</a></p></li>
+<li><p>add <code><a href="../reference/st_subdivide.html">st_subdivide()</a></code>, see <a href="https://github.com/r-spatial/sf/issues/597" class="external-link uri">https://github.com/r-spatial/sf/issues/597</a></p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1-0" id="version-01-0">version 0.1-0<a class="anchor" aria-label="anchor" href="#version-01-0"></a></h2><p class="text-muted">CRAN release: 2017-11-16</p>
