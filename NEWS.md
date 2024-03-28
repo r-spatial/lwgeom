@@ -1,3 +1,7 @@
+# version 0.2-15
+
+* fix default for argument `digits` in `st_astext()`
+
 # version 0.2-14
 
 * `st_perimeter()` is deprecated in favor of `st_perimeter_lwgeom()`, as `sf` takes over with `sf::st_perimeter()`.

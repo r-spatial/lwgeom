@@ -17,7 +17,7 @@
 #' st_astext(pt, 3)
 #' st_asewkt(pt, 3)
 #' @export
-st_astext <- function(x, digits = options("digits"), ..., EWKT = FALSE) {
+st_astext <- function(x, digits = getOption("digits"), ..., EWKT = FALSE) {
   if (! EWKT && !inherits(x, "sfg"))
     st_crs(x) <- NA_crs_
   CPL_sfc_to_wkt(st_geometry(x), as.integer(digits))

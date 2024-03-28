@@ -1,6 +1,6 @@
 
-R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
-Copyright (C) 2021 The R Foundation for Statistical Computing
+R version 4.3.2 (2023-10-31) -- "Eye Holes"
+Copyright (C) 2023 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -20,11 +20,8 @@ Type 'q()' to quit R.
 > suppressPackageStartupMessages(library(lwgeom))
 > 
 > test_check("lwgeom")
-══ Skipped tests ═══════════════════════════════════════════════════════════════
-• empty test (3)
-
-[ FAIL 0 | WARN 0 | SKIP 3 | PASS 61 ]
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 61 ]
 > 
 > proc.time()
    user  system elapsed 
-  1.428   0.063   1.485 
+  1.110   1.293   0.896 
