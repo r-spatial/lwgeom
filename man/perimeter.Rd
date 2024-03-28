@@ -3,13 +3,10 @@
 \name{perimeter}
 \alias{perimeter}
 \alias{st_perimeter_lwgeom}
-\alias{st_perimeter}
 \alias{st_perimeter_2d}
-\title{compute perimeter from polygons or other geometries}
+\title{Compute perimeter from polygons or other geometries}
 \usage{
 st_perimeter_lwgeom(x)
-
-st_perimeter(x)
 
 st_perimeter_2d(x)
 }
@@ -20,5 +17,5 @@ st_perimeter_2d(x)
 numerical vector with perimeter for each feature (geometry), with unit of measure when possible
 }
 \description{
-compute perimeter from polygons or other geometries
+Compute perimeter from polygons or other geometries
 }

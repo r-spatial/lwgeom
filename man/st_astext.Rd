@@ -5,7 +5,7 @@
 \alias{st_asewkt}
 \title{Return Well-known Text representation of simple feature geometry}
 \usage{
-st_astext(x, digits = options("digits"), ..., EWKT = FALSE)
+st_astext(x, digits = getOption("digits"), ..., EWKT = FALSE)
 
 st_asewkt(x, digits = options("digits"))
 }
