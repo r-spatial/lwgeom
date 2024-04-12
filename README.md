@@ -40,3 +40,9 @@ are being reused.
 
 Previous to version 0.1-6, `lwgeom` would also try to link the system
 library liblwgeom; from 0.1-6 on only the shipped version is used.
+
+## Contributing
+
+* Contributions of all sorts are most welcome, issues and pull requests are the preferred ways of sharing them.
+* When contributing pull requests, please adhere to the package style (in package code use `=` rather than `<-`; don't change indentation; tab stops of 4 spaces are preferred)
+* This project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
