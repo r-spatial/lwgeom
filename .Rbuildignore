@@ -12,3 +12,4 @@ tic.R
 ^tic\.R$
 ^_pkgdown\.yml$
 ^pkgdown$
+CONDUCT.md
