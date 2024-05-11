@@ -7,7 +7,12 @@
 \usage{
 st_geohash(x, precision = 0)
 
-st_geom_from_geohash(hash, precision = -1, crs = st_crs("OGC:CRS84"))
+st_geom_from_geohash(
+  hash,
+  precision = -1,
+  crs = st_crs("OGC:CRS84"),
+  raw = FALSE
+)
 }
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
@@ -17,9 +22,13 @@ st_geom_from_geohash(hash, precision = -1, crs = st_crs("OGC:CRS84"))
 \item{hash}{character vector with geohashes}
 
 \item{crs}{object of class `crs`}
+
+\item{raw}{logical; if `TRUE`, return a matrix with bounding box coordinates on each row}
 }
 \value{
-character vector with geohashes
+`st_geohash` returns a character vector with geohashes
+
+`st_geom_from_geohash` returns a (bounding box) polygon for each geohash if `raw` is `FALSE`, if `raw` is `TRUE` a matrix is returned with bounding box coordinates on each row.
 }
 \description{
 compute geohash from (average) coordinates
