@@ -144,7 +144,7 @@ Rcpp::NumericVector CPL_bbox_from_geohash(Rcpp::CharacterVector h, int prec) {
 	Rcpp::NumericVector ret(4 * h.size()); // return
 	double lat[2], lon[2];
 	char *hash;
-	for (size_t i = 0; i < h.size(); i++) {
+	for (size_t i = 0; i < (size_t) h.size(); i++) {
 		hash = h[i];
 		decode_geohash_bbox(hash, lat, lon, prec);
 		ret[4 * i + 0] = lon[0];

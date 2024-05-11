@@ -80,7 +80,8 @@ PKG_CPPFLAGS = \
 	-I./liblwgeom \
 	-I$(RWINLIB)/include/geos-3.9.0 \
 	-I$(RWINLIB)/include/proj-7.2.1 \
-	-DUSE_PROJ_H
+	-DUSE_PROJ_H \
+	-DHAVE_LIBLWGEOM_INTERNAL_H
 
 PKG_LIBS = \
 	-L./liblwgeom -llwgeomstatic \
