@@ -40,7 +40,8 @@ see \url{http://geohash.org/} or \url{https://en.wikipedia.org/wiki/Geohash}.
 library(sf)
 lwgeom::st_geohash(st_sfc(st_point(c(1.5,3.5)), st_point(c(0,90))), 2)
 lwgeom::st_geohash(st_sfc(st_point(c(1.5,3.5)), st_point(c(0,90))), 10)
-o = options(digits = 20)
+st_geom_from_geohash(c('9qqj7nmxncgyy4d0dbxqz0', 'up'), raw = TRUE)
+o = options(digits = 20) # for printing purposes
 st_geom_from_geohash(c('9qqj7nmxncgyy4d0dbxqz0', 'u1hzz631zyd63zwsd7zt'))
 st_geom_from_geohash('9qqj7nmxncgyy4d0dbxqz0', 4) 
 st_geom_from_geohash('9qqj7nmxncgyy4d0dbxqz0', 10)

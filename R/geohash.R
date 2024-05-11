@@ -21,7 +21,8 @@ st_geohash = function(x, precision = 0) {
 #' @param raw logical; if `TRUE`, return a matrix with bounding box coordinates on each row
 #' @param crs object of class `crs`
 #' @examples
-#' o = options(digits = 20)
+#' st_geom_from_geohash(c('9qqj7nmxncgyy4d0dbxqz0', 'up'), raw = TRUE)
+#' o = options(digits = 20) # for printing purposes
 #' st_geom_from_geohash(c('9qqj7nmxncgyy4d0dbxqz0', 'u1hzz631zyd63zwsd7zt'))
 #' st_geom_from_geohash('9qqj7nmxncgyy4d0dbxqz0', 4) 
 #' st_geom_from_geohash('9qqj7nmxncgyy4d0dbxqz0', 10)
