@@ -509,7 +509,7 @@ AC_CHECK_LIB(geos_c, GEOS_init_r,
 AC_SUBST([OBJECTS], ["${OBJECTS} \$(OBJECTS_LIBLWGEOM)"])
 
 # Must keep the leading ${CPPFLAGS} or the previous CPPFLAGS don't get saved
-AC_SUBST([PKG_CPPFLAGS], ["${CPPFLAGS} ${PKG_CPPFLAGS} -I./liblwgeom -DHAVE_LIBGEOM_INTERNAL_H"])
+AC_SUBST([PKG_CPPFLAGS], ["${CPPFLAGS} ${PKG_CPPFLAGS} -I./liblwgeom -DHAVE_LIBLWGEOM_INTERNAL_H"])
 
 #
 # concluding substitution

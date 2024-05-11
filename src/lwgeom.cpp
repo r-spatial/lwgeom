@@ -138,6 +138,24 @@ Rcpp::CharacterVector CPL_geohash(Rcpp::List sfc, int prec) {
 }
 
 // [[Rcpp::export]]
+Rcpp::NumericVector CPL_bbox_from_geohash(Rcpp::CharacterVector h, int prec) {
+
+	// void decode_geohash_bbox(char *geohash, double *lat, double *lon, int precision)
+	Rcpp::NumericVector ret(4 * h.size()); // return
+	double lat[2], lon[2];
+	char *hash;
+	for (size_t i = 0; i < h.size(); i++) {
+		hash = h[i];
+		decode_geohash_bbox(hash, lat, lon, prec);
+		ret[4 * i + 0] = lon[0];
+		ret[4 * i + 1] = lat[0];
+		ret[4 * i + 2] = lon[1];
+		ret[4 * i + 3] = lat[1];
+	}
+	return ret;
+}
+
+// [[Rcpp::export]]
 Rcpp::List CPL_lwgeom_transform(Rcpp::List sfc, Rcpp::CharacterVector p4s) {
 	if (p4s.size() != 2)
 		Rcpp::stop("st_lwgeom_transform: p4s needs to be a length 2 character vector\n"); // #nocov

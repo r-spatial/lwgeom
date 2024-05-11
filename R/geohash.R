@@ -12,3 +12,22 @@
 st_geohash = function(x, precision = 0) {
 	CPL_geohash(st_geometry(x), precision)
 }
+
+#' @export
+#' @name st_geohash
+#' @param hash character vector with geohashes
+#' @param crs object of class `crs`
+#' @examples
+#' o = options(digits = 20)
+#' st_geom_from_geohash(c('9qqj7nmxncgyy4d0dbxqz0', 'u1hzz631zyd63zwsd7zt'))
+#' st_geom_from_geohash('9qqj7nmxncgyy4d0dbxqz0', 4) 
+#' st_geom_from_geohash('9qqj7nmxncgyy4d0dbxqz0', 10)
+#' options(o)
+st_geom_from_geohash = function(hash, precision = -1, crs = st_crs('OGC:CRS84')) {
+	stopifnot(is.character(hash), is.numeric(precision), length(precision) == 1)
+	m = CPL_bbox_from_geohash(hash, as.integer(precision))
+	bb = matrix(m, nrow = 4)
+	rownames(bb) = c("xmin", "ymin", "xmax", "ymax")
+	bb = apply(bb, 2, sf::st_bbox, simplify = FALSE)
+	sf::st_set_crs(do.call(c, lapply(bb, sf::st_as_sfc)), crs)
+}

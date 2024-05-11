@@ -1,3 +1,7 @@
+# version 0.2-16
+
+* add `st_geom_from_geohash()`; #37
+
 # version 0.2-15
 
 * fix default for argument `digits` in `st_astext()`

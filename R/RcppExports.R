@@ -57,6 +57,10 @@ CPL_geohash <- function(sfc, prec) {
     .Call('_lwgeom_CPL_geohash', PACKAGE = 'lwgeom', sfc, prec)
 }
 
+CPL_bbox_from_geohash <- function(h, prec) {
+    .Call('_lwgeom_CPL_bbox_from_geohash', PACKAGE = 'lwgeom', h, prec)
+}
+
 CPL_lwgeom_transform <- function(sfc, p4s) {
     .Call('_lwgeom_CPL_lwgeom_transform', PACKAGE = 'lwgeom', sfc, p4s)
 }

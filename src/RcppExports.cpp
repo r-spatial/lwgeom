@@ -182,6 +182,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_bbox_from_geohash
+Rcpp::NumericVector CPL_bbox_from_geohash(Rcpp::CharacterVector h, int prec);
+RcppExport SEXP _lwgeom_CPL_bbox_from_geohash(SEXP hSEXP, SEXP precSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type h(hSEXP);
+    Rcpp::traits::input_parameter< int >::type prec(precSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_bbox_from_geohash(h, prec));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_lwgeom_transform
 Rcpp::List CPL_lwgeom_transform(Rcpp::List sfc, Rcpp::CharacterVector p4s);
 RcppExport SEXP _lwgeom_CPL_lwgeom_transform(SEXP sfcSEXP, SEXP p4sSEXP) {
@@ -361,6 +373,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_lwgeom_CPL_split", (DL_FUNC) &_lwgeom_CPL_split, 2},
     {"_lwgeom_CPL_wrap_x", (DL_FUNC) &_lwgeom_CPL_wrap_x, 3},
     {"_lwgeom_CPL_geohash", (DL_FUNC) &_lwgeom_CPL_geohash, 2},
+    {"_lwgeom_CPL_bbox_from_geohash", (DL_FUNC) &_lwgeom_CPL_bbox_from_geohash, 2},
     {"_lwgeom_CPL_lwgeom_transform", (DL_FUNC) &_lwgeom_CPL_lwgeom_transform, 2},
     {"_lwgeom_CPL_minimum_bounding_circle", (DL_FUNC) &_lwgeom_CPL_minimum_bounding_circle, 1},
     {"_lwgeom_CPL_subdivide", (DL_FUNC) &_lwgeom_CPL_subdivide, 2},
