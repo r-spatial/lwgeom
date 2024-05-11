@@ -53,7 +53,12 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">st_geohash</span><span class="op">(</span><span class="va">x</span>, precision <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">st_geom_from_geohash</span><span class="op">(</span><span class="va">hash</span>, precision <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="st">"OGC:CRS84"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">st_geom_from_geohash</span><span class="op">(</span></span>
+<span>  <span class="va">hash</span>,</span>
+<span>  precision <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>,</span>
+<span>  crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="st">"OGC:CRS84"</span><span class="op">)</span>,</span>
+<span>  raw <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -73,12 +78,19 @@
 <dt>crs</dt>
 <dd><p>object of class `crs`</p></dd>
 
+
+<dt>raw</dt>
+<dd><p>logical; if `TRUE`, return a matrix with bounding box coordinates on each row</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>character vector with geohashes</p>
+<p>`st_geohash` returns a character vector with geohashes</p>
+
+
+<p>`st_geom_from_geohash` returns a (bounding box) polygon for each geohash if `raw` is `FALSE`, if `raw` is `TRUE` a matrix is returned with bounding box coordinates on each row.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
