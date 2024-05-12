@@ -46,7 +46,7 @@ jobs:
           
       - name: Install system dependencies (MacOS)
         if: runner.os == 'macos'
-        run: brew install gdal proj udunits pkg-config
+        run: brew install geos proj
         
       - uses: r-lib/actions/check-r-package@v2
         with:
