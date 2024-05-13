@@ -19,6 +19,7 @@ st_perimeter_lwgeom = function(x) {
 #' @keywords internal
 #' @name perimeter-deprecated
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
+#' @export
 st_perimeter = function(x) {
   .Deprecated("sf::st_perimeter or lwgeom::st_perimeter_lwgeom")
   # for back compatibility 
