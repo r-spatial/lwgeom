@@ -491,7 +491,7 @@ if test "${geosok}" = no; then
 fi
 
 rm -f geos_test errors.txt geos_test.cpp
-
+AC_C_BIGENDIAN()
 
 #
 # liblwgeom
