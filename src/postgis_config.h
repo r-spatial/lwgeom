@@ -1,3 +1,4 @@
+/* src/postgis_config.h.  Generated from postgis_config.h.in by configure.  */
 /* postgis_config.h.  Generated from postgis_config.h.in by configure.  */
 #ifndef POSTGIS_CONFIG_H
 #define POSTGIS_CONFIG_H 1
@@ -121,7 +122,7 @@
 #define POSTGIS_PGSQL_VERSION 100
 
 /* PROJ library version */
-#define POSTGIS_PROJ_VERSION 93
+#define POSTGIS_PROJ_VERSION @POSTGIS_PROJ_VERSION@
 
 /* PostGIS Raster build date */
 /* #undef POSTGIS_RASTER_BUILD_DATE */

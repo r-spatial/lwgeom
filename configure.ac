@@ -1,6 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl GDAL stuff largely copied from rgdal, (c) Roger Bivand
 AC_INIT
+AC_CONFIG_HEADERS([src/postgis_config.h:src/postgis_config.h.in])
 AC_CONFIG_SRCDIR([src/lwgeom.cpp])
 
 : ${R_HOME=`R RHOME`}
@@ -517,6 +518,5 @@ AC_SUBST([PKG_CPPFLAGS], ["${CPPFLAGS} ${PKG_CPPFLAGS} -I./liblwgeom -DHAVE_LIBL
 AC_MSG_NOTICE([Package CPP flags: ${PKG_CPPFLAGS}])
 AC_MSG_NOTICE([Package LIBS: ${LIBS}])
 
-AC_CONFIG_FILES(src/Makevars
-	src/postgis_config.h)
+AC_CONFIG_FILES(src/Makevars)
 AC_OUTPUT
