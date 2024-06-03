@@ -1,8 +1,8 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl GDAL stuff largely copied from rgdal, (c) Roger Bivand
 AC_INIT
-# AC_CONFIG_HEADERS([src/postgis_config.h:src/postgis_config.h.in])
-AC_CONFIG_SRCDIR([src/lwgeom.cpp])
+AC_CONFIG_HEADERS([src/postgis_config.h:src/postgis_config.h.in])
+AC_CONFIG_FILES(src/Makevars)
 
 : ${R_HOME=`R RHOME`}
 if test -z "${R_HOME}"; then
@@ -357,8 +357,8 @@ PROJ_VERSION_MINOR=`echo $proj_version | cut -d "." -f 2`
 POSTGIS_PROJ_VERSION="${PROJ_VERSION_MAJOR}${PROJ_VERSION_MINOR}"
 AC_MSG_NOTICE([POSTGIS_PROJ_VERSION: ${POSTGIS_PROJ_VERSION}])
 #AC_SUBST([POSTGIS_PROJ_VERSION],["${PROJV12}"])
-#AC_DEFINE_UNQUOTED([POSTGIS_PROJ_VERSION], [$POSTGIS_PROJ_VERSION], [PROJ library version])
-AC_SUBST(POSTGIS_PROJ_VERSION)
+AC_DEFINE_UNQUOTED([POSTGIS_PROJ_VERSION], ["$POSTGIS_PROJ_VERSION"], [PROJ library version])
+#AC_SUBST(POSTGIS_PROJ_VERSION)
 PKG_CPPFLAGS="${PKG_CPPFLAGS} -DPOSTGIS_PROJ_VERSION=${POSTGIS_PROJ_VERSION}"
 if test ${POSTGIS_PROJ_VERSION} -lt 60 ; then
   PKG_CPPFLAGS="${PKG_CPPFLAGS} -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
@@ -518,6 +518,4 @@ AC_SUBST([PKG_CPPFLAGS], ["${CPPFLAGS} ${PKG_CPPFLAGS} -I./liblwgeom -DHAVE_LIBL
 AC_MSG_NOTICE([Package CPP flags: ${PKG_CPPFLAGS}])
 AC_MSG_NOTICE([Package LIBS: ${LIBS}])
 
-AC_CONFIG_FILES(src/Makevars
-				src/postgis_config.h)
 AC_OUTPUT

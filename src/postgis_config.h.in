@@ -22,7 +22,7 @@
 #define HAVE_GETTEXT 1
 
 /* Define if the build is big endian */
-/* #undef WORDS_BIGENDIAN */
+#undef WORDS_BIGENDIAN
 
 /* Define if you have the iconv() function and it works. */
 #define HAVE_ICONV 1
@@ -121,7 +121,7 @@
 #define POSTGIS_PGSQL_VERSION 100
 
 /* PROJ library version */
-#define POSTGIS_PROJ_VERSION @POSTGIS_PROJ_VERSION@
+/* #undef POSTGIS_PROJ_VERSION */
 
 /* PostGIS Raster build date */
 /* #undef POSTGIS_RASTER_BUILD_DATE */
