@@ -4,7 +4,7 @@
 #' @param precision integer; precision (length) of geohash returned. From the liblwgeom source: ``where the precision is non-positive, a precision based on the bounds of the feature. Big features have loose precision. Small features have tight precision.''
 #' @export
 #' @details see \url{http://geohash.org/} or \url{https://en.wikipedia.org/wiki/Geohash}.
-#' @return `st_geohash` returns a character vector with geohashes
+#' @return `st_geohash` returns a character vector with geohashes; empty or full geometries result in `NA`
 #' 
 #' `st_geom_from_geohash` returns a (bounding box) polygon for each geohash if `raw` is `FALSE`, if `raw` is `TRUE` a matrix is returned with bounding box coordinates on each row.
 #' @examples
@@ -12,7 +12,12 @@
 #' lwgeom::st_geohash(st_sfc(st_point(c(1.5,3.5)), st_point(c(0,90))), 2)
 #' lwgeom::st_geohash(st_sfc(st_point(c(1.5,3.5)), st_point(c(0,90))), 10)
 st_geohash = function(x, precision = 0) {
-	CPL_geohash(st_geometry(x), precision)
+	x = st_geometry(x)
+	ret = vector("character", length(x))
+	is_na = st_is_empty(x) | st_is_full(x)
+	ret[is_na] = NA_character_
+	ret[!is_na] = CPL_geohash(x[!is_na], precision)
+	ret
 }
 
 #' @export

@@ -26,7 +26,7 @@ st_geom_from_geohash(
 \item{raw}{logical; if `TRUE`, return a matrix with bounding box coordinates on each row}
 }
 \value{
-`st_geohash` returns a character vector with geohashes
+`st_geohash` returns a character vector with geohashes; empty or full geometries result in `NA`
 
 `st_geom_from_geohash` returns a (bounding box) polygon for each geohash if `raw` is `FALSE`, if `raw` is `TRUE` a matrix is returned with bounding box coordinates on each row.
 }
