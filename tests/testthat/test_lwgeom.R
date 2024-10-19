@@ -130,3 +130,26 @@ test_that("st_wrap_x works", {
   expect_equal(st_bbox(x)$xmin, splitline, check.attributes = FALSE)
   expect_equal(st_bbox(x)$xmax, splitline + offset, check.attributes = FALSE)
 })
+
+test_that("st_split works", {
+  library(lwgeom)
+  library(sf)
+  
+  l = st_as_sfc('MULTILINESTRING((10 10, 190 10, 190 190), (15 15, 30 30, 100 90))')
+  
+  pts = st_sfc(st_multipoint(matrix(c(30, 30,
+                                      190, 10),
+                                    ncol = 2,
+                                    byrow = TRUE)))
+  pts = st_cast(pts, "POINT")
+  pts_sf = st_sf(pts)
+  
+  splitted1 = st_split(l, pts)
+  splitted1 = st_collection_extract(splitted1, "LINESTRING")
+  
+  splitted2 = st_split(l, pts_sf)
+  splitted2 = st_collection_extract(splitted2, "LINESTRING")
+  
+  expect_equal(length(splitted1), 4)
+  expect_equal(splitted1, splitted2)
+})
