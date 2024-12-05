@@ -50,6 +50,8 @@ Rcpp::NumericVector CPL_geodetic_azimuth(Rcpp::List sfc, double semi_major, doub
     Rcpp::List sfc2(sfc2_);
     if (sfc2.size() < 1)
       stop("bearing needs at least 2 points"); // #nocov
+    if (sfc.size() != sfc2.size())
+      stop("length of x and y must match");
     std::vector<LWGEOM *> lw2 = lwgeom_from_sfc(sfc2);
     for (int i = 0; i < ret.size(); i++) {
       ret[i] = lwgeom_azumith_spheroid((LWPOINT*) lw[i], (LWPOINT*) lw2[i], &s);
