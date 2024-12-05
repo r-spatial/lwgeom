@@ -37,7 +37,7 @@ Rcpp::NumericVector CPL_geodetic_length(Rcpp::List sfc, double semi_major, doubl
 }
 
 // [[Rcpp::export]]
-Rcpp::NumericVector CPL_geodetic_azimuth(Rcpp::List sfc, Nullable<Rcpp::List> sfc2 = R_NilValue, double semi_major, double inv_flattening) {
+Rcpp::NumericVector CPL_geodetic_azimuth(Rcpp::List sfc, double semi_major, double inv_flattening, Nullable<Rcpp::List> sfc2 = R_NilValue) {
   if (sfc.size() < 1)
     stop("bearing needs at least 2 points"); // #nocov
   Rcpp::NumericVector ret(sfc.size() - 1);
