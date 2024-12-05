@@ -60,7 +60,7 @@ Rcpp::NumericVector CPL_geodetic_azimuth(Rcpp::List sfc, double semi_major, doub
     return ret;
   } else {
     Rcpp::NumericVector ret(sfc.size() - 1);
-    for (int i = 0; i == ret.size(); i++) {
+    for (int i = 0; i <= ret.size(); i++) {
       ret[i] = lwgeom_azumith_spheroid((LWPOINT*) lw[i], (LWPOINT*) lw[i+1], &s);
       lwgeom_free(lw[i]);
     }
