@@ -37,15 +37,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_geodetic_azimuth
-Rcpp::NumericVector CPL_geodetic_azimuth(Rcpp::List sfc, double semi_major, double inv_flattening);
-RcppExport SEXP _lwgeom_CPL_geodetic_azimuth(SEXP sfcSEXP, SEXP semi_majorSEXP, SEXP inv_flatteningSEXP) {
+Rcpp::NumericVector CPL_geodetic_azimuth(Rcpp::List sfc, double semi_major, double inv_flattening, Nullable<Rcpp::List> sfc2_);
+RcppExport SEXP _lwgeom_CPL_geodetic_azimuth(SEXP sfcSEXP, SEXP semi_majorSEXP, SEXP inv_flatteningSEXP, SEXP sfc2_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
     Rcpp::traits::input_parameter< double >::type semi_major(semi_majorSEXP);
     Rcpp::traits::input_parameter< double >::type inv_flattening(inv_flatteningSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_geodetic_azimuth(sfc, semi_major, inv_flattening));
+    Rcpp::traits::input_parameter< Nullable<Rcpp::List> >::type sfc2_(sfc2_SEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_geodetic_azimuth(sfc, semi_major, inv_flattening, sfc2_));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -361,7 +362,7 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_lwgeom_CPL_geodetic_area", (DL_FUNC) &_lwgeom_CPL_geodetic_area, 3},
     {"_lwgeom_CPL_geodetic_length", (DL_FUNC) &_lwgeom_CPL_geodetic_length, 3},
-    {"_lwgeom_CPL_geodetic_azimuth", (DL_FUNC) &_lwgeom_CPL_geodetic_azimuth, 3},
+    {"_lwgeom_CPL_geodetic_azimuth", (DL_FUNC) &_lwgeom_CPL_geodetic_azimuth, 4},
     {"_lwgeom_CPL_geodetic_segmentize", (DL_FUNC) &_lwgeom_CPL_geodetic_segmentize, 2},
     {"_lwgeom_CPL_geodetic_covers", (DL_FUNC) &_lwgeom_CPL_geodetic_covers, 2},
     {"_lwgeom_CPL_geodetic_distance", (DL_FUNC) &_lwgeom_CPL_geodetic_distance, 7},
