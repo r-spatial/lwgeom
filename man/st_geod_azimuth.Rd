@@ -8,6 +8,8 @@ st_geod_azimuth(x, y = NULL)
 }
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
+
+\item{y}{object of class \code{sf}, \code{sfc} or \code{sfg}, or NULL}
 }
 \description{
 compute azimuth between sequence of points
