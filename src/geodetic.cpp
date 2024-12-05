@@ -37,7 +37,7 @@ Rcpp::NumericVector CPL_geodetic_length(Rcpp::List sfc, double semi_major, doubl
 }
 
 // [[Rcpp::export]]
-Rcpp::NumericVector CPL_geodetic_azimuth(Rcpp::List sfc, double semi_major, double inv_flattening, Nullable<Rcpp::List> sfc2 = R_NilValue) {
+Rcpp::NumericVector CPL_geodetic_azimuth(Rcpp::List sfc, double semi_major, double inv_flattening, Nullable<Rcpp::List> sfc2_ = R_NilValue) {
   if (sfc.size() < 1)
     stop("bearing needs at least 2 points"); // #nocov
   Rcpp::NumericVector ret(sfc.size() - 1);
@@ -45,8 +45,8 @@ Rcpp::NumericVector CPL_geodetic_azimuth(Rcpp::List sfc, double semi_major, doub
   SPHEROID s;
   spheroid_init(&s, semi_major, semi_major * (1.0 - 1.0/inv_flattening));
   
-  if (sfc2.isNotNull()) {
-    Rcpp::List sfc2;
+  if (sfc2_.isNotNull()) {
+    Rcpp::List sfc2(sfc2_);
     if (sfc2.size() < 1)
       stop("bearing needs at least 2 points"); // #nocov
     std::vector<LWGEOM *> lw2 = lwgeom_from_sfc(sfc2);
