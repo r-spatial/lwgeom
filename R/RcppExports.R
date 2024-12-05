@@ -9,8 +9,8 @@ CPL_geodetic_length <- function(sfc, semi_major, inv_flattening) {
     .Call('_lwgeom_CPL_geodetic_length', PACKAGE = 'lwgeom', sfc, semi_major, inv_flattening)
 }
 
-CPL_geodetic_azimuth <- function(sfc, semi_major, inv_flattening) {
-    .Call('_lwgeom_CPL_geodetic_azimuth', PACKAGE = 'lwgeom', sfc, semi_major, inv_flattening)
+CPL_geodetic_azimuth <- function(sfc, semi_major, inv_flattening, sfc2_ = NULL) {
+    .Call('_lwgeom_CPL_geodetic_azimuth', PACKAGE = 'lwgeom', sfc, semi_major, inv_flattening, sfc2_)
 }
 
 CPL_geodetic_segmentize <- function(sfc, max_seg_length) {
