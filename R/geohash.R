@@ -3,7 +3,7 @@
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param precision integer; precision (length) of geohash returned. From the liblwgeom source: ``where the precision is non-positive, a precision based on the bounds of the feature. Big features have loose precision. Small features have tight precision.''
 #' @export
-#' @details see \url{http://geohash.org/} or \url{https://en.wikipedia.org/wiki/Geohash}.
+#' @details see \url{https://en.wikipedia.org/wiki/Geohash}.
 #' @return `st_geohash` returns a character vector with geohashes; empty or full geometries result in `NA`
 #' 
 #' `st_geom_from_geohash` returns a (bounding box) polygon for each geohash if `raw` is `FALSE`, if `raw` is `TRUE` a matrix is returned with bounding box coordinates on each row.

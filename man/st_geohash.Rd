@@ -34,7 +34,7 @@ st_geom_from_geohash(
 compute geohash from (average) coordinates
 }
 \details{
-see \url{http://geohash.org/} or \url{https://en.wikipedia.org/wiki/Geohash}.
+see \url{https://en.wikipedia.org/wiki/Geohash}.
 }
 \examples{
 library(sf)
