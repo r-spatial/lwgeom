@@ -1,8 +1,8 @@
 pandoc: 3.1.11
-pkgdown: 2.1.1
+pkgdown: 2.1.2
 pkgdown_sha: ~
 articles: {}
-last_built: 2025-02-11T14:11Z
+last_built: 2025-05-06T06:08Z
 urls:
   reference: https://r-spatial.github.io/lwgeom/reference
   article: https://r-spatial.github.io/lwgeom/articles
