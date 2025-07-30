@@ -169,4 +169,12 @@ test_that('st_geod_azimuth works', {
   expect_equal(st_geod_azimuth(p), as_units(NaN, 'rad'))
   expect_equal(st_geod_azimuth(p_x), as_units(1.57, 'rad'), tolerance = 42)
   expect_equal(st_geod_azimuth(p_y), as_units(0, 'rad'))
+  
+  # Check pairwise azimuth
+  expect_equal(nrow(st_geod_azimuth(p, y = p)), nrow(p))
+  
+  expect_equal(st_geod_azimuth(p, y = p), rep(as_units(NaN, 'rad'), 2))
+  expect_equal(st_geod_azimuth(p, y = p_x), as_units(c(NaN, 1.57), 'rad'), 
+               tolerance = 42)
+  expect_equal(st_geod_azimuth(p, y = p_y), as_units(c(NaN, 0), 'rad'))
 })
