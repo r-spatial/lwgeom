@@ -1,5 +1,7 @@
 # version 0.2-15
 
+* `st_geod_azimuth()` adds feature/pairwise azimuth #97 by @robitalec 
+
 * add `st_geom_from_geohash()`; #37
 
 * fix default for argument `digits` in `st_astext()`
