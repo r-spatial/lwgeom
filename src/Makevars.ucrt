@@ -106,8 +106,6 @@ $(STATLIB): $(OBJECTS_LIBLWGEOM)
 
 $(OBJECTS_LIBLWGEOM): winlibs
 
-CXX_STD = CXX
-
 clean:
 	rm -f $(SHLIB) $(OBJECTS)
 
