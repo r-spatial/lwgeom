@@ -6,13 +6,15 @@ Generate the minimum bounding circle
 
 ``` r
 st_minimum_bounding_circle(x, nQuadSegs = 30)
+
+st_minimum_bounding_radius(x)
 ```
 
 ## Arguments
 
 - x:
 
-  object of class `sfg`, `sfg` or `sf`
+  object of class `sfg`, `sfc` or `sf`
 
 - nQuadSegs:
 
@@ -26,6 +28,9 @@ Object of the same class as `x`
 
 `st_minimum_bounding_circle` uses the `lwgeom_calculate_mbc` method also
 used by the PostGIS command `ST_MinimumBoundingCircle`.
+`st_minimum_bounding_radius` also uses the `lwgeom_calculate_mbc`
+method, but returns the centers (as a geometry) and the respective radii
+(as a column).
 
 ## Examples
 

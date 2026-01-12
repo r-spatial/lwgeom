@@ -3,6 +3,7 @@
 ## All functions
 
 - [`st_minimum_bounding_circle()`](https://r-spatial.github.io/lwgeom/reference/bounding_circle.md)
+  [`st_minimum_bounding_radius()`](https://r-spatial.github.io/lwgeom/reference/bounding_circle.md)
   : Generate the minimum bounding circle
 - [`st_geod_area()`](https://r-spatial.github.io/lwgeom/reference/geod.md)
   [`st_geod_length()`](https://r-spatial.github.io/lwgeom/reference/geod.md)
