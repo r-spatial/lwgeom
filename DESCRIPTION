@@ -19,7 +19,7 @@ Suggests:
 	testthat
 LinkingTo:
 	Rcpp,
-	sf (>= 0.6-0)
+	sf (>= 1.0-15)
 SystemRequirements: GEOS (>= 3.5.0), PROJ (>= 4.8.0), sqlite3
 License: GPL-2
 Copyright: file COPYRIGHTS
