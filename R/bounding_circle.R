@@ -1,9 +1,9 @@
 #' Generate the minimum bounding circle
 #' @name bounding_circle
-#' @param x object of class \code{sfg}, \code{sfg} or \code{sf}
+#' @param x object of class \code{sfg}, \code{sfc} or \code{sf}
 #' @param nQuadSegs number of segments per quadrant (passed to \code{st_buffer})
 #' @return Object of the same class as \code{x}
-#' @details \code{st_minimum_bounding_circle} uses the \code{lwgeom_calculate_mbc} method also used by the PostGIS command \code{ST_MinimumBoundingCircle}.
+#' @details \code{st_minimum_bounding_circle} uses the \code{lwgeom_calculate_mbc} method also used by the PostGIS command \code{ST_MinimumBoundingCircle}. \code{st_minimum_bounding_radius} also uses the \code{lwgeom_calculate_mbc} method, but returns the centers (as a geometry) and the respective radii (as a column).
 #' @examples
 #' library(sf)
 #'
@@ -61,3 +61,36 @@ st_minimum_bounding_circle.sf = function(x, nQuadSegs = 30) {
   st_set_geometry(x, st_minimum_bounding_circle(st_geometry(x), nQuadSegs))
 }
 
+#' @rdname bounding_circle
+#' @export
+st_minimum_bounding_radius = function(x) UseMethod("st_minimum_bounding_radius", x)
+
+generate_radii = function(geom) {
+  stopifnot(inherits(geom,"sfc"))
+  circles = CPL_minimum_bounding_circle(geom)
+  if (any(is.nan(unlist(circles))))
+    stop("NaN values returned by lwgeom's lwgeom_calculate_mbc.") #nocov
+  centers = st_as_sf(st_sfc(lapply(circles[["center"]], st_point),
+                            crs = st_crs(geom)))
+  cbind(centers, radius = circles[["radius"]])
+}
+
+#' @export
+st_minimum_bounding_radius.sfg = function(x) {
+  warning("Returning only centers.")
+  lapply(CPL_minimum_bounding_circle(x)[["center"]],
+         st_point)
+}
+
+#' @export
+st_minimum_bounding_radius.sfc = function(x) {
+  warning("Returning only centers.")
+  st_geometry(generate_radii(x))
+}
+
+#' @export
+st_minimum_bounding_radius.sf = function(x) {
+  aux = generate_radii(st_geometry(x))
+  out = st_set_geometry(x, st_geometry(aux))
+  cbind(out, st_drop_geometry(aux))
+}
