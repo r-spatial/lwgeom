@@ -1,7 +1,7 @@
 
-R version 4.3.2 (2023-10-31) -- "Eye Holes"
-Copyright (C) 2023 The R Foundation for Statistical Computing
-Platform: x86_64-pc-linux-gnu (64-bit)
+R version 4.5.2 (2025-10-31) -- "[Not] Part in a Rumble"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -20,8 +20,8 @@ Type 'q()' to quit R.
 > suppressPackageStartupMessages(library(lwgeom))
 > 
 > test_check("lwgeom")
-[ FAIL 0 | WARN 0 | SKIP 0 | PASS 61 ]
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 70 ]
 > 
 > proc.time()
    user  system elapsed 
-  1.110   1.293   0.896 
+  1.057   1.415   0.976 
