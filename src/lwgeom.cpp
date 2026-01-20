@@ -260,7 +260,8 @@ Rcpp::List CPL_snap_to_grid(Rcpp::List sfc, Rcpp::NumericVector origin, Rcpp::Nu
 	grid.msize = size[3];
 	// snap geometries to grid
 	for (size_t i = 0; i < lwgeom_v.size(); i++)
-		lwgeom_grid_in_place(lwgeom_v[i], &grid);
+		if (!lwgeom_is_empty(lwgeom_v[i]))
+			lwgeom_grid_in_place(lwgeom_v[i], &grid);
 	// return snapped geometries
 	return sfc_from_lwgeom(lwgeom_v); 
 #endif
