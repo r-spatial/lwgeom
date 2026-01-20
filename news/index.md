@@ -1,6 +1,14 @@
 # Changelog
 
+## version 0.2-16
+
+- [`st_snap_to_grid()`](https://r-spatial.github.io/lwgeom/reference/st_snap_to_grid.md)
+  handles empty geometries;
+  [\#100](https://github.com/r-spatial/lwgeom/issues/100)
+
 ## version 0.2-15
+
+CRAN release: 2026-01-12
 
 - [`st_geod_azimuth()`](https://r-spatial.github.io/lwgeom/reference/st_geod_azimuth.md)
   adds feature/pairwise azimuth
