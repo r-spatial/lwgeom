@@ -22,8 +22,8 @@ Snap geometries to a grid
 \examples{
 # obtain data
 library(sf)
-x = st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE)[1, ] \%>\%
-    st_geometry \%>\%
+x = st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE)[1, ] |>
+    st_geometry() |>
     st_transform(3395)
 
 # snap to a grid of 5000 m

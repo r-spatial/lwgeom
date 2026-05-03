@@ -7,7 +7,7 @@ Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.p
 	person("Andy", "Teucher", role = "ctb"),
 	person("liblwgeom developers", role = "cph"))
 Depends:
-	R (>= 3.3.0)
+	R (>= 4.1.0)
 Imports: 
 	Rcpp,
 	units,
