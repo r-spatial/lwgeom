@@ -2,6 +2,8 @@
 
 ## version 0.2-16
 
+- remove ‘%\>%’; depend on R 4.1.0
+
 - [`st_snap_to_grid()`](https://r-spatial.github.io/lwgeom/reference/st_snap_to_grid.md)
   handles empty geometries;
   [\#100](https://github.com/r-spatial/lwgeom/issues/100)
