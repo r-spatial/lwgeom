@@ -2,6 +2,8 @@
 
 ## version 0.2-16
 
+CRAN release: 2026-05-03
+
 - remove ‘%\>%’; depend on R 4.1.0
 
 - [`st_snap_to_grid()`](https://r-spatial.github.io/lwgeom/reference/st_snap_to_grid.md)
