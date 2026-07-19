@@ -365,7 +365,7 @@ GBOX* gbox_from_string(const char *str)
 {
 	const char *ptr = str;
 	char *nextptr;
-	char *gbox_start = strstr(str, "GBOX((");
+	const char *gbox_start = strstr(str, "GBOX((");
 	GBOX *gbox = gbox_new(lwflags(0,0,1));
 	if ( ! gbox_start ) return NULL; /* No header found */
 	ptr += 6;
